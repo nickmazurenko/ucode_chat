@@ -1,45 +1,88 @@
-NAME = send_image_client
-# CFLAGS = -std=c11 $(addprefix -W, all extra error pedantic) -g
-CFLAGS = -std=c11 -g
-COMP = clang
+# NAME = send_image_client
+# # CFLAGS = -std=c11 $(addprefix -W, all extra error pedantic) -g
+# CFLAGS = -std=c11 -g
+# COMP = clang
 
-SRCDIR = src
-INCDIR = inc
-OBJDIR = obj
+# SRCDIR = src
+# INCDIR = inc
+# OBJDIR = obj
+
+
+
+
+# INCS = $(wildcard $(INCDIR)/*.h)
+# SRCS = $(wildcard $(SRCDIR)/*.c)
+# OBJS = $(addprefix $(OBJDIR)/, $(notdir $(SRCS:%.c=%.o)))
+
+# all: install
+
+# install: $(LMXA) $(NAME)
+
+# $(NAME): $(OBJS)
+# 	@clang $(CFLAGS) $(OBJS) -L$(LMXDIR) -lmx -o $@
+
+# $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCS)
+# 	@clang $(CFLAGS) -c $< -o $@ -I$(INCDIR) -I$(LMXINC)
+
+# $(OBJS): | $(OBJDIR)
+
+# $(OBJDIR):
+# 		@mkdir -p $@
+
+# $(LMXA):
+# 		@make -sC $(LMXDIR)
+
+# clean:
+# 	@rm -rf $(OBJDIR)
+
+# uninstall: clean
+# 	@make -sC $(LMXDIR) $@
+# 	@rm -rf $(OBJDIR)
+# 	@rm -rf $(NAME)
+
+# reinstall: uninstall install
+
 
 LMXDIR = libmx
 LMXA := $(LMXDIR)/libmx.a
-LMXINC := $(LMXDIR)/inc
 
+MODELDIR = model
+MODELA  := $(MODELDIR)/libmodel.a
 
-INCS = $(wildcard $(INCDIR)/*.h)
-SRCS = $(wildcard $(SRCDIR)/*.c)
-OBJS = $(addprefix $(OBJDIR)/, $(notdir $(SRCS:%.c=%.o)))
+NETWORKDIR = network
+NETWORKA  := $(NETTWORKDIR)/libnetwork.a
+
+SERVERDIR = server
+SERVER = uchat_server
+
+CLIENTDIR = client
+CLIENT = uchat
 
 all: install
 
-install: $(LMXA) $(NAME)
-
-$(NAME): $(OBJS)
-	@clang $(CFLAGS) $(OBJS) -L$(LMXDIR) -lmx -o $@
-
-$(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCS)
-	@clang $(CFLAGS) -c $< -o $@ -I$(INCDIR) -I$(LMXINC)
-
-$(OBJS): | $(OBJDIR)
-
-$(OBJDIR):
-		@mkdir -p $@
+install:
+		if [ -f $(LMXA) ]; then echo "libmx exists" ; else make -sC $(LMXDIR); fi
+		@make -sC $(NETWORKDIR) reinstall
+		@make -sC $(MODELDIR)   reinstall
+		@make -sC $(SERVERDIR)
+		@make -sC $(CLIENTDIR)
+		
+#model and protocol
 
 $(LMXA):
 		@make -sC $(LMXDIR)
 
-clean:
-	@rm -rf $(OBJDIR)
+$(SERVER):
+		@make -sC $(SERVERDIR)
 
-uninstall: clean
+$(CLIENT):
+		@make -sC $(CLIENTDIR)
+
+uninstall:
+	@make -sC $(CLIENTDIR) $@
+	@make -sC $(SERVERDIR) $@
 	@make -sC $(LMXDIR) $@
-	@rm -rf $(OBJDIR)
-	@rm -rf $(NAME)
+	@make -sC $(NETWORKDIR) $@
+
 
 reinstall: uninstall install

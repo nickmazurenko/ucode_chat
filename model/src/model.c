@@ -2,6 +2,6 @@
 
 void print_model() {
 
-    printf("model print\n");
+    mx_printstr("Hello second model \n");
 
 }

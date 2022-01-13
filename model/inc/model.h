@@ -3,10 +3,6 @@
 
 #include "libmx.h"
 
-void print_model() {
-
-    printf();
-
-}
+void print_model();
 
 #endif
