@@ -1,7 +1,5 @@
 #include "model_data.h"
 
-#define STR_SIZE 1024
-
 t_model_data* new_model_data(e_model_data_types type, long size, char* string) {
 
     t_model_data* model_data = (t_model_data*)malloc(sizeof(t_model_data));
@@ -113,10 +111,29 @@ t_model_data*   from_string_model_data(char* string) {
     return model_data;
 }
 
-t_model_data* free_model_data(t_model_data** data) {
+void free_model_data(t_model_data** data) {
 
     free((*data)->string);
     free(*data);
 
     *data = NULL;
+
+}
+
+long model_data_string_length(char* model_data_str) {
+
+    if (model_data_str == NULL) return 0;
+
+    t_model_data* model_data = from_string_model_data(model_data_str);
+    long length = 0;
+    int count_of_delimeter = 0;
+
+    for (long str_index = 0; count_of_delimeter != 2; str_index++) {
+        if (model_data_str[str_index] != ';') length++;
+        else count_of_delimeter++;
+    }
+
+    free_model_data(&model_data);
+    
+    return length + model_data->size + 3;
 }

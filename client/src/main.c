@@ -1,11 +1,20 @@
 #include "controller.h"
 #include "view.h"
-#include "model.h"
 
-int main() {
+int main(int argc, char*argv[]) {
 
-    print_model();
-    print_client_view();
-    print_client_controller();
-    mx_printint(1224);
+    GtkWidget* window;
+
+    gtk_init(&argc, &argv);
+
+    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+
+    g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL);
+    gtk_window_set_default_size(GTK_WINDOW(window), DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
+
+    view_sign_up(window);
+
+    gtk_main();
+
 }

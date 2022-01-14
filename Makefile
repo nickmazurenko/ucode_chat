@@ -52,6 +52,9 @@ MODELA  := $(MODELDIR)/libmodel.a
 NETWORKDIR = network
 NETWORKA  := $(NETTWORKDIR)/libnetwork.a
 
+CJSONDIR  = cjson
+CJSONA   := $(CJSONDIR)/libcjson.a
+
 SERVERDIR = server
 SERVER = uchat_server
 
@@ -64,6 +67,7 @@ install:
 		if [ -f $(LMXA) ]; then echo "libmx exists" ; else make -sC $(LMXDIR); fi
 		@make -sC $(NETWORKDIR) reinstall
 		@make -sC $(MODELDIR)   reinstall
+		@make -sC $(CJSONDIR)
 		@make -sC $(SERVERDIR)
 		@make -sC $(CLIENTDIR)
 		

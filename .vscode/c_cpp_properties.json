@@ -1,0 +1,22 @@
+{
+  "configurations": [
+    {
+      "name": "macos-clang-x64",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "${HOME}/.brew/Cellar/**",
+        "${HOME}/.brew/Cellar/glib/**"
+      ],
+      "defines": [],
+      "macFrameworkPath": [
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/System/Library/Frameworks"
+      ],
+      "compilerPath": "/usr/bin/clang",
+      "cStandard": "c11",
+      "cppStandard": "c++98",
+      "intelliSenseMode": "macos-clang-x64",
+      "compilerArgs": []
+    }
+  ],
+  "version": 4
+}

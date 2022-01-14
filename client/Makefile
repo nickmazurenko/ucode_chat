@@ -17,6 +17,13 @@ MODELINC = $(MODELDIR)/inc
 MODELA = $(MODELDIR)/libmodel.a 
 
 #network
+NETWORKDIR = ../network
+NETWORKINC = $(NETWORKDIR)/inc
+NETWORKA = $(NETWORKDIR)/libnetwork.a
+
+JSONDIR = ../cjson
+JSONINC = $(JSONDIR)/inc
+JSONA = $(JSONDIR)/libcjson.a
 
 
 INCS = $(wildcard $(INCDIR)/*.h)
@@ -28,10 +35,10 @@ all: install
 install: $(NAME)
 
 $(NAME): $(OBJS)
-	@clang $(CFLAGS) $(OBJS) -L$(LMXDIR) -lmx -L$(MODELDIR) -lmodel -o $@
+	@clang $(CFLAGS) $(OBJS) -L$(LMXDIR) -lmx -L$(MODELDIR) -lmodel -L$(NETWORKDIR) -lnetwork -L$(JSONDIR) -lcjson -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCS)
-	@clang $(CFLAGS) -c $< -o $@ -I$(INCDIR) -I$(LMXINC) -I$(MODELINC)
+	@clang $(CFLAGS) -c $< -o $@ -I$(INCDIR) -I$(LMXINC) -I$(MODELINC) -I$(NETWORKINC) -I$(JSONINC)
 
 $(OBJS): | $(OBJDIR)
 

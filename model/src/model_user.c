@@ -74,7 +74,7 @@ t_model_user* from_string_model_user(char* string) {
     index = mx_get_char_index(string + last_index + 1, ';');
     if (index < 0) {
         mx_strdel(&buff);
-        free_model_user(model_user);
+        free_model_user(&model_user);
         return NULL;
     }
 
