@@ -1,0 +1,12 @@
+#ifndef SIGN_UP_REQUEST_H
+#define SIGN_UP_REQUEST_H
+
+#include "model_user.h"
+#include "cJSON.h"
+#include "send_request.h"
+
+char* create_sign_up_request(t_model_user* model_user);
+
+bool send_sign_up_request(t_model_user* model_user);
+
+#endif

@@ -1,6 +1,6 @@
 
 CC = clang
-CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic -I./inc -I../libmx/inc -I../model/inc
+CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic -I./inc -I../libmx/inc -I../model/inc -I../cjson/inc
 
 SOURCE_FILES = *.c
 OBJECT_FILES = *.o

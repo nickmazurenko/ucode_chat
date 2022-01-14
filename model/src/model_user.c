@@ -88,7 +88,6 @@ t_model_user* from_string_model_user(char* string) {
 }
 
 void          free_model_user(t_model_user** model_user) {
-
     free((*model_user)->name);
     free((*model_user)->password);
     free(*model_user);
