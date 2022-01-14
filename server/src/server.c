@@ -1,6 +1,7 @@
 #include "server.h"
 #include "cJSON.h"
 #include "string.h"
+#include "database.h"
 
 char* read_request(int conn_fd) {
 
@@ -17,6 +18,8 @@ char* read_request(int conn_fd) {
 }
 
 void run_server() {
+
+    init_User_table();
 
     int listen_fd = 0, conn_fd = 0;
     struct sockaddr_in serv_addr;

@@ -1,9 +1,9 @@
 @yzet
 
-sign in
-sign up
-create protocol
-    create json head
-    add action
-    add data
-send
+sign in +
+sign up +
+create protocol +
+    create json head +
+    add action +
+    add data +
+send +

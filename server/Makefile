@@ -35,7 +35,7 @@ all: install
 install: $(NAME)
 
 $(NAME): $(OBJS)
-	@clang $(CFLAGS) $(OBJS) -L$(LMXDIR) -lmx -L$(MODELDIR) -lmodel -L$(NETWORKDIR) -lnetwork -L$(JSONDIR) -lcjson -o $@
+	@clang $(CFLAGS) $(OBJS) -L$(LMXDIR) -lmx -L$(MODELDIR) -lmodel -L$(NETWORKDIR) -lnetwork -L$(JSONDIR) -lcjson -lsqlite3 -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCS)
 	@clang $(CFLAGS) -c $< -o $@ -I$(INCDIR) -I$(LMXINC) -I$(MODELINC) -I$(NETWORKINC) -I$(JSONINC)
