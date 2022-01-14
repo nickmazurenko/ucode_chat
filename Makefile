@@ -87,6 +87,8 @@ uninstall:
 	@make -sC $(SERVERDIR) $@
 	@make -sC $(LMXDIR) $@
 	@make -sC $(NETWORKDIR) $@
+	@make -sC $(MODELDIR) $@
+	@make -sC $(CJSONDIR) $@
 
 
 reinstall: uninstall install
