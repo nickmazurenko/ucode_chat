@@ -37,9 +37,14 @@ void run_server() {
 
     while (1)
     {
-        conn_fd = accept(listen_fd, (struct socketaddr*)NULL, NULL);
+        struct sockaddr client;
+        memset(&client, 0, sizeof(struct sockaddr));
+        socklen_t client_len = (socklen_t)sizeof client;
+        conn_fd = accept(listen_fd, (struct sockaddr*)&client, &client_len);
 
         char* request = read_request(conn_fd);
+        
+        select_action(request);
 
         strcpy(response_buffer, "200 OK\r\n\r\n");
         printf("response: %s\n", response_buffer);

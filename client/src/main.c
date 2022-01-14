@@ -13,7 +13,8 @@ int main(int argc, char*argv[]) {
     gtk_window_set_default_size(GTK_WINDOW(window), DEFAULT_WIDTH, DEFAULT_HEIGHT);
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
 
-    view_sign_up(window);
+    // view_sign_up(window);
+    view_sign_in(window);
 
     gtk_main();
 

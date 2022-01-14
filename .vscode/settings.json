@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "cjson.h": "c",
-        "view_sign_up.h": "c"
+        "view_sign_up.h": "c",
+        "sign_up.h": "c",
+        "controller_sign_up.h": "c"
     }
 }

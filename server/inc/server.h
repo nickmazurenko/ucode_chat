@@ -16,6 +16,8 @@
 #include <sys/types.h>
 #include <time.h>
 
+#include "select_action.h"
+
 #define BUFFER_SIZE 1024
 #define PORT 5000
 #define MAX_CONNECTIONS 10
