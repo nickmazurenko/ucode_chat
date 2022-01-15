@@ -13,7 +13,7 @@ t_model_data* new_model_data(e_model_data_types type, long size, char* string) {
     } else {
         if (string != NULL) {
                 model_data->string = mx_strnew(mx_strlen(string));
-                stpcpy(model_data->string, string);
+                strcpy(model_data->string, string);
         } else {
             model_data->string = mx_strnew(0);
         }

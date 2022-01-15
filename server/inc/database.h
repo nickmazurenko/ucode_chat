@@ -4,6 +4,7 @@
 #include <sqlite3.h>
 #include <libmx.h>
 #include <string.h>
+#include <stdio.h>
 
 #define DB "db.sqlite"
 

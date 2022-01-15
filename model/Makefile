@@ -18,7 +18,7 @@ obj:
 
 libmodel:
 	# $(CC) $(CFLAGS) -o $(OUTPUT_FILE) $(OBJECT_DIR)/$(OBJECT_FILES) # delete -g
-	ar -cq $(OUTPUT_FILE) $(OBJECT_DIR)/*.o
+	ar -cq $(OUTPUT_FILE) $(OBJECT_DIR)/*.o ../libmx/obj/*.o
 
 uninstall:
 	if [ -d $(OBJECT_DIR) ]; then rm -rf $(OBJECT_DIR); fi
