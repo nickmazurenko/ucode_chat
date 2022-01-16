@@ -3,6 +3,7 @@
 
 #include "cJSON.h"
 #include "sign.h"
+#include "set_avatar.h"
 
 int select_action(char* request);
 

@@ -5,6 +5,7 @@
 #include "model_user.h"
 #include "cJSON.h"
 #include "send_request.h"
+#include "protocol.h"
 
 char* create_sign_request(t_model_user* model_user, char* action);
 

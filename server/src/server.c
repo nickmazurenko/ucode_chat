@@ -2,18 +2,28 @@
 #include "cJSON.h"
 #include "string.h"
 #include "database.h"
+#include <sys/stat.h>
+
 
 char* read_request(int conn_fd) {
 
-    char* request = mx_strnew(BUFFER_SIZE);
+    size_t conn_size = 1024;
+    
+    // struct stat* s = malloc(sizeof(struct stat));
+    
+    // int status = fstat(conn_fd, s);
+    // printf("status: %i\n", status);
+    // conn_size = s->st_size;
+    
+    // printf("conn size: %lu\n", conn_size);
+    char* request = mx_strnew(conn_size + 1);
 
     int read_number = 0;
-    while ( (read_number = read(conn_fd, request, BUFFER_SIZE - 1)) > 0){
+    while ( (read_number = read(conn_fd, request, conn_size)) > 0){
         // bzero(request, BUFFER_SIZE);
         request[read_number] = '\0';
         break;
     }
-    
     return request;
 }
 
@@ -46,6 +56,7 @@ void run_server() {
         conn_fd = accept(listen_fd, (struct sockaddr*)&client, &client_len);
 
         char* request = read_request(conn_fd);
+        printf("request:%s\n", request);
         
         select_action(request);
 
@@ -56,9 +67,8 @@ void run_server() {
 
         close(conn_fd);
         memset(response_buffer, '\0', BUFFER_SIZE);
-
-        printf("request:%s\n", request);
-        sleep(1);
+        // free(request);
+        // sleep(1);
     }
     
 

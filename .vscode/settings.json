@@ -3,6 +3,8 @@
         "cjson.h": "c",
         "view_sign_up.h": "c",
         "sign_up.h": "c",
-        "controller_sign_up.h": "c"
+        "controller_sign_up.h": "c",
+        "__locale": "c",
+        "stat.h": "c"
     }
 }

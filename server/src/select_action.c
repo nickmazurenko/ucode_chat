@@ -26,6 +26,8 @@ int select_action(char* request) {
 
         sign_in(request);
 
+    } else if ( strcmp(action, "SET AVATAR") == 0 ) {
+        set_avatar(request);
     }
 
     cJSON_Delete(request_obj);
