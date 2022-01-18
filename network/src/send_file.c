@@ -27,6 +27,7 @@ char* create_file_part_data(FILE* file, size_t* read_number) {
     }
 
     printf("reeded number = %zu\n", *read_number);
+    
     size_t screened_size = 0;
     char* file_part = screen_file(file_data, *read_number, &screened_size);
 
@@ -64,6 +65,8 @@ char* send_file(char* path_to_file, char* after_file_request, char* ip, int port
         add_to_protocol(protocol, "DATA", data_value);
 
         char* protocol_str = cJSON_Print(protocol);
+
+        printf("protocol: %zu\n", strlen(protocol_str));
         send_request(protocol_str, ip, port);
 
         free(protocol_str);

@@ -7,7 +7,7 @@
 
 char* read_request(int conn_fd, char* request, int* read_number) {
 
-    size_t buff_size = 8192;
+    size_t buff_size = 14336;
     
 
 
@@ -44,7 +44,7 @@ void run_server() {
 
     printf("server runned\n");
 
-    char* request = mx_strnew(8192);
+    char* request = mx_strnew(14336);
 
     while (1)
     {

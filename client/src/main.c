@@ -21,5 +21,5 @@ int main(int argc, char*argv[]) {
     // gtk_main();
 
     // send_file("bigimage.jpeg", "OK", "127.0.0.1", 5000);
-    send_set_avatar_request("bigimage.jpeg");
+    send_set_avatar_request("sound.wav");
 }

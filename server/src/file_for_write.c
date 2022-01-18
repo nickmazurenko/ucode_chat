@@ -50,8 +50,11 @@ char* save_file(char* request, char* response) {
 
     cJSON* file_data_obj = cJSON_GetObjectItemCaseSensitive(request_obj, "DATA");
     cJSON* screened_file_size_obj = cJSON_GetObjectItemCaseSensitive(request_obj, "FILE PART SIZE");
+    printf("server screened size: %d\n", screened_file_size_obj->valueint);
+
     size_t unscreened_size = 0;
-    char* file_data_unscreened = unscreen_file(file_data_obj->valuestring, screened_file_size_obj->valuedouble, &unscreened_size);
+
+    char* file_data_unscreened = unscreen_file(file_data_obj->valuestring, screened_file_size_obj->valueint, &unscreened_size);
 
 
     fwrite(file_data_unscreened, sizeof(char), unscreened_size, file);
