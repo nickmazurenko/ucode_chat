@@ -5,23 +5,17 @@
 #include <sys/stat.h>
 
 
-char* read_request(int conn_fd) {
+char* read_request(int conn_fd, char* request, int* read_number) {
 
-    size_t conn_size = 1024;
+    size_t buff_size = 8192;
     
-    // struct stat* s = malloc(sizeof(struct stat));
-    
-    // int status = fstat(conn_fd, s);
-    // printf("status: %i\n", status);
-    // conn_size = s->st_size;
-    
-    // printf("conn size: %lu\n", conn_size);
-    char* request = mx_strnew(conn_size + 1);
 
-    int read_number = 0;
-    while ( (read_number = read(conn_fd, request, conn_size)) > 0){
+
+    while ( (*read_number = read(conn_fd, request, buff_size - 1)) > 0 )
+    {
         // bzero(request, BUFFER_SIZE);
-        request[read_number] = '\0';
+        // request[read_number] = '\0';
+        // read_number = read(conn_fd, request, buff_size);
         break;
     }
     return request;
@@ -42,33 +36,42 @@ void run_server() {
 
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    serv_addr.sin_port = htons(PORT);
+    serv_addr.sin_port = htons(S_PORT);
 
     bind(listen_fd, (struct sockaddr*)&serv_addr, sizeof(serv_addr));
 
     listen(listen_fd, MAX_CONNECTIONS);
 
+    printf("server runned\n");
+
+    char* request = mx_strnew(8192);
+
     while (1)
     {
-        struct sockaddr client;
+        struct sockaddr_in client;
         memset(&client, 0, sizeof(struct sockaddr));
         socklen_t client_len = (socklen_t)sizeof client;
+        char client_addres[BUFFER_SIZE + 1];
+
         conn_fd = accept(listen_fd, (struct sockaddr*)&client, &client_len);
 
-        char* request = read_request(conn_fd);
-        printf("request:%s\n", request);
+        // inet_ntop(AF_INET, &client, client_addres, BUFFER_SIZE);
+        int read_number = 0;
+        read_request(conn_fd, request, &read_number);
         
-        select_action(request);
+        select_action(request, response_buffer);
 
-        strcpy(response_buffer, "200 OK\r\n\r\n");
-        printf("response: %s\n", response_buffer);
+        if (strlen(response_buffer) == 0)
+            strcpy(response_buffer, "200 OK\r\n\r\n");
         // send(conn_fd, response_buffer, strlen(response_buffer), 0); 
-        write(conn_fd, response_buffer, strlen(response_buffer));
+        size_t response_buffer_length = strlen(response_buffer);
+        write(conn_fd, response_buffer, response_buffer_length);
+        // sendto(conn_fd, response_buffer, strlen(response_buffer), 0, (struct sockaddr *)&client, sizeof(client_addres));
 
         close(conn_fd);
-        memset(response_buffer, '\0', BUFFER_SIZE);
-        // free(request);
-        // sleep(1);
+        memset(response_buffer, '\0', response_buffer_length);
+        memset(request, '\0', read_number);
+        sleep(1);
     }
     
 

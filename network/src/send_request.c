@@ -1,13 +1,14 @@
 #include "send_request.h"
 
+
 char* read_response(int sock_fd) {
 
-    char* response = mx_strnew(RESPONSE_BUFFER_SIZE);
+    char* response = mx_strnew(BUFFER_SIZE);
     int read_size = 0;
 
-    while ( (read_size = read(sock_fd, response, RESPONSE_BUFFER_SIZE - 1)) > 0 )
+    while ( (read_size = read(sock_fd, response, BUFFER_SIZE - 1)) > 0 )
     {
-        response[RESPONSE_BUFFER_SIZE - 1] = '\0';
+        response[BUFFER_SIZE - 1] = '\0';
     }
     
     return response;

@@ -5,6 +5,7 @@
         "sign_up.h": "c",
         "controller_sign_up.h": "c",
         "__locale": "c",
-        "stat.h": "c"
+        "stat.h": "c",
+        "send_file.h": "c"
     }
 }

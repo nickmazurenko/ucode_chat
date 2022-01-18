@@ -1,6 +1,7 @@
 #include "controller.h"
 #include "view.h"
 #include "set_avatar_request.h"
+#include "send_file.h"
 
 int main(int argc, char*argv[]) {
 
@@ -19,19 +20,6 @@ int main(int argc, char*argv[]) {
 
     // gtk_main();
 
-    FILE* file_file = fopen("todo", "r");
-    fseek(file_file, 0, SEEK_END);
-    size_t file_size = ftell(file_file);
-    fseek(file_file, 0, SEEK_SET);
-    fclose(file_file);
-
-    printf("file_size: %lu\n", (size_t)file_size);
-
-    char* file_str = mx_strnew(file_size);
-
-    int file = open("todo", O_RDONLY);
-    read(file, file_str, file_size);
-    close(file);
-
-    send_set_avatar_request(file_str, file_size);
+    // send_file("bigimage.jpeg", "OK", "127.0.0.1", 5000);
+    send_set_avatar_request("bigimage.jpeg");
 }

@@ -96,3 +96,7 @@ char*  get_file_from_protocol(cJSON* protocol, char* key, size_t* file_size) {
 
     return file_str;
 }
+
+char* get_server_ip() {
+    return "127.0.0.1";
+}

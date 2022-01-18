@@ -5,9 +5,15 @@
 #include "model.h"
 #include "network.h"
 
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
+
+#include <winsock2.h>
+#include <windows.h>
+#include <Ws2tcpip.h>
+
+
+// #include <sys/socket.h>
+// #include <netinet/in.h>
+// #include <arpa/inet.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -16,10 +22,11 @@
 #include <sys/types.h>
 #include <time.h>
 
+
 #include "select_action.h"
 
-#define BUFFER_SIZE 1024
-#define PORT 5000
+#define BUFFER_SIZE 4096
+#define S_PORT 5000
 #define MAX_CONNECTIONS 10
 
 void run_server();

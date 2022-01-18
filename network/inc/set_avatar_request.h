@@ -4,7 +4,10 @@
 #include "libmx.h"
 #include "protocol.h"
 #include "send_request.h"
+#include "protocol.h"
+#include "send_file.h"
 
-char* send_set_avatar_request(char* file_bytes, size_t file_size);
+char* send_set_avatar_request(char* path_to_file);
+
 
 #endif

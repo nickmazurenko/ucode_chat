@@ -4,17 +4,21 @@
       "name": "macos-clang-x64",
       "includePath": [
         "${workspaceFolder}/**",
-        "${HOME}/.brew/Cellar/**",
-        "${HOME}/.brew/Cellar/glib/**"
+        // "${HOME}/.brew/Cellar/**",
+        // "${HOME}/.brew/Cellar/glib/**"
+        "C:/msys64/mingw64/**",
+        "C:/msys64/mingw64/include/**",
+        "C:/msys64/mingw64/include/glib-2.0/**",
+        "C:/msys64/mingw64/lib/**"
       ],
       "defines": [],
       "macFrameworkPath": [
-        "/Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/System/Library/Frameworks"
+        // "/Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/System/Library/Frameworks"
       ],
-      "compilerPath": "/usr/bin/clang",
+      "compilerPath": "C:/msys64/usr/bin/clang.exe",
       "cStandard": "c11",
       "cppStandard": "c++98",
-      "intelliSenseMode": "macos-clang-x64",
+      "intelliSenseMode": "clang-x64",
       "compilerArgs": []
     }
   ],

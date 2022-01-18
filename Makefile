@@ -20,15 +20,20 @@ all: install
 
 install:
 		if [ -f $(LMXA) ]; then echo "libmx exists" ; else make -sC $(LMXDIR); fi
-		if [ -f $(MODELA) ]; then echo "libmx exists" ; else make -sC $(MODELDIR); fi
+		if [ -f $(MODELA) ]; then echo "libmodel exists" ; else make -sC $(MODELDIR); fi
 		@make -sC $(NETWORKDIR) reinstall
 		@make -sC $(CJSONDIR)
 		@make -sC $(SERVERDIR)
 		@make -sC $(CLIENTDIR)
-		# @make -sC $(MODELDIR)   reinstall
 
 		
 #model and protocol
+
+client:
+		@make -sC $(CLIENTDIR)
+
+server:
+		@make -sC $(SERVERDIR)
 
 $(LMXA):
 		@make -sC $(LMXDIR)

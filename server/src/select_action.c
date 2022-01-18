@@ -1,7 +1,8 @@
 #include "select_action.h"
 
-int select_action(char* request) {
+int select_action(char* request, char* response) {
 
+    *response = NULL;
     cJSON* request_obj = cJSON_Parse(request);
 
     if (request_obj == NULL) {
@@ -27,7 +28,22 @@ int select_action(char* request) {
         sign_in(request);
 
     } else if ( strcmp(action, "SET AVATAR") == 0 ) {
+        
         set_avatar(request);
+    
+    } else if ( strcmp(action, "GET FILE FOR WRITE") == 0 ) {
+
+        file_for_write(response);
+    
+    } else if ( strcmp(action, "SAVE FILE") == 0 ) {
+
+        save_file(request, response);
+    
+    } else if ( strcmp(action, "FILE END") == 0 ) {
+
+        printf("there\n");
+        file_end(request, response);
+
     }
 
     cJSON_Delete(request_obj);
