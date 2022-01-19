@@ -1,59 +1,48 @@
 #include "view_sign_in.h"
 
-void sign_in_clicked(GtkWidget *widget, GtkEntry** fields) {
+void view_sign_in(t_current_window_info *current_layout_info)
+{
 
-    gchar* username = gtk_entry_get_text(fields[0]);
-    gchar* password = gtk_entry_get_text(fields[1]);  
+    GtkLayout *sign_up_layout = GTK_LAYOUT(gtk_builder_get_object(current_layout_info->builder, "sign_up_layout"));
+    if (current_layout_info->layout_exists)
+    {
+        gtk_widget_destroy(GTK_WIDGET(sign_up_layout));
+    }
+    gtk_builder_add_from_file(current_layout_info->builder, get_path_to_glade("sign_in_layout.glade"), NULL);
 
-    controller_sign_in(username, password);
+    GtkLayout *sign_in_layout = GTK_LAYOUT(gtk_builder_get_object(current_layout_info->builder, "sign_in_layout"));
+
+    GtkImage *sign_in_image = GTK_IMAGE(gtk_builder_get_object(current_layout_info->builder, "sign_in_image"));
+
+    gtk_container_add(GTK_CONTAINER(current_layout_info->main_window), GTK_WIDGET(sign_in_layout));
+    current_layout_info->layout_exists = true;
+    GtkEntry **sign_in_info = (GtkEntry **)malloc(3 * sizeof(GtkEntry *));
+    sign_in_info[0] = GTK_ENTRY(gtk_builder_get_object(current_layout_info->builder, "username_entry"));
+    sign_in_info[1] = GTK_ENTRY(gtk_builder_get_object(current_layout_info->builder, "password_entry"));
+    sign_in_info[2] = NULL;
+
+    GtkButton *sign_in_button = GTK_BUTTON(gtk_builder_get_object(current_layout_info->builder, "sign_in"));
+    GtkButton *sign_up_button = GTK_BUTTON(gtk_builder_get_object(current_layout_info->builder, "sign_up"));
+
+    g_signal_connect(sign_in_info[0], "changed", G_CALLBACK(entry_activate), sign_in_info);
+    g_signal_connect(sign_in_info[1], "changed", G_CALLBACK(entry_activate), sign_in_info);
+    g_signal_connect(sign_in_button, "clicked", G_CALLBACK(sign_in_clicked), sign_in_info);
+    g_signal_connect(sign_up_button, "clicked", G_CALLBACK(sign_up_clicked), current_layout_info);
+    // printf("asAFFASFAF\n");
+
 }
 
-void go_to_signup(GtkWidget *widget, GtkWidget** widgets) {
-
-    gtk_widget_destroy(widgets[1]);
-
-    view_sign_up(widgets[0]);
+G_MODULE_EXPORT void sign_in_clicked(GtkButton *button, GtkEntry **sign_in_info)
+{
+    // printf("username: %s\npassword: %s\n", (char *)gtk_entry_get_text(sign_in_info[0]), (char *)gtk_entry_get_text(sign_in_info[1]));
+    //check input
+    if (!is_valid_user_data(sign_in_info))
+        place_sign_entry_error(sign_in_info);
+    else
+       controller_sign_in((char *)gtk_entry_get_text(sign_in_info[0]), (char *)gtk_entry_get_text(sign_in_info[1]));
 }
 
-void view_sign_in(GtkWidget* window) {
-
-    gtk_window_set_title(GTK_WINDOW(window) ,"Sign In");
-
-    GtkWidget* username_text_field;
-    GtkWidget* password_text_field;
-
-    GtkWidget* fixed_container = gtk_fixed_new();
-
-    GtkWidget* username_label = gtk_label_new("Nickname");
-    GtkWidget* password_label = gtk_label_new("Password");
-
-    username_text_field = gtk_entry_new();
-    gtk_widget_set_size_request(username_text_field, 50, 40);
-    password_text_field = gtk_entry_new();
-    gtk_widget_set_size_request(password_text_field, 50, 40);
-
-    GtkEntry** text_fields = (GtkEntry**)malloc(sizeof(GtkEntry*));
-    text_fields[0] = username_text_field;
-    text_fields[1] = password_text_field;
-
-    GtkWidget** for_go = (GtkWidget**)malloc(sizeof(GtkWidget*));
-    for_go[0] = window;
-    for_go[1] = fixed_container;
-
-    GtkWidget* sign_in_button = gtk_button_new_with_label("Sign In");
-    g_signal_connect(G_OBJECT(sign_in_button), "clicked", G_CALLBACK(sign_in_clicked), text_fields);
-
-    GtkWidget* go_to_sign_up_button = gtk_button_new_with_label("Sign Up");
-    g_signal_connect(G_OBJECT(go_to_sign_up_button), "clicked", G_CALLBACK(go_to_signup), for_go);
-
-    gtk_fixed_put(GTK_FIXED(fixed_container), username_label, 100, 60);
-    gtk_fixed_put(GTK_FIXED(fixed_container), password_label, 100, 160);
-    gtk_fixed_put(GTK_FIXED(fixed_container), username_text_field, 200, 50);
-    gtk_fixed_put(GTK_FIXED(fixed_container), password_text_field, 200, 150);
-    gtk_fixed_put(GTK_FIXED(fixed_container), sign_in_button, 200, 275);
-    gtk_fixed_put(GTK_FIXED(fixed_container), go_to_sign_up_button, 400, 0);
-
-    gtk_container_add(GTK_CONTAINER(window), fixed_container);
-
-    gtk_widget_show_all(window);
+G_MODULE_EXPORT void sign_up_clicked(GtkButton *button, t_current_window_info *current_layout_info)
+{
+    view_sign_up(current_layout_info);
 }

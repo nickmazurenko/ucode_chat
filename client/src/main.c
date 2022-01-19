@@ -1,28 +1,31 @@
 #include "controller.h"
 #include "view.h"
+#include "resources.h"
 #include "set_avatar_request.h"
 #include "send_file.h"
 #include "get_file.h"
 
 int main(int argc, char*argv[]) {
 
-    // GtkWidget* window;
+    gtk_init(&argc, &argv);
+    GtkBuilder* main_window_builder = gtk_builder_new();
+    gtk_builder_add_from_file(main_window_builder, get_path_to_glade("main_window.glade"), NULL);
+    
+    GtkWindow *new_window = GTK_WINDOW(gtk_builder_get_object(main_window_builder, "main_window"));
+    
+    GtkCssProvider *cssProvider = gtk_css_provider_new();
+    gtk_css_provider_load_from_path(cssProvider, get_path_to_style("sign.css"), NULL);
+    gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
+                              GTK_STYLE_PROVIDER(cssProvider),
+                              GTK_STYLE_PROVIDER_PRIORITY_USER);
+    
+    t_current_window_info *sign_in_layout_info = NULL;
+    
+    sign_in_layout_info = create_current_window_info();
+    sign_in_layout_info->main_window = GTK_WIDGET(new_window);
+    view_sign_in(sign_in_layout_info);
 
-    // gtk_init(&argc, &argv);
+    g_signal_connect(new_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
-    // window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-
-    // g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL);
-    // gtk_window_set_default_size(GTK_WINDOW(window), DEFAULT_WIDTH, DEFAULT_HEIGHT);
-    // gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
-
-    // // view_sign_up(window);
-    // view_sign_in(window);
-
-    // gtk_main();
-
-    // send_file("bigimage.jpeg", "OK", "127.0.0.1", 5000);
-    // send_set_avatar_request("sound.wav");
-
-    get_file("/resources/images/avatars/gof.gif");
+    gtk_main();
 }
