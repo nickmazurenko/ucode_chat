@@ -23,6 +23,54 @@ cJSON* add_to_protocol(cJSON* protocol, char* key, cJSON* value) {
     return protocol;
 }
 
+cJSON* add_to_protocol_string(cJSON* protocol, char* key, char* value) {
+
+    cJSON* value_obj = cJSON_CreateString(value);
+
+    return add_to_protocol(protocol, key, value_obj);
+}
+
+cJSON* add_to_protocol_number(cJSON* protocol, char* key, double value) {
+
+    cJSON* value_obj = cJSON_CreateNumber(value);
+
+    return add_to_protocol(protocol, key, value_obj);
+}
+
+cJSON* get_from_protocol(cJSON* protocol, char* key) {
+
+    cJSON* value_obj = cJSON_GetObjectItemCaseSensitive(protocol, key);
+
+    return value_obj;
+}
+
+char* get_from_protocol_string(cJSON* protocol, char* key) {
+
+    cJSON* value_obj = get_from_protocol(protocol, key);
+
+    if (value_obj == NULL) {
+        printf("get from protocol string value obj is null in key: %s\n", key);
+        return NULL;
+    }
+
+    return value_obj->valuestring;
+}
+
+double get_from_protocol_number(cJSON* protocol, char* key) {
+
+    cJSON* value_obj = get_from_protocol(protocol, key);
+
+    if (value_obj == NULL) {
+        printf("get from protocol number value obj is null in key: %s\n", key);
+        return 0.0;
+    }
+
+   
+    if (value_obj->valueint != 0) return value_obj->valueint;
+    else return value_obj->valuedouble;
+    return 0.0;
+}
+
 char* screen_file(char* file_bytes, size_t file_size, size_t *screened_size) {
 
     // screen '\0'

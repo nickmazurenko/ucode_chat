@@ -5,6 +5,7 @@
 #include "sign.h"
 #include "set_avatar.h"
 #include "file_for_write.h"
+#include "send_file_server.h"
 
 int select_action(char* request, char* response);
 

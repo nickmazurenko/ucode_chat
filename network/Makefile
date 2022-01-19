@@ -11,7 +11,7 @@ SRC_PATH = $(wildcard $(SOURCE_DIR)/$(SOURCE_FILES))
 OUTPUT_FILE = libnetwork.a
 
 
-all: clean obj libnetwork
+all: uninstall clean obj libnetwork
 
 obj:
 	if [ ! -d $(OBJECT_DIR) ]; then mkdir $(OBJECT_DIR); fi

@@ -34,8 +34,8 @@ bool send_sign_up_request(t_model_user* model_user) {
 bool send_sign_in_request(t_model_user* model_user) {
 
     char* request = create_sign_request(model_user, "SIGN IN");
+    
     char* response = send_request(request, "127.0.0.1", 5000);
-
     // check sign in
 
     printf("%s\n", response);

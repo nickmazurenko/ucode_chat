@@ -75,7 +75,7 @@ char* file_end(char* request, char* response) {
         printf("parse error\n");
         return NULL;
     }
-
+    // TODO: add file path to after save action
     cJSON* after_save_action = cJSON_GetObjectItemCaseSensitive(protocol, "DATA");
 
     select_action(after_save_action->valuestring, response);

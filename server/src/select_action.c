@@ -41,9 +41,12 @@ int select_action(char* request, char* response) {
     
     } else if ( strcmp(action, "FILE END") == 0 ) {
 
-        printf("there\n");
         file_end(request, response);
 
+    } else if (strcmp(action, "GET FILE") == 0) {
+        
+        char* response_buff = send_file_server(request);
+        strcpy(response, response_buff);
     }
 
     cJSON_Delete(request_obj);

@@ -3,23 +3,26 @@
 
 char* read_response(int sock_fd) {
 
-    char* response = mx_strnew(BUFFER_SIZE);
+    char* response = mx_strnew(READ_SIZE);
     int read_size = 0;
 
-    while ( (read_size = read(sock_fd, response, BUFFER_SIZE - 1)) > 0 )
+    while ( (read_size = read(sock_fd, response, READ_SIZE - 1)) > 0 )
     {
-        response[BUFFER_SIZE - 1] = '\0';
+        // response[read_size - 1] = '\0';
     }
     
     return response;
 }
 
-char* send_request(char*  request, char* ip, int port) {
+char* send_request(char*  request_str, char* ip, int port) {
 
     // printf("%s", request);
 
     int sock_fd = 0;
     struct sockaddr_in serv_addr;
+
+    char* request = mx_strnew(strlen(request_str) + 2);
+    strcpy(request, request_str);
 
     memset(&serv_addr, '0', sizeof(serv_addr));
 
@@ -48,7 +51,7 @@ char* send_request(char*  request, char* ip, int port) {
     request[strlen(request)] = '\n';
 
     sendto(sock_fd, request, strlen(request), 0, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
-
+    free(request);
     char* response = read_response(sock_fd);
     // char* response = NULL;
 

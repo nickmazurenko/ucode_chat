@@ -14,10 +14,15 @@ char* read_request(int conn_fd, char* request, int* read_number) {
     while ( (*read_number = read(conn_fd, request, buff_size - 1)) > 0 )
     {
         // bzero(request, BUFFER_SIZE);
-        // request[read_number] = '\0';
+        request[*read_number - 1] = '\0';
+        request[*read_number - 2] = '\0';
         // read_number = read(conn_fd, request, buff_size);
         break;
     }
+    *read_number = *read_number - 2;
+    
+    printf(request);
+
     return request;
 }
 
@@ -27,7 +32,7 @@ void run_server() {
 
     int listen_fd = 0, conn_fd = 0;
     struct sockaddr_in serv_addr;
-    char* response_buffer = mx_strnew(BUFFER_SIZE);
+    char* response_buffer = mx_strnew(READ_SIZE);
 
     memset(&serv_addr, '0', sizeof(serv_addr));
 
