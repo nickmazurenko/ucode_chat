@@ -36,10 +36,17 @@ G_MODULE_EXPORT void sign_in_clicked(GtkButton *button, GtkEntry **sign_in_info)
 {
     // printf("username: %s\npassword: %s\n", (char *)gtk_entry_get_text(sign_in_info[0]), (char *)gtk_entry_get_text(sign_in_info[1]));
     //check input
-    if (!is_valid_user_data(sign_in_info))
+    if (!is_valid_user_data(sign_in_info)){
         place_sign_entry_error(sign_in_info);
-    else
-       controller_sign_in((char *)gtk_entry_get_text(sign_in_info[0]), (char *)gtk_entry_get_text(sign_in_info[1]));
+    }else{
+        int status = controller_sign_in((char *)gtk_entry_get_text(sign_in_info[0]), (char *)gtk_entry_get_text(sign_in_info[1]));
+        if (status){
+            place_sign_entry_error(sign_in_info);
+        } else {
+            NULL;
+            // change window
+        }
+    }
 }
 
 G_MODULE_EXPORT void sign_up_clicked(GtkButton *button, t_current_window_info *current_layout_info)

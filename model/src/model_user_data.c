@@ -53,9 +53,6 @@ t_model_user_data* from_string_model_user_data(char* json) {
     model_user_data->status = (int)get_from_protocol_number(user_data, "status");
     model_user_data->money = (size_t)get_from_protocol_number(user_data, "money");
 
-    free(about);
-    free(email);
-    free(t_number);
     cJSON_Delete(user_data);
 
     return model_user_data;

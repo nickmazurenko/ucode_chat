@@ -36,8 +36,7 @@ t_model_user* from_string_model_user(char* string) {
     model_user->id = get_from_protocol_number(user, "id");
     model_user->user_data_id = get_from_protocol_number(user, "user_data_id");
 
-    free(name);
-    free(password);
+
     cJSON_Delete(user);
 
     return model_user;

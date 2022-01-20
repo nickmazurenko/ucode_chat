@@ -43,7 +43,6 @@ t_model_message* from_string_model_message(char* json) {
 
     strcpy(model_message->data, data);
 
-    free(data);
     cJSON_Delete(message);
 
     return model_message;

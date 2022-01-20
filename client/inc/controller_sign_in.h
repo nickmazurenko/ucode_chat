@@ -4,6 +4,6 @@
 #include "model.h"
 #include "sign_requests.h"
 
-void controller_sign_in(char* user_name, char* password);
+int controller_sign_in(char* user_name, char* password);
 
 #endif

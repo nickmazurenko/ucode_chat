@@ -19,13 +19,13 @@ int select_action(char* request, char* response) {
 
     if ( strcmp(action, "SIGN UP") == 0 ) {
 
-        sign_up(request);
+        sign_up(request, response);
 
     }
 
     else if ( strcmp(action, "SIGN IN") == 0 ) {
 
-        sign_in(request);
+        sign_in(request, response);
 
     } else if ( strcmp(action, "SET AVATAR") == 0 ) {
         

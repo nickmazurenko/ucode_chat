@@ -36,7 +36,6 @@ t_model_stone* from_string_model_stone(char* json) {
 
     strcpy(model_stone->path, path);
 
-    free(path);
     cJSON_Delete(stone);
 
     return model_stone;

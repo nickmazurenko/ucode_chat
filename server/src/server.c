@@ -20,7 +20,6 @@ char* read_request(int conn_fd, char* request, int* read_number) {
         break;
     }
     *read_number = *read_number - 2;
-    
     printf(request);
 
     return request;

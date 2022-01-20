@@ -38,8 +38,6 @@ t_model_resource* from_string_model_resource(char* json) {
     strcpy(model_resource->name, name);
     strcpy(model_resource->path, path);
 
-    free(name);
-    free(path);
     cJSON_Delete(resource);
     return model_resource;
 }
