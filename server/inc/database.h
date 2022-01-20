@@ -5,6 +5,14 @@
 #include <libmx.h>
 #include <string.h>
 #include <stdio.h>
+#include <unistd.h>
+
+#include "model_user_data.h"
+#include "model_message.h"
+#include "model_resource.h"
+#include "model_stone.h"
+
+void init_tables();
 
 #define DB "db.sqlite"
 
@@ -13,6 +21,19 @@ void init_User_table();
 int callback_count(void *not_used, int argc, char **argv, char **azColName);
 bool is_user(char *username, char *password);
 bool is_new_user(char *username);
-void insert_data_user(char *username, char *password);
+size_t insert_data_user(char *username, char *password);
+
+// User Data Table
+size_t insert_data_user_data(t_model_user_data* model_user_data);
+
+// Message Table
+size_t insert_data_message(t_model_message* model_message);
+
+// Resource Table
+size_t insert_data_resource(t_model_resource* model_resource);
+
+// Stones Table
+size_t insert_data_stone(t_model_stone* model_stone);
+
 
 #endif

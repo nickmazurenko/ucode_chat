@@ -3,13 +3,16 @@
 
 #include <string.h>
 #include "libmx.h"
+#include "cJSON.h"
+
+#include "protocol.h"
 
 typedef struct s_model_user {
 
     size_t id;
     char* name;
     char* password;
-
+    size_t user_data_id;
 }              t_model_user;
 
 

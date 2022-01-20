@@ -6,84 +6,40 @@ t_model_user* new_model_user(char* name, char* password) {
     model_user->id = 0;
     model_user->name = mx_strdup(name);
     model_user->password = mx_strdup(password);
+    model_user->user_data_id = 0;
 
     return model_user;
 }
 
 char*         to_string_model_user(t_model_user* model_user) {
 
-    char* string = NULL;
-    char* buff = mx_itoa(model_user->id);
+    cJSON* user = cJSON_CreateObject();
 
-    string = mx_strjoin(string, buff);
-    free(buff);
-    buff = string;
+    add_to_protocol_string(user, "name", model_user->name);
+    add_to_protocol_string(user, "password", model_user->password);
+    add_to_protocol_number(user, "id", model_user->id);
+    add_to_protocol_number(user, "user_data_id", model_user->user_data_id);
 
-    string = mx_strjoin(string, ";");
-    free(buff);
-    buff = string;
-
-    string = mx_strjoin(string, model_user->name);
-    free(buff);
-    buff = string;
-
-    string = mx_strjoin(string, ";");
-    free(buff);
-    buff = string;
-
-    string = mx_strjoin(string, model_user->password);
-    free(buff);
-    buff = string;
-
-    string = mx_strjoin(string, ";");
-    free(buff);
-
-    return string;
+    char* user_str = cJSON_Print(user);
+    cJSON_Delete(user);
+    return user_str;
 }
 
 t_model_user* from_string_model_user(char* string) {
 
-    char* buff = mx_strnew(256);
-    
-    t_model_user* model_user = new_model_user("", "");
-    int index = mx_get_char_index(string, ';');
+    cJSON* user = cJSON_Parse(string);
+    char* name = get_from_protocol_string(user, "name");
+    char* password = get_from_protocol_string(user, "password");
 
-    if (index < 0) {
-        mx_strdel(&buff);
-        return NULL;
-    }
+    t_model_user* model_user = new_model_user(name, password);
 
-    int last_index = index;
-    mx_strncpy(buff, string, index);
-    model_user->id = atol(buff);
-    memset(buff, '\0', index);
+    model_user->id = get_from_protocol_number(user, "id");
+    model_user->user_data_id = get_from_protocol_number(user, "user_data_id");
 
-    index = mx_get_char_index(string + last_index + 1, ';');
-    if (index < 0) {
-        mx_strdel(&buff);
-        free_model_user(&model_user);
-        return NULL;
-    }
+    free(name);
+    free(password);
+    cJSON_Delete(user);
 
-    mx_strncpy(buff, string + last_index + 1, index);
-    free(model_user->name);
-    model_user->name = mx_strdup(buff);
-    memset(buff, '\0', index);
-    
-    last_index = last_index + 1 + index;
-    index = mx_get_char_index(string + last_index + 1, ';');
-    if (index < 0) {
-        mx_strdel(&buff);
-        free_model_user(&model_user);
-        return NULL;
-    }
-
-    mx_strncpy(buff, string + last_index + 1, index);
-    free(model_user->password);
-    model_user->password = mx_strdup(buff);
-
-
-    mx_strdel(&buff);
     return model_user;
 }
 

@@ -1,5 +1,48 @@
 #include "database.h"
 
+char* table_names[] = {
+    "Users",
+    "UsersData",
+    "Messages",
+    "Resources",
+    "Stones",
+    NULL
+};
+
+char* tables_init[] = {
+
+    "CREATE TABLE IF NOT EXISTS Users (Id INTEGER PRIMARY KEY AUTOINCREMENT, Username TEXT, Password TEXT, UserData INTEGER) ;",
+    "CREATE TABLE IF NOT EXISTS UsersData (Id INTEGER PRIMARY KEY AUTOINCREMENT, About TEXT, Status INTEGER, TNumber CHAR, Email TEXT, Era INTEGER, Money INTEGER) ;",
+    "CREATE TABLE IF NOT EXISTS Messages (Id INTEGER PRIMARY KEY AUTOINCREMENT, FromUser INTEGER, ToUser INTEGER, Type INTEGER, Data TEXT) ;",
+    "CREATE TABLE IF NOT EXISTS Resources (Id INTEGER PRIMARY KEY AUTOINCREMENT, Path TEXT, Name TEXT) ;",
+    "CREATE TABLE IF NOT EXISTS Stones (Id INTEGER PRIMARY KEY AUTOINCREMENT, Path TEXT) ;",
+    NULL
+};
+
+void init_tables() {
+
+    sqlite3 *db = NULL;
+    int err_status = 0;
+
+    if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
+        fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        exit(1);
+    }
+
+    char *err_msg = NULL;
+
+    for (int table_index = 0; tables_init[table_index] != NULL; table_index++) {
+        if((err_status = sqlite3_exec(db, tables_init[table_index], 0, 0, &err_msg)) != SQLITE_OK) {
+            fprintf(stderr, "SQL_error: %s\n", err_msg);
+            sqlite3_free(err_msg);
+            sqlite3_close(db);
+            exit(1);
+        }
+    }
+
+    sqlite3_close(db);
+}
 
 void init_User_table() {
     sqlite3 *db;
@@ -26,106 +69,7 @@ void init_User_table() {
     sqlite3_close(db);
 }
 
-bool is_new_user(char *username) {
-    int err_status = 0;
 
-    sqlite3 *db;
-    
-    if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
-        fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
-        sqlite3_close(db);
-        exit(1);
-    } 
-
-    char *sql_query = NULL;
-
-    char *check_request = "SELECT * FROM Users WHERE Username=('%s');";
-
-    asprintf(&sql_query, check_request, username);
-
-    char *err_msg = NULL;
-    
-    int count = 0;
-
-    if((err_status = sqlite3_exec(db, sql_query, callback_count, &count, &err_msg)) != SQLITE_OK) {
-        fprintf(stderr, "SQL_error: %s\n", err_msg);
-        sqlite3_free(err_msg);
-        sqlite3_close(db);
-        exit(1);
-    }
-
-    sqlite3_close(db);
-
-
-    if(count == 0)
-        return true;
-    return false;
-}
-
-
-bool is_user(char *username, char *password) {
-    sqlite3 *db;
-    
-    int err_status = 0;
-
-    if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
-        fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
-        sqlite3_close(db);
-        exit(1);
-    } 
-
-    char *sql_query = NULL;
-
-    char *check_request = "SELECT * FROM Users WHERE (Username=('%s') AND Password=('%s'));";
-
-    asprintf(&sql_query, check_request, username, password);
-
-    char *err_msg = NULL;
-    
-    int count = 0;
-
-    if((err_status = sqlite3_exec(db, sql_query, callback_count, &count, &err_msg)) != SQLITE_OK) {
-        fprintf(stderr, "SQL_error: %s\n", err_msg);
-        sqlite3_free(err_msg);
-        sqlite3_close(db);
-        exit(1);
-    }
-
-    sqlite3_close(db);
-    
-    if(count == 0)
-        return false;
-    return true;
-}
-
-void insert_data_user(char *username, char *password) {
-    sqlite3 *db;
-    
-    int err_status = 0;
-
-    if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
-        fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
-        sqlite3_close(db);
-        exit(1);
-    } 
-
-    char *insert_request = "INSERT INTO Users(Username, Password) VALUES('%s', '%s');";
-    char *sql_query = NULL;
-    char *err_msg = NULL;
-
-    asprintf(&sql_query, insert_request, username, password);
-
-    
-    if((err_status = sqlite3_exec(db, sql_query, callback_print_db, 0, &err_msg)) != SQLITE_OK) {
-        fprintf(stderr, "SQL_error: %s\n", err_msg);
-        sqlite3_free(err_msg);
-        sqlite3_close(db);
-        return;
-        // exit(1);
-    }
-
-    sqlite3_close(db);
-}
 
 int callback_print_db(void *not_used, int argc, char **argv, char **azColName) {
     not_used = 0;
