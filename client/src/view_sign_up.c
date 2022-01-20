@@ -12,20 +12,13 @@ void view_sign_up(t_current_window_info *current_layout)
 
     gtk_container_add(GTK_CONTAINER(current_layout->main_window), GTK_WIDGET(sign_up_layout));
 
-    GtkEntry **sign_up_info = (GtkEntry **)malloc(4 * sizeof(GtkEntry *));
-    sign_up_info[0] = GTK_ENTRY(gtk_builder_get_object(current_layout->builder, "username_entry"));
-    sign_up_info[1] = GTK_ENTRY(gtk_builder_get_object(current_layout->builder, "password_entry"));
-    sign_up_info[2] = GTK_ENTRY(gtk_builder_get_object(current_layout->builder, "password_entry1"));
 
     GtkButton *return_button = GTK_BUTTON(gtk_builder_get_object(current_layout->builder, "return_button"));
     GtkButton *sign_up_button = GTK_BUTTON(gtk_builder_get_object(current_layout->builder, "sign_up"));
 
-    g_signal_connect(sign_up_info[0], "changed", G_CALLBACK(entry_activate), sign_up_info);
-    g_signal_connect(sign_up_info[1], "changed", G_CALLBACK(entry_activate), sign_up_info);
-    g_signal_connect(sign_up_info[2], "changed", G_CALLBACK(entry_activate), sign_up_info);
 
     g_signal_connect(return_button, "clicked", G_CALLBACK(return_clicked), current_layout);
-    g_signal_connect(sign_up_button, "clicked", G_CALLBACK(sign_up_insert_clicked), sign_up_info);
+    g_signal_connect(sign_up_button, "clicked", G_CALLBACK(sign_up_insert_clicked), current_layout);
 }
 
 G_MODULE_EXPORT void return_clicked(GtkButton *button, t_current_window_info *current_layout)
@@ -33,12 +26,22 @@ G_MODULE_EXPORT void return_clicked(GtkButton *button, t_current_window_info *cu
     view_sign_in(current_layout);
 }
 
-G_MODULE_EXPORT void sign_up_insert_clicked(GtkButton *button, GtkEntry **sign_up_info)
+G_MODULE_EXPORT void sign_up_insert_clicked(GtkButton *button, t_current_window_info *current_layout)
 {
+
+    //check if valid sign up info
+    GtkEntry **sign_up_info = (GtkEntry **)malloc(4 * sizeof(GtkEntry *));
+    sign_up_info[0] = GTK_ENTRY(gtk_builder_get_object(current_layout->builder, "username_entry"));
+    sign_up_info[1] = GTK_ENTRY(gtk_builder_get_object(current_layout->builder, "password_entry"));
+    sign_up_info[2] = GTK_ENTRY(gtk_builder_get_object(current_layout->builder, "password_entry1"));
+
+    g_signal_connect(sign_up_info[0], "changed", G_CALLBACK(entry_activate), sign_up_info);
+    g_signal_connect(sign_up_info[1], "changed", G_CALLBACK(entry_activate), sign_up_info);
+    g_signal_connect(sign_up_info[2], "changed", G_CALLBACK(entry_activate), sign_up_info);
+
     printf("username: %s\npassword: %s\nrepeat password: %s\n", (char *)gtk_entry_get_text(sign_up_info[0]),
                                                                 (char *)gtk_entry_get_text(sign_up_info[1]),
                                                                 (char *)gtk_entry_get_text(sign_up_info[2]));
-    //check if valid sign up info
     if (!is_valid_user_data(sign_up_info)){
         place_sign_entry_error(sign_up_info);
     }else{
@@ -46,8 +49,8 @@ G_MODULE_EXPORT void sign_up_insert_clicked(GtkButton *button, GtkEntry **sign_u
         if(status){
             place_sign_entry_error(sign_up_info);
         }else {
-            NULL;
-            // change window
+            view_sign_in(current_layout); // or main page;
+
         }
     }
 }

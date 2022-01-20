@@ -12,7 +12,7 @@
 
 G_MODULE_EXPORT void sign_up_clicked(GtkButton* button, t_current_window_info *current_layout_info);
 void view_sign_in(t_current_window_info *current_layout_info);
-G_MODULE_EXPORT void sign_in_clicked(GtkButton* button, GtkEntry **sign_in_info);
+G_MODULE_EXPORT void sign_in_clicked(GtkButton* button, t_current_window_info *current_layout_info);
 
 
 
