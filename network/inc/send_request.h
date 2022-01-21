@@ -3,31 +3,66 @@
 
 #include "libmx.h"
 
-//////////////////////////////
-
+#if      defined(_MSC_VER) \
+        ||defined(__WIN32__) \
+        ||defined(_WIN32)\
+        ||defined(__WIN32)\
+        ||defined(WIN32)\
+        ||defined(__WINNT)\
+        ||defined(__WINNT__)\
+        ||defined(_WINNT)\
+        ||defined(WINNT)
 #include <winsock2.h>
 #include <windows.h>
 #include <Ws2tcpip.h>
-
-
-#include <time.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
 #include <sys/timeb.h>
-#include <string.h>
+#elif   defined(__linux) \
+       ||defined(__linux__)\
+       ||defined(linux)\
+       ||defined(_linux)
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#elif defined(__unix) \
+       ||defined(_unix) \
+       ||defined(__unix__) \
+       ||defined(unix) 
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+       #if      defined(__APPLE__) 
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+      #endif
+#else
+# error Cannot determine OS type
+#endif
+
+//////////////////////////////
+
+// #include <winsock2.h>
+// #include <windows.h>
+// #include <Ws2tcpip.h>
+// #include <sys/timeb.h>
+
+
 /////////////////////////////
 
 // #include <sys/socket.h>
-#include <sys/types.h>
 // #include <netinet/in.h>
+// #include <arpa/inet.h>
 // #include <netdb.h>
+#include <sys/types.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
-// #include <arpa/inet.h>
+#include <time.h>
 
 #include "protocol.h"
 

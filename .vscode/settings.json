@@ -8,6 +8,7 @@
         "stat.h": "c",
         "send_file.h": "c",
         "send_file_server.h": "c",
-        "*.tcc": "c"
+        "*.tcc": "c",
+        "inet.h": "c"
     }
 }
