@@ -2,6 +2,7 @@
 #define VIEW_TOOLS_H
 #include <gtk/gtk.h>
 #include "libmx.h"
+
 typedef struct s_current_window_info {
   GtkBuilder *builder;
   GtkWidget *main_window;

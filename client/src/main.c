@@ -5,6 +5,9 @@
 #include "send_file.h"
 #include "get_file.h"
 
+//temp
+#include "drawing_area.h"
+
 int main(int argc, char*argv[]) {
 
     gtk_init(&argc, &argv);
@@ -24,6 +27,11 @@ int main(int argc, char*argv[]) {
     sign_in_layout_info = create_current_window_info();
     sign_in_layout_info->main_window = GTK_WIDGET(new_window);
     view_sign_in(sign_in_layout_info);
+    // add_draw_area(sign_in_layout_info);
+	// GtkWidget *draw_area = GTK_WIDGET(gtk_builder_get_object(sign_in_layout_info->builder, "draw"));
+    // gtk_widget_set_events(draw_area, GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
+
+
 
     g_signal_connect(new_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 

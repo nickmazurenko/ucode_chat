@@ -27,7 +27,7 @@ char* read_request(int conn_fd, char* request, int* read_number) {
 
 void run_server() {
 
-    init_User_table();
+    init_tables();
 
     int listen_fd = 0, conn_fd = 0;
     struct sockaddr_in serv_addr;

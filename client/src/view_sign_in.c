@@ -1,5 +1,8 @@
 #include "view_sign_in.h"
 
+//TODO: delete drawing from here
+#include "drawing_area.h"
+
 void view_sign_in(t_current_window_info *current_layout_info)
 {
 
@@ -49,6 +52,7 @@ G_MODULE_EXPORT void sign_in_clicked(GtkButton *button, t_current_window_info *c
         } else {
             NULL;
             // change window to main page
+            add_draw_area(current_layout_info);     //TODO: delete it
         }
     }
 }

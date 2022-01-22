@@ -9,6 +9,10 @@
         "send_file.h": "c",
         "send_file_server.h": "c",
         "*.tcc": "c",
-        "inet.h": "c"
+        "inet.h": "c",
+        "view_tools.h": "c",
+        "resources.h": "c",
+        "drawing_area.h": "c",
+        "view_sign_in.h": "c"
     }
 }
