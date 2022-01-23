@@ -103,19 +103,23 @@ gboolean on_draw_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, t
 
 void add_draw_area(t_current_window_info *current_window_info) {
 
+	gtk_widget_hide(current_window_info->main_window);
 
 	// create layout form glade
 	// add layout to current window
     gtk_builder_add_from_file(current_window_info->builder, get_path_to_glade("drawing_area.glade"), NULL);
 
+
     GtkLayout *drawing_area_layout = GTK_LAYOUT(gtk_builder_get_object(current_window_info->builder, "draw_layout"));
 
     GtkLayout *current_layout = GTK_LAYOUT(gtk_builder_get_object(current_window_info->builder, "sign_in_layout")); //TODO: replace layout
 
-    gtk_widget_destroy(current_layout);
-    gtk_container_add(GTK_CONTAINER(current_window_info->main_window), GTK_WIDGET(drawing_area_layout));
+    // gtk_widget_destroy(current_layout);
+    // gtk_container_add(GTK_CONTAINER(current_window_info->main_window), GTK_WIDGET(drawing_area_layout));
+	// current_layout = GTK_LAYOUT(gtk_builder_get_object(current_window_info->builder, "sign_in_layout"));
+	// gtk_container_add(GTK_CONTAINER(drawing_area_layout), GTK_WIDGET(current_layout));
+    gtk_container_add(GTK_CONTAINER(current_layout), GTK_WIDGET(drawing_area_layout));
 
-    gtk_widget_show_all(current_window_info->main_window);
 
 	GtkWidget *draw_area = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "draw"));
 	
@@ -123,9 +127,8 @@ void add_draw_area(t_current_window_info *current_window_info) {
     g_signal_connect(draw_area, "button-release-event", G_CALLBACK(on_draw_button_release_event), current_window_info);
     g_signal_connect(draw_area, "draw", G_CALLBACK(on_draw_draw), current_window_info);
     g_signal_connect(draw_area, "motion-notify-event", G_CALLBACK(on_draw_motion_notify_event), current_window_info);
-
-    // gtk_widget_set_events(draw_area, GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
-    
+    gtk_widget_set_events(draw_area, GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
+    gtk_widget_show_all(current_window_info->main_window);
 }
 
 
