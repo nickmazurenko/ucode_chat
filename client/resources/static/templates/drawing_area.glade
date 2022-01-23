@@ -2,48 +2,47 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkLayout" id="draw_layout">
-    <property name="visible">True</property>
+  <object class="GtkWindow" id="drawing_window">
+    <property name="width-request">600</property>
+    <property name="height-request">600</property>
     <property name="can-focus">False</property>
-    <property name="width">1366</property>
-    <property name="height">768</property>
     <child>
-      <object class="GtkFixed" id="fixed">
-        <property name="width-request">100</property>
-        <property name="height-request">80</property>
+      <object class="GtkLayout" id="draw_layout">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="width">1366</property>
+        <property name="height">768</property>
         <child>
-          <object class="GtkImage" id="image2">
-            <property name="width-request">100</property>
-            <property name="height-request">80</property>
+          <object class="GtkFixed" id="drawing_area_fixed">
+            <property name="width-request">400</property>
+            <property name="height-request">400</property>
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="pixbuf">..\images\rock.png</property>
-            <accessibility>
-              <relation type="embeds" target="draw"/>
-            </accessibility>
+            <child>
+              <object class="GtkImage" id="image2">
+                <property name="width-request">400</property>
+                <property name="height-request">400</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="pixbuf">..\images\rock.png</property>
+                <accessibility>
+                  <relation type="embeds" target="draw"/>
+                </accessibility>
+              </object>
+            </child>
+            <child>
+              <object class="GtkDrawingArea" id="draw">
+                <property name="width-request">600</property>
+                <property name="height-request">600</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <signal name="button-press-event" handler="on_draw_button_press_event" swapped="no"/>
+                <signal name="button-release-event" handler="on_draw_button_release_event" swapped="no"/>
+                <signal name="draw" handler="on_draw_draw" swapped="no"/>
+                <signal name="motion-notify-event" handler="on_draw_motion_notify_event" swapped="no"/>
+              </object>
+            </child>
           </object>
-          <packing>
-            <property name="x">-42</property>
-            <property name="y">141</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkDrawingArea" id="draw">
-            <property name="width-request">100</property>
-            <property name="height-request">80</property>
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <signal name="button-press-event" handler="on_draw_button_press_event" swapped="no"/>
-            <signal name="button-release-event" handler="on_draw_button_release_event" swapped="no"/>
-            <signal name="draw" handler="on_draw_draw" swapped="no"/>
-            <signal name="motion-notify-event" handler="on_draw_motion_notify_event" swapped="no"/>
-          </object>
-          <packing>
-            <property name="x">10</property>
-            <property name="y">149</property>
-          </packing>
         </child>
       </object>
     </child>
