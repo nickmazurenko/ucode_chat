@@ -52,7 +52,7 @@ G_MODULE_EXPORT void sign_in_clicked(GtkButton *button, t_current_window_info *c
         } else {
             NULL;
             // change window to main page
-            add_draw_area(current_layout_info);     //TODO: delete it
+           view_home_page(current_layout_info);    //TODO: delete it
         }
     }
 }

@@ -5,6 +5,7 @@
 #include "libmx.h"
 #include "controller_sign_in.h"
 #include "view_sign_up.h"
+#include "view_home_page.h"
 #include "view_tools.h"
 #include "resources.h"
 

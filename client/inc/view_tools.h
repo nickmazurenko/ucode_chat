@@ -10,6 +10,8 @@ typedef struct s_current_window_info {
 }               t_current_window_info;
 
 void delete_sign_entry_error(GtkEntry **entries);
+void place_answer_error(GtkWidget *button);
+void delete_answer_error(GtkWidget *button);
 void place_sign_entry_error(GtkEntry **entries);
 int is_valid_user_data(GtkEntry **info);
 G_MODULE_EXPORT void entry_activate(GtkEntry* entry, GtkEntry **info);

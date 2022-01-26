@@ -30,6 +30,25 @@ int is_valid_user_data(GtkEntry **info) {
 }
 
 
+
+void place_answer_error(GtkWidget *button) {
+    GtkStyleContext *answer_context = gtk_widget_get_style_context(button);
+    gtk_style_context_remove_class(answer_context, "answer");
+    gtk_style_context_add_class(answer_context, "answer_error");
+}
+
+
+void delete_answer_error(GtkWidget *button) {
+    GtkStyleContext *answer_context = gtk_widget_get_style_context(button);
+    gtk_style_context_remove_class(answer_context, "answer_error");
+    gtk_style_context_add_class(answer_context, "answer");
+}
+
+
+
+
+
+
 void place_sign_entry_error(GtkEntry **entries) {
     GtkStyleContext *entry_context_username = gtk_widget_get_style_context(GTK_WIDGET(entries[0]));
     GtkStyleContext *entry_context_password = gtk_widget_get_style_context(GTK_WIDGET(entries[1]));

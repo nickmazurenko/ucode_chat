@@ -9,3 +9,12 @@
     border-color: red;
 }
 
+.answer{
+    border-width: 0px;
+    border-color: transparent;
+}
+
+.answer_error{
+    border-width: 5px;
+    border-color: red;
+}
