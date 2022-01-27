@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkLayout" id="draw_layout">
     <property name="name">draw_layout</property>
-    <property name="width_request">400</property>
-    <property name="height_request">400</property>
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="width">400</property>
-    <property name="height">400</property>
+    <property name="can-focus">False</property>  
+    <property name="width">600</property>
+    <property name="height">800</property>
     <child>
       <object class="GtkFixed" id="drawing_area_fixed">
         <property name="name">drawing_area_fixed</property>
-        <property name="width_request">400</property>
-        <property name="height_request">400</property>
+        <property name="width-request">800</property>
+        <property name="height-request">600</property>
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <child>
           <object class="GtkImage" id="draw_image">
             <property name="name">draw_image</property>
-            <property name="width_request">400</property>
-            <property name="height_request">400</property>
-            <property name="can_focus">False</property>
+            <property name="visible">True</property>
+            <property name="width-request">600</property>
+            <property name="height-request">600</property>
+            <property name="can-focus">False</property>
             <property name="pixbuf">../images/rock.png</property>
             <accessibility>
               <relation type="embeds" target="draw"/>
@@ -32,10 +31,10 @@
         <child>
           <object class="GtkDrawingArea" id="draw">
             <property name="name">draw</property>
-            <property name="width_request">400</property>
-            <property name="height_request">400</property>
+            <property name="width-request">800</property>
+            <property name="height-request">600</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <signal name="button-press-event" handler="on_draw_button_press_event" swapped="no"/>
             <signal name="button-release-event" handler="on_draw_button_release_event" swapped="no"/>
             <signal name="draw" handler="on_draw_draw" swapped="no"/>
@@ -43,6 +42,9 @@
           </object>
         </child>
       </object>
+      <packing>
+        <property name="x">140</property>
+      </packing>
     </child>
   </object>
 </interface>

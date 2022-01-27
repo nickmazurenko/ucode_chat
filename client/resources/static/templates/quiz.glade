@@ -15,7 +15,7 @@
         <property name="height-request">80</property>
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="pixbuf">..\..\..\..\..\..\..\..\..\Users\User\Pictures\Cyberpunk 2077\photomode_06062021_215957.png</property>
+        <property name="pixbuf">../images/quiz_background.jpeg</property>
       </object>
       <packing>
         <property name="x">-360</property>
