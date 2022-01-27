@@ -4,6 +4,17 @@ void	on_column(GtkButton *b) {
 	printf("You selected: %s\n", gtk_button_get_label (b));
 	}
     
+
+gboolean add_drawing_area_clicked(GtkWidget *widget, t_current_window_info *current_window_info) {
+    
+    add_draw_area(current_window_info);
+
+
+    return TRUE;
+}
+
+
+
 void view_home_page(t_current_window_info *current_layout_info)
 {
     GtkWidget *button[1000];
@@ -28,6 +39,8 @@ void view_home_page(t_current_window_info *current_layout_info)
     GtkWidget *home_chats_grid = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "home_chats_grid"));
 
     GtkWidget *quiz_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "quiz_button"));
+
+    GtkWidget *draw_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "draw_button"));
     
     set_quiz_on_button(quiz_button);
 
@@ -41,7 +54,7 @@ void view_home_page(t_current_window_info *current_layout_info)
 		printf("File finctions.txt not found\n");
 		// return EXIT_FAILURE;
 		}
-
+    g_signal_connect(draw_button, "clicked", G_CALLBACK(add_drawing_area_clicked), current_layout_info);
 	column = 0;
 	while (1) {
 		if (fgets(tmp, 1024, f1) == NULL) {
@@ -55,6 +68,7 @@ void view_home_page(t_current_window_info *current_layout_info)
 		gtk_button_set_alignment (GTK_BUTTON(button[column]), 0.5, 0.0); // hor left, ver center
         gtk_widget_set_size_request(button[column], 100, 100);
 		gtk_grid_attach (GTK_GRID(home_chats_grid), button[column], column, 1, 1, 1);
+        
 		g_signal_connect(button[column], "clicked", G_CALLBACK(on_column), NULL);
 		column ++;
 		}

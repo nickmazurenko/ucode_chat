@@ -13,6 +13,7 @@
         "view_tools.h": "c",
         "resources.h": "c",
         "drawing_area.h": "c",
-        "view_sign_in.h": "c"
+        "view_sign_in.h": "c",
+        "view_home_page.h": "c"
     }
 }

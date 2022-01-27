@@ -4,6 +4,7 @@
 #include <gtk/gtk.h>
 #include "libmx.h"
 #include "view_sign_in.h"
+#include "drawing_area.h"
 #include "view_tools.h"
 #include "quiz.h"
 #include "resources.h"

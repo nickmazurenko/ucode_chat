@@ -160,16 +160,16 @@ gboolean on_draw_button_press_event(GtkWidget *widget, GdkEventButton *event,  t
 
 gboolean on_draw_button_release_event(GtkWidget *widget, GdkEventButton *event,  t_current_window_info* current_window_info)
 {
-	GdkWindow *window = gtk_widget_get_window(widget);
+	// GdkWindow *window = gtk_widget_get_window(widget);
 	
 	// GdkWindow *main_window = gtk_widget_get_window(current_window_info->main_window);
 	// gdk_window_resize(main_window, 2000, 2000);
 	
-	GdkPixbuf *pixbuf = gdk_pixbuf_get_from_window(window, 0, 0, 2000, 2000);
-	pixbuf = gdk_pixbuf_scale_simple(pixbuf, 600, 600, GDK_INTERP_HYPER);
+	// GdkPixbuf *pixbuf = gdk_pixbuf_get_from_window(window, 0, 0, 2000, 2000);
+	// pixbuf = gdk_pixbuf_scale_simple(pixbuf, 600, 600, GDK_INTERP_HYPER);
 	
 
-	gdk_pixbuf_save(pixbuf, "new.png", "png", NULL, NULL, NULL); // TODO: change path
+	// gdk_pixbuf_save(pixbuf, "new.png", "png", NULL, NULL, NULL); // TODO: change path
 	save_saved_to_file(saved, "test_saved_points");
 
     return TRUE;
@@ -275,47 +275,61 @@ gboolean resize_drawing_area(GtkWidget *widget, GdkEventScroll *event, t_current
 	// GtkWidget *draw_area = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "draw"));
 	// GdkWindow *window = gtk_widget_get_window(draw_area);
 	// gdk_window_resize(window, 2000, 2000);
-
+	return true;
 }
 
 
 
 void add_draw_area(t_current_window_info *current_window_info) {
-
 	saved = read_saved_from_file("test_saved_points");
 
+	fprintf(stderr, "THERE\n");
+
+    GtkLayout *home_page_layout = GTK_LAYOUT(gtk_builder_get_object(current_window_info->builder, "home_page_layout"));
+	// GtkLayout *sign_in_layout = GTK_LAYOUT(gtk_builder_get_object(current_window_info->builder, "sign_in_layout"));
+	// gtk_widget_destroy(GTK_WIDGET(sign_in_layout));
 
 
-	GtkBuilder* drawing_window_builder = gtk_builder_new_from_file(get_path_to_glade("drawing_area.glade"));
+	gtk_builder_add_from_file(current_window_info->builder, get_path_to_glade("drawing_area.glade"), NULL);
+	// GtkBuilder* drawing_window_builder = gtk_builder_new_from_file(get_path_to_glade("drawing_area.glade"));
     
-    GtkWidget *drawing_window = GTK_WIDGET(gtk_builder_get_object(drawing_window_builder, "drawing_window"));
+    // GtkWidget *drawing_layout = GTK_WIDGET(gtk_builder_get_object(drawing_window_builder, "draw_layout"));
+	GtkLayout *drawing_layout = GTK_LAYOUT(gtk_builder_get_object(current_window_info->builder, "draw_layout"));
+
+	gtk_widget_set_size_request(GTK_WIDGET(drawing_layout), 400, 400);
+	// gtk_container_add(GTK_CONTAINER(current_window_info->main_window), GTK_WIDGET(drawing_layout));
+	gtk_container_add(GTK_CONTAINER(home_page_layout), GTK_WIDGET(drawing_layout));
+
+	current_window_info->layout_exists = true;
 
 	GdkPixbuf *image_pixbuf = gdk_pixbuf_new_from_file(get_path_to_image("rock.png"), NULL);
-    GtkWidget *image = GTK_WIDGET(gtk_builder_get_object(drawing_window_builder, "draw_image"));
-	gtk_image_set_from_pixbuf(image, image_pixbuf);
+    GtkWidget *image = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "draw_image"));
+	gtk_image_set_from_pixbuf(GTK_IMAGE(image), image_pixbuf);
 
-    g_signal_connect(drawing_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+    // g_signal_connect(drawing_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
     
-    t_current_window_info *drawing_window_info = NULL;
+    // t_current_window_info *drawing_window_info = NULL;
     
-    drawing_window_info = create_current_window_info();
-    drawing_window_info->main_window = drawing_window;
-    drawing_window_info->builder = drawing_window_builder;
+    // drawing_window_info = create_current_window_info();
+    // drawing_window_info->main_window = drawing_layout;
+	// // current_window_info->main_window = GTK_WIDGET(drawing_layout);
+    // current_window_info->builder = drawing_window_builder;
 
 	// if(saved != NULL){
 	// 	draw_saved(drawing_window_info);
 	// }
     
-	GtkWidget *draw_area = GTK_WIDGET(gtk_builder_get_object(drawing_window_info->builder, "draw"));
-    g_signal_connect(draw_area, "button-press-event", G_CALLBACK(on_draw_button_press_event), drawing_window_info);
-    g_signal_connect(draw_area, "button-release-event", G_CALLBACK(on_draw_button_release_event), drawing_window_info);
-    g_signal_connect(draw_area, "draw", G_CALLBACK(on_draw_draw), drawing_window_info);
-    g_signal_connect(draw_area, "motion-notify-event", G_CALLBACK(on_draw_motion_notify_event), drawing_window_info);
-    g_signal_connect(draw_area, "scroll-event", G_CALLBACK(resize_drawing_area),drawing_window_info);
-	gtk_widget_set_events(draw_area, GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_SCROLL_MASK);
+	GtkWidget *draw_area = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "draw"));
+    g_signal_connect(draw_area, "button-press-event", G_CALLBACK(on_draw_button_press_event), current_window_info);
+    g_signal_connect(draw_area, "button-release-event", G_CALLBACK(on_draw_button_release_event), current_window_info);
+    g_signal_connect(draw_area, "draw", G_CALLBACK(on_draw_draw), current_window_info);
+    g_signal_connect(draw_area, "motion-notify-event", G_CALLBACK(on_draw_motion_notify_event), current_window_info);
+    g_signal_connect(draw_area, "scroll-event", G_CALLBACK(resize_drawing_area), current_window_info);
+	gtk_widget_add_events(draw_area, GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_SCROLL_MASK);
 
-    gtk_widget_show(drawing_window);
+    // gtk_widget_show(drawing_window);
+	gtk_widget_show(current_window_info->main_window);
 
     gtk_main();
 
