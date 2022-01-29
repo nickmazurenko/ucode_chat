@@ -26,5 +26,6 @@ gboolean on_draw_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, t
 
 void add_draw_area(t_current_window_info *current_window_info);
 
+void set_rock_on_button(GtkWidget *button, t_current_window_info *current_window_info) ;
 
 #endif

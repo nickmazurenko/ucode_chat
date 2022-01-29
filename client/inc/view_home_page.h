@@ -7,6 +7,7 @@
 #include "drawing_area.h"
 #include "view_tools.h"
 #include "quiz.h"
+#include "user_info.h"
 #include "resources.h"
 
 void view_home_page(t_current_window_info *current_layout_info);
