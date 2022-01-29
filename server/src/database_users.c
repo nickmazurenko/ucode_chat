@@ -1,5 +1,56 @@
 #include "database.h"
 
+bool is_verified_user(char* username, char* token) {
+
+    t_model_user* user = get_user_by_name(username);
+
+    
+
+    if (strcmp(username, user->name) == 0 && strcmp(token, user->password) == 0)
+        return true;
+    
+    return false;
+
+}
+
+int callback_get_user(void *data, int argc, char **argv, char **azColName) {
+
+     *((t_model_user**)data) = new_model_user(argv[1], argv[2]);
+    return 0;
+}
+
+
+t_model_user* get_user_by_name(char* username) {
+
+    t_model_user* model_user = NULL;
+
+    int err_status = 0;
+
+    sqlite3 *db;
+    
+    if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
+        fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        exit(1);
+    } 
+
+    char *sql_query = NULL;
+
+    char *check_request = "SELECT * FROM Users WHERE Username=('%s');";
+    asprintf(&sql_query, check_request, username);
+    char *err_msg = NULL;
+
+    if((err_status = sqlite3_exec(db, sql_query, callback_get_user, (void*)&model_user, &err_msg)) != SQLITE_OK) {
+        fprintf(stderr, "SQL_error: %s\n", err_msg);
+        sqlite3_free(err_msg);
+        sqlite3_close(db);
+        exit(1);
+    }
+
+    return model_user;
+}
+
+
 bool is_new_user(char *username) {
     int err_status = 0;
 

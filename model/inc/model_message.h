@@ -26,8 +26,8 @@ typedef enum  message_status {
 typedef struct s_model_message {
 
     size_t               id;
-    size_t               from_user;
-    size_t               to_user;
+    char*               from_user;
+    char*               to_user;
     e_message_data_types data_type;
     char*                data;
     char*                date;
