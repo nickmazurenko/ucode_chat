@@ -40,9 +40,17 @@ void view_home_page(t_current_window_info *current_layout_info)
 
     GtkWidget *quiz_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "quiz_button"));
 
-    GtkWidget *draw_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "draw_button"));
+    GtkWidget *menu_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "menu_button"));
+
+
+    // GtkWidget *draw_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "draw_button"));
     
     set_quiz_on_button(quiz_button);
+
+    // TODO: add era checker;
+    add_draw_area(current_layout_info);
+ 
+    set_user_info_on_button(menu_button);
 
 
     gtk_container_add(GTK_CONTAINER(current_layout_info->main_window), GTK_WIDGET(home_page_layout));
@@ -54,7 +62,7 @@ void view_home_page(t_current_window_info *current_layout_info)
 		printf("File finctions.txt not found\n");
 		// return EXIT_FAILURE;
 		}
-    g_signal_connect(draw_button, "clicked", G_CALLBACK(add_drawing_area_clicked), current_layout_info);
+    // g_signal_connect(draw_button, "clicked", G_CALLBACK(add_drawing_area_clicked), current_layout_info);
 	column = 0;
 	while (1) {
 		if (fgets(tmp, 1024, f1) == NULL) {

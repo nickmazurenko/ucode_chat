@@ -94,7 +94,7 @@ void set_quiz_on_button(GtkWidget *button) {
     cJSON *quiz_questions;
     int questions_number = set_quiz_from_file(&quiz_questions, "quiz");
 
-    printf("%s\n", cJSON_Print(quiz_questions));
+    // printf("%s\n", cJSON_Print(quiz_questions));
 
     gtk_button_set_image (GTK_BUTTON (button), gtk_image_new_from_icon_name ("open-menu-symbolic", GTK_ICON_SIZE_BUTTON));
 

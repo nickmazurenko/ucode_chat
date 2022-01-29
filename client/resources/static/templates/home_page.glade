@@ -237,5 +237,16 @@
         <property name="x">140</property>
       </packing>
     </child>
+    <child>
+      <object class="GtkLayout" id="rock_layout">
+        <property name="width-request">1226</property>
+        <property name="height-request">628</property>
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="x">140</property>
+      </packing>
+    </child>
   </object>
 </interface>
