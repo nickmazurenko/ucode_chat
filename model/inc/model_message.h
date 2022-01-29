@@ -15,6 +15,14 @@ typedef enum   message_data_types {
 
 }             e_message_data_types;
 
+typedef enum  message_status {
+
+    MESSAGE_SENDED,
+    MESSAGE_RECEIVED,
+    MESSAGE_READ
+
+}             e_message_status;
+
 typedef struct s_model_message {
 
     size_t               id;
@@ -22,6 +30,9 @@ typedef struct s_model_message {
     size_t               to_user;
     e_message_data_types data_type;
     char*                data;
+    char*                date;
+    e_message_status     status;
+
 }              t_model_message;
 
 t_model_message* new_model_message();
