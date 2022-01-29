@@ -45,14 +45,15 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="status_entry">
+              <object class="GtkLabel" id="status_info">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-bottom">2</property>
                 <property name="hexpand">True</property>
-                <property name="has-frame">False</property>
-                <property name="xalign">0.5</property>
-                <property name="truncate-multiline">True</property>
-                <property name="placeholder-text" translatable="yes">print smth here...</property>
+                <property name="label" translatable="yes">Status</property>
+                <attributes>
+                  <attribute name="font-desc" value="Segoe Print Bold 10"/>
+                </attributes>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -88,13 +89,15 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="phone_entry">
+              <object class="GtkLabel" id="phone_info">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="has-frame">False</property>
-                <property name="xalign">0.5</property>
-                <property name="placeholder-text" translatable="yes">+3807777777777</property>
+                <property name="vexpand">False</property>
+                <property name="label" translatable="yes">Phone number</property>
+                <attributes>
+                  <attribute name="font-desc" value="Segoe Print Bold 10"/>
+                </attributes>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -130,12 +133,15 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="mail_entry">
+              <object class="GtkLabel" id="mail_info">
+                <property name="name">ma</property>
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="has-frame">False</property>
-                <property name="xalign">0.5</property>
-                <property name="placeholder-text" translatable="yes">your.mail@ucode.world</property>
+                <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="label" translatable="yes">Mail</property>
+                <attributes>
+                  <attribute name="font-desc" value="Segoe Print Bold 10"/>
+                </attributes>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -170,14 +176,14 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="era_entry">
+              <object class="GtkLabel" id="era_info">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="editable">False</property>
-                <property name="has-frame">False</property>
-                <property name="text" translatable="yes">mason</property>
-                <property name="xalign">0.5</property>
-                <property name="placeholder-text" translatable="yes">mason</property>
+                <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="label" translatable="yes">Era</property>
+                <attributes>
+                  <attribute name="font-desc" value="Segoe Print Bold 10"/>
+                </attributes>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -212,23 +218,14 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="level_entry">
-                <property name="width-request">40</property>
+              <object class="GtkLabel" id="level_info">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="halign">center</property>
-                <property name="margin-left">30</property>
-                <property name="margin-right">30</property>
-                <property name="margin-start">45</property>
-                <property name="margin-end">45</property>
-                <property name="margin-top">4</property>
-                <property name="margin-bottom">4</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="visibility">False</property>
-                <property name="has-frame">False</property>
-                <property name="invisible-char">●</property>
-                <property name="max-width-chars">58</property>
-                <property name="text" translatable="yes">             </property>
+                <property name="label" translatable="yes">level</property>
+                <attributes>
+                  <attribute name="font-desc" value="Segoe Print Bold 10"/>
+                </attributes>
               </object>
               <packing>
                 <property name="left-attach">0</property>
