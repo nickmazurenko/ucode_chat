@@ -5,7 +5,7 @@
 t_point* saved = NULL;
 
 void add_to_saved(t_point* point) {
-	printf("to add x: %dy: %d\n", point->x, point->y);
+	// printf("to add x: %dy: %d\n", point->x, point->y);
     if (saved == NULL) {
         saved = (t_point*)malloc(sizeof(t_point));
         saved->x = point->x;
@@ -32,7 +32,7 @@ void save_saved_to_file(t_point* saved, char* path_to_file) {
 		size_of_saved++;
 		current = current->next;
 	}
-	printf("size of saved: %d\n", size_of_saved);
+	// printf("size of saved: %d\n", size_of_saved);
 	fflush(stdout);
 	t_point saved_points[size_of_saved];
 
@@ -83,7 +83,7 @@ t_point* read_saved_from_file(char* path_to_file) {
     }
     fseek(file, 0, SEEK_SET);
 
-	printf("size of array: %d\n", size_of_array);
+	// printf("size of array: %d\n", size_of_array);
 	fflush(stdout);
     
 	fread(points, sizeof( t_point), size_of_array, file);
@@ -309,9 +309,9 @@ void add_draw_area(t_current_window_info *current_window_info) {
 	gtk_widget_add_events(draw_area, GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
 
     // gtk_widget_show(drawing_window);
-	gtk_widget_show(current_window_info->main_window);
+	// gtk_widget_show(current_window_info->main_window);
 
-    gtk_main();
+    // gtk_main();
 
 }
 
