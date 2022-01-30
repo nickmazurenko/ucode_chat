@@ -46,9 +46,11 @@ void view_home_page(t_current_window_info *current_layout_info)
     // GtkWidget *draw_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "draw_button"));
     
     set_quiz_on_button(quiz_button);
+    view_chat_window(current_layout_info);
+    
 
     // TODO: add era checker;
-    add_draw_area(current_layout_info);
+    // add_draw_area(current_layout_info);
  
     set_user_info_on_button(menu_button);
 

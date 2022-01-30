@@ -24,6 +24,7 @@ int main(int argc, char*argv[]) {
     g_signal_connect(new_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
     GtkCssProvider *cssProvider = gtk_css_provider_new();
     gtk_css_provider_load_from_path(cssProvider, get_path_to_style("sign.css"), NULL);
+
     gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
                               GTK_STYLE_PROVIDER(cssProvider),
                               GTK_STYLE_PROVIDER_PRIORITY_USER);

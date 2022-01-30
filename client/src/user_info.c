@@ -20,6 +20,8 @@ void set_user_info_on_button(GtkWidget *button) {
     GtkLabel *era_info = GTK_LABEL( gtk_builder_get_object(builder, "era_info"));
     GtkLabel *level_info = GTK_LABEL( gtk_builder_get_object(builder, "level_info"));
 
+
+
     gtk_label_set_text(status_info, "info form database");
     gtk_label_set_text(phone_info, "info form database");
     gtk_label_set_text(mail_info, "info form database");

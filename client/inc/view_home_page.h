@@ -9,6 +9,7 @@
 #include "quiz.h"
 #include "user_info.h"
 #include "resources.h"
+#include "view_chat_window.h"
 
 void view_home_page(t_current_window_info *current_layout_info);
 void	on_column(GtkButton *b);
