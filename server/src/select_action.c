@@ -2,7 +2,7 @@
 
 int select_action(char* request, char* response) {
 
-    *response = NULL;
+    // *response = NULL;
 
 
     cJSON* request_obj = cJSON_Parse(request);
@@ -56,7 +56,7 @@ int select_action(char* request, char* response) {
         char* response_buff = add_message(request_obj);
         strcpy(response, response_buff);
         free(response_buff);
-
+             
     }
 
     cJSON_Delete(request_obj);

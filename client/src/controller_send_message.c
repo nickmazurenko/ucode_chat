@@ -13,7 +13,7 @@
     model_message->data_type = data_type;
 
     strcpy(model_message->data, data);
-
+    
     printf("%s\n", to_string_model_message(model_message));
     fflush(stdout);
 

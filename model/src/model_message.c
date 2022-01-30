@@ -9,7 +9,7 @@ t_model_message* new_model_message() {
     model_message->data_type = MESSAGE_TEXT;
     model_message->data      = mx_strnew(BUFFER_SIZE);
     model_message->date      = mx_strnew(1024);
-    model_message->status    = MESSAGE_SENDED;
+    model_message->status    = MESSAGE_SENT;
 
     return model_message;
 }

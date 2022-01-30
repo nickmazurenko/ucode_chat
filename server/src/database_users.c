@@ -4,8 +4,8 @@ bool is_verified_user(char* username, char* token) {
 
     t_model_user* user = get_user_by_name(username);
 
+    if (user == NULL) return false;
     
-
     if (strcmp(username, user->name) == 0 && strcmp(token, user->password) == 0)
         return true;
     
@@ -15,7 +15,11 @@ bool is_verified_user(char* username, char* token) {
 
 int callback_get_user(void *data, int argc, char **argv, char **azColName) {
 
-     *((t_model_user**)data) = new_model_user(argv[1], argv[2]);
+    if (argc == 0) {
+        *((t_model_user**)data) = NULL;
+        return 1;
+    }
+    else *((t_model_user**)data) = new_model_user(argv[1], argv[2]);
     return 0;
 }
 
@@ -46,6 +50,8 @@ t_model_user* get_user_by_name(char* username) {
         sqlite3_close(db);
         exit(1);
     }
+
+    sqlite3_close(db);
 
     return model_user;
 }

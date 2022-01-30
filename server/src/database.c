@@ -90,4 +90,15 @@ int callback_count(void *data, int argc, char **argv, char **azColName) {
     return 0;
 }
 
+t_db_array_data* create_db_array_data() {
+
+    t_db_array_data* db_array_data = (t_db_array_data*)malloc(sizeof(t_db_array_data));
+
+    db_array_data->array = NULL;
+    db_array_data->first = true;
+    db_array_data->size  = 0;
+
+    return db_array_data;
+}
+
 

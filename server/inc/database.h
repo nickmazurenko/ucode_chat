@@ -13,6 +13,14 @@
 #include "model_resource.h"
 #include "model_stone.h"
 
+typedef struct s_db_array_data {
+
+    void* array;
+    bool  first;
+    int   size;
+
+}              t_db_array_data;
+
 void init_tables();
 
 #define DB "db.sqlite"
@@ -22,6 +30,8 @@ void init_User_table();
 int callback_count(void *not_used, int argc, char **argv, char **azColName);
 bool is_user(char *username, char *password);
 bool is_new_user(char *username);
+
+t_db_array_data* create_db_array_data();
 
 // User Table
 size_t insert_data_user(char *username, char *password);
@@ -39,6 +49,8 @@ size_t insert_data_resource(t_model_resource* model_resource);
 
 // Stones Table
 size_t insert_data_stone(t_model_stone* model_stone);
+
+
 
 
 #endif

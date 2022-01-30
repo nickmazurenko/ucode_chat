@@ -17,7 +17,7 @@ typedef enum   message_data_types {
 
 typedef enum  message_status {
 
-    MESSAGE_SENDED,
+    MESSAGE_SENT,
     MESSAGE_RECEIVED,
     MESSAGE_READ
 
