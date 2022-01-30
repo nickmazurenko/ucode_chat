@@ -14,6 +14,7 @@ typedef struct s_second_era_elements {
     int word_count;
     int page;
     char *message;
+    GtkWidget *entry;
 }               t_second_era_elements;
 
 t_second_era_elements *create_second_era_elements();

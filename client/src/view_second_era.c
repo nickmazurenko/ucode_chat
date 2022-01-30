@@ -15,6 +15,8 @@ void view_second_era(t_current_window_info *current_layout_info)
     gtk_builder_add_from_file(current_layout_info->builder, get_path_to_glade("second_era.glade"), NULL);
     gtk_builder_add_from_file(current_layout_info->builder, get_path_to_glade("quiz.glade"), NULL);
 
+    second_era_elements->entry = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "type_message_entry"));
+
     GtkLayout *home_page_layout = GTK_LAYOUT(gtk_builder_get_object(current_layout_info->builder, "home_page_layout"));
     GtkWidget *home_page_fixed = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "home_page_fixed"));
     GtkWidget *home_chats_viewport = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "home_chats_viewport"));
@@ -35,6 +37,8 @@ void view_second_era(t_current_window_info *current_layout_info)
 
     GtkWidget *quiz_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "quiz_button"));
     set_quiz_on_button(quiz_button);
+    GtkWidget *menu_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "menu_button"));
+    set_user_info_on_button(menu_button);
 
     gtk_container_add(GTK_CONTAINER(current_layout_info->main_window), GTK_WIDGET(home_page_layout));
     current_layout_info->layout_exists = true;
@@ -118,6 +122,7 @@ t_second_era_elements *create_second_era_elements() {
     second_era_elements->page = 1;
     second_era_elements->message = NULL;
     second_era_elements->word_count = 0;
+    second_era_elements->entry = NULL;
 
     return second_era_elements; 
 }
@@ -126,19 +131,33 @@ void add_word_to_message(GtkWidget *widget, t_second_era_elements *second_era_el
     char *word = gtk_button_get_label(GTK_BUTTON(widget));
 
     char* buff = NULL;
+    if(second_era_elements->message) {
+        if((strlen(second_era_elements->message)) <= 140) {
 
-    if (second_era_elements->message) {
+            if (second_era_elements->message) {
+                buff = second_era_elements->message;
+                second_era_elements->message = mx_strjoin(second_era_elements->message, " ");
+                free(buff);
+            }
+
+            buff = second_era_elements->message;
+            second_era_elements->message = mx_strjoin(second_era_elements->message, word);
+         
+            if (buff) 
+                free(buff);
+            
+                gtk_entry_set_text(second_era_elements->entry, second_era_elements->message);
+        }
+    } else {
+
         buff = second_era_elements->message;
-        second_era_elements->message = mx_strjoin(second_era_elements->message, " ");
-        free(buff);
+        second_era_elements->message = mx_strjoin(second_era_elements->message, word);
+
+            if (buff) 
+                free(buff);
+            
+        gtk_entry_set_text(second_era_elements->entry, second_era_elements->message);
     }
-
-    buff = second_era_elements->message;
-    second_era_elements->message = mx_strjoin(second_era_elements->message, word);
-
-    if (buff) 
-        free(buff);
-
     printf("%s\n", second_era_elements->message);
 }
 

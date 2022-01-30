@@ -41,6 +41,7 @@
 *.su
 *.idb
 *.pdb
+db.sqlite
 
 # Kernel Module Compile Results
 *.mod*
