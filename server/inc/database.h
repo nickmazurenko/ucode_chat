@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#include "model_user.h"
 #include "model_user_data.h"
 #include "model_message.h"
 #include "model_resource.h"
@@ -21,7 +22,11 @@ void init_User_table();
 int callback_count(void *not_used, int argc, char **argv, char **azColName);
 bool is_user(char *username, char *password);
 bool is_new_user(char *username);
+
+// User Table
 size_t insert_data_user(char *username, char *password);
+bool is_verified_user(char* username, char* token);
+t_model_user* get_user_by_name(char* username);
 
 // User Data Table
 size_t insert_data_user_data(t_model_user_data* model_user_data);

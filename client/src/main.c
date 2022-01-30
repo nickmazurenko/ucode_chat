@@ -5,8 +5,14 @@
 #include "send_file.h"
 #include "get_file.h"
 
+#include "user_data.h"
+
 //temp
 #include "drawing_area.h"
+
+#include "controller_send_message.h"
+
+
 
 int main(int argc, char*argv[]) {
 
@@ -31,4 +37,14 @@ int main(int argc, char*argv[]) {
     view_sign_in(sign_in_layout_info);
     gtk_widget_show(new_window);
     gtk_main();
+
+    // generate_cookies();
+    // cJSON_DeleteItemFromObject(get_cookies(), "USERNAME");
+    // add_to_protocol_string(get_cookies(), "USERNAME", "f");
+
+    // cJSON_DeleteItemFromObject(get_cookies(), "TOKEN");
+    // add_to_protocol_string(get_cookies(), "TOKEN", "f");
+
+    // controller_send_message("r", MESSAGE_TEXT, "hello");
+
 }

@@ -3,6 +3,8 @@
 int select_action(char* request, char* response) {
 
     *response = NULL;
+
+
     cJSON* request_obj = cJSON_Parse(request);
 
     if (request_obj == NULL) {
@@ -47,6 +49,14 @@ int select_action(char* request, char* response) {
         
         char* response_buff = send_file_server(request);
         strcpy(response, response_buff);
+        free(response_buff);
+
+    } else if (strcmp(action, "SEND MSG") == 0) {
+        
+        char* response_buff = add_message(request_obj);
+        strcpy(response, response_buff);
+        free(response_buff);
+
     }
 
     cJSON_Delete(request_obj);

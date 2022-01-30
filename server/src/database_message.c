@@ -12,7 +12,7 @@ size_t insert_data_message(t_model_message* model_message) {
         exit(1);
     }
 
-    char *insert_request = "INSERT INTO UsersData(FromUser, ToUser, Type, Data) VALUES(%i, %i, %i, '%s');";
+    char *insert_request = "INSERT INTO Messages(FromUser, ToUser, Type, Data) VALUES('%s', '%s', %i, '%s');";
     char *sql_query = NULL;
     char *err_msg = NULL;
 

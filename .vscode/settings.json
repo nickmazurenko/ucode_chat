@@ -14,6 +14,7 @@
         "resources.h": "c",
         "drawing_area.h": "c",
         "view_sign_in.h": "c",
-        "view_home_page.h": "c"
+        "view_home_page.h": "c",
+        "controller_send_message.h": "c"
     }
 }
