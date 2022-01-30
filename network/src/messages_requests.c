@@ -1,5 +1,4 @@
 #include "messages_requests.h"
-#include "user_data.h"
 
 char* send_message(t_model_message* model_message, cJSON* protocol) {
 
@@ -36,15 +35,16 @@ char* send_message(t_model_message* model_message, cJSON* protocol) {
 
 }
 
-char* get_my_new_messages() {
+char* get_my_new_messages(cJSON* cookies) {
     // something like get my messages
     // ACTION: GET MESSAGES
     // SUBACTION: GET NEW MSGS
     // SUBACTION: GET FILE WITH MSGS
-
+    cookies = NULL;
+    return  NULL;
 }
 
-char* get_my_messages() {
+char* get_my_messages(cJSON* cookies) {
     // create table if not exist
     // get filename with temp messages json
     // get this file
@@ -56,8 +56,8 @@ char* get_my_messages() {
     // SUBACTION: GET FILE WITH MSGS
     cJSON* protocol = create_protocol();
 
-    char* username = get_from_protocol_string(get_cookies(), "username");
-    char* token    = get_from_protocol_string(get_cookies(), "token");
+    char* username = get_from_protocol_string(cookies, "username");
+    char* token    = get_from_protocol_string(cookies, "token");
     
     if (username == NULL || token == NULL) {
         printf("username or token is null\n"); fflush(stdout);
@@ -72,5 +72,6 @@ char* get_my_messages() {
     add_to_protocol_string(protocol, "SUBACTION", "GET FILE FOR MSGS");
 
 
+    return NULL;
 
 }

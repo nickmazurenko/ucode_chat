@@ -130,9 +130,9 @@ void add_word_to_message(GtkWidget *widget, t_second_era_elements *second_era_el
     if (second_era_elements->message) {
         buff = second_era_elements->message;
         second_era_elements->message = mx_strjoin(second_era_elements->message, " ");
-        free(buff;)
+        free(buff);
     }
-    
+
     buff = second_era_elements->message;
     second_era_elements->message = mx_strjoin(second_era_elements->message, word);
 
