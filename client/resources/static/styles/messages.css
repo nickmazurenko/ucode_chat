@@ -1,5 +1,9 @@
 .message_label{
-    border-width: 2px;
-    border-color: cyan;
-    background-color: darkblue;
+    border-radius: 300px; 
+    border: solid #5B6DCD 2px;
+    padding: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
 }   
+
+

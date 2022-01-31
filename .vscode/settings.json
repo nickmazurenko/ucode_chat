@@ -15,6 +15,8 @@
         "drawing_area.h": "c",
         "view_sign_in.h": "c",
         "view_home_page.h": "c",
-        "controller_send_message.h": "c"
+        "controller_send_message.h": "c",
+        "view_chat_window.h": "c",
+        "model_message.h": "c"
     }
 }
