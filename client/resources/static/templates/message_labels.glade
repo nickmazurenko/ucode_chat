@@ -15,9 +15,7 @@
                 <property name="wrap">True</property>
                 <property name="wrap_mode">word-char</property>
                 <property name="max_width_chars">36</property>
-                <attributes>
-                  <attribute name="font-desc" value="Purisa 10"/>
-                </attributes>
+
                 <style>
                   <class name="message_label"/>
                 </style>
@@ -35,9 +33,7 @@
                 <property name="wrap">True</property>
                 <property name="wrap_mode">word-char</property>
                 <property name="max_width_chars">36</property>
-                <attributes>
-                  <attribute name="font-desc" value="Purisa 10"/>
-                </attributes>
+
                 <style>
                   <class name="message_label"/>
                 </style>
@@ -55,8 +51,6 @@
                 <property name="wrap">True</property>
                 <property name="wrap_mode">word-char</property>
                 <property name="max_width_chars">36</property>
-                <attributes>
-                  <attribute name="font-desc" value="Purisa 10"/>
-                </attributes>
+
               </object>
 </interface>

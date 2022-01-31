@@ -1,9 +1,11 @@
 .message_label{
+    font-size: 14pt;
+    background-color: rgba(37, 196, 196, 0.2);
     border-radius: 300px; 
-    border: solid #5B6DCD 2px;
+    border: solid #57b9b4 0.8px;
     padding: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
 }   
 
 
