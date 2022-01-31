@@ -10,8 +10,11 @@ void view_chat_window(t_current_window_info *current_layout_info)
     gtk_style_context_add_provider_for_screen(gdk_screen_get_default(), 
                                             GTK_STYLE_PROVIDER(cssProvider), 
                                             GTK_STYLE_PROVIDER_PRIORITY_USER);
+    int count = 0;
+    t_model_message** model_message = get_all_messages_from_chat("f", &count);
 
-    t_model_message** model_message = (t_model_message**)malloc(sizeof(t_model_message*) * 10);
+    
+
 
     char tmp[1024];
     int row = 0;
@@ -63,40 +66,40 @@ void view_chat_window(t_current_window_info *current_layout_info)
     }
 
         
+    
+        // model_message[0] = new_model_message();
+        // model_message[0]->from_user = 1;
+        // mx_strcpy(model_message[0]->data, "LOH LOH LOH");
 
-        model_message[0] = new_model_message();
-        model_message[0]->from_user = 1;
-        mx_strcpy(model_message[0]->data, "LOH LOH LOH");
-
-        model_message[1] = new_model_message();
-        model_message[1]->to_user = 1;
-        mx_strcpy(model_message[1]->data, "HUY HUY HUY");
+        // model_message[1] = new_model_message();
+        // model_message[1]->to_user = 1;
+        // mx_strcpy(model_message[1]->data, "HUY HUY HUY");
         
-        model_message[2] = new_model_message();
-        model_message[2]->to_user = 1;
-        mx_strcpy(model_message[2]->data, "JOPA JOPA");
+        // model_message[2] = new_model_message();
+        // model_message[2]->to_user = 1;
+        // mx_strcpy(model_message[2]->data, "JOPA JOPA");
 
-        model_message[3] = new_model_message();
-        model_message[3]->from_user = 1;
-        mx_strcpy(model_message[3]->data, "hello ");
+        // model_message[3] = new_model_message();
+        // model_message[3]->from_user = 1;
+        // mx_strcpy(model_message[3]->data, "hello ");
 
-        model_message[4] = new_model_message();
-        model_message[4]->to_user = 1;
-        mx_strcpy(model_message[4]->data, "PIZDEC");
+        // model_message[4] = new_model_message();
+        // model_message[4]->to_user = 1;
+        // mx_strcpy(model_message[4]->data, "PIZDEC");
 
-        model_message[5] = new_model_message();
-        model_message[5]->from_user = 1;
-        mx_strcpy(model_message[5]->data, "dgdsgsdg");
+        // model_message[5] = new_model_message();
+        // model_message[5]->from_user = 1;
+        // mx_strcpy(model_message[5]->data, "dgdsgsdg");
         
-        model_message[6] = new_model_message();
-        model_message[6]->to_user = 1;
-        mx_strcpy(model_message[6]->data, "PIsdgdsgsZDEC");
+        // model_message[6] = new_model_message();
+        // model_message[6]->to_user = 1;
+        // mx_strcpy(model_message[6]->data, "PIsdgdsgsZDEC");
 
-        model_message[7] = new_model_message();
-        model_message[7]->from_user = 1;
-        mx_strcpy(model_message[7]->data, "PIfasfsafZDEC");
+        // model_message[7] = new_model_message();
+        // model_message[7]->from_user = 1;
+        // mx_strcpy(model_message[7]->data, "PIfasfsafZDEC");
 
-        view_message(model_message, current_layout_info, 8);
+        view_message(model_message, current_layout_info, count);
 
         
         gtk_widget_show_all(current_layout_info->main_window);
@@ -109,28 +112,28 @@ void view_message(t_model_message** model_message, t_current_window_info *curren
     GtkWidget *label[size];
     GtkWidget *chat_window_grid = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "chat_window_grid"));
 
-
-    
-    for(int i = 0; i < 8; i++) {
+    for(int i = 0; i < size; i++) {
         GtkWidget *message_builder = gtk_builder_new_from_file(get_path_to_glade ("message_labels.glade"));
 
          gtk_grid_insert_row (GTK_GRID(chat_window_grid), i + 10);
 
-        if(model_message[i]->from_user == 1) {
-        
-
-        label[i] = GTK_WIDGET(gtk_builder_get_object(message_builder, "current_user_msg_label"));
-
-        gtk_label_set_text(GTK_LABEL(label[i]), model_message[i]->data);
+        // if(model_message[i]->from_user == 1) {
+        if(!strcmp(model_message[i]->from_user, get_from_protocol_string(get_cookies(), "USERNAME"))) {
 
         
-        // gtk_label_set_xalign (GTK_LABEL(label[i]), 0.5);
-        // gtk_label_set_justify (GTK_LABEL(label[i]), GTK_JUSTIFY_RIGHT);// mb GTK_JUSTIFY_LEFT
-        gtk_grid_attach (GTK_GRID(chat_window_grid), label[i], 1, i + 10, 1, 1);
+
+            label[i] = GTK_WIDGET(gtk_builder_get_object(message_builder, "current_user_msg_label"));
+
+            gtk_label_set_text(GTK_LABEL(label[i]), model_message[i]->data);
+
+            
+            // gtk_label_set_xalign (GTK_LABEL(label[i]), 0.5);
+            // gtk_label_set_justify (GTK_LABEL(label[i]), GTK_JUSTIFY_RIGHT);// mb GTK_JUSTIFY_LEFT
+            gtk_grid_attach (GTK_GRID(chat_window_grid), label[i], 1, i + 10, 1, 1);
         
         } 
         
-        else if(model_message[i]->to_user == 1) { //// !!!!!!!!!!!!!! mb prosto else sdelat`, huy znaet
+        else if(!strcmp(model_message[i]->to_user, "a")) { //// !!!!!!!!!!!!!! mb prosto else sdelat`, huy znaet
         
             label[i] = GTK_WIDGET(gtk_builder_get_object(message_builder, "other_user_msg_label"));
             gtk_label_set_text(GTK_LABEL(label[i]), model_message[i]->data);
@@ -150,6 +153,9 @@ void send_message_button_clicked (GtkWidget *widget, t_current_window_info *curr
     GtkWidget *type_message_entry = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "type_message_entry"));
 
     char *message = gtk_entry_get_text(type_message_entry);
+
+
+
 
 }
 

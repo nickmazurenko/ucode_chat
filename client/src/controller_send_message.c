@@ -8,6 +8,7 @@
     add_to_protocol_string(protocol, "FROM", get_from_protocol_string(get_cookies(), "USERNAME"));
     add_to_protocol_string(protocol, "TOKEN", get_from_protocol_string(get_cookies(), "TOKEN"));
 
+
     strcpy(model_message->from_user, get_from_protocol_string(get_cookies(), "USERNAME"));
     strcpy(model_message->to_user, to);
     model_message->data_type = data_type;

@@ -35,7 +35,7 @@ all: install
 install: $(NAME)
 
 $(NAME): $(OBJS)
-	@clang $(OBJS) -L$(LMXDIR) -lmx -L$(MODELDIR) -lmodel -L$(NETWORKDIR) -lnetwork -L$(JSONDIR) -lcjson -o $@ $(CFLAGS)
+	@clang $(OBJS) -L$(LMXDIR) -lmx -L$(MODELDIR) -lmodel -L$(NETWORKDIR) -lnetwork -L$(JSONDIR) -lcjson -lsqlite3 -o $@ $(CFLAGS)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCS)
 	@clang -c $< -o $@ -I$(INCDIR) -I$(LMXINC) -I$(MODELINC) -I$(NETWORKINC) -I$(JSONINC) $(CFLAGS)
@@ -53,3 +53,4 @@ uninstall: clean
 	@rm -rf $(NAME)
 
 reinstall: uninstall install
+

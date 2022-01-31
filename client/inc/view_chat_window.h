@@ -4,6 +4,7 @@
 #include <gtk/gtk.h>
 #include "libmx.h"
 #include "view_sign_in.h"
+#include "database_client.h"
 #include "drawing_area.h"
 #include "view_tools.h"
 #include "model_message.h"
