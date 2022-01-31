@@ -5,6 +5,9 @@
 #include "view_tools.h"
 #include "libmx.h"
 #include "resources.h"
+#include "quiz_requests.h"
+#include "user_data.h"
+
 typedef struct s_quiz_info {
     GtkBuilder *builder;
     cJSON *questions;
@@ -15,9 +18,9 @@ typedef struct s_quiz_info {
 }               t_quiz_info;
 
 void set_quiz_on_button(GtkWidget *button);
-int set_quiz_from_file(cJSON **questions_arr, char *file_name);
+// int set_quiz_from_file(cJSON **questions_arr, char *file_name);
 gboolean quiz_button_clicked(GtkWidget *widget, t_quiz_info *quiz_info);
 gboolean answer_clicked(GtkWidget *widget, t_quiz_info *quiz_info);
-int *get_array_of_diff_rand(int size);
+// int *get_array_of_diff_rand(int size);
 
 #endif

@@ -63,6 +63,13 @@ int select_action(char* request, char* response) {
         strcpy(response, response_buff);
         free(response_buff);
 
+    } else if ( strcmp(action, "QUIZ" ) == 0 ) {
+
+        // subaction: get question, check answer
+        char* response_buff = quiz_server(request_obj);
+        strcpy(response, response_buff);
+        free(response_buff);
+
     }
 
     cJSON_Delete(request_obj);

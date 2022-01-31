@@ -7,6 +7,7 @@
 #include "file_for_write.h"
 #include "send_file_server.h"
 #include "messages_server.h"
+#include "quiz_server.h"
 
 int select_action(char* request, char* response);
 
