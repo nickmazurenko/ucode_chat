@@ -2,6 +2,9 @@
 
 bool is_verified_user(char* username, char* token) {
 
+
+    if (username == NULL || token == NULL) return false;
+
     t_model_user* user = get_user_by_name(username);
 
     if (user == NULL) return false;

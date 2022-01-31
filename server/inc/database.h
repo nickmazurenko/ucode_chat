@@ -43,6 +43,8 @@ size_t insert_data_user_data(t_model_user_data* model_user_data);
 
 // Message Table
 size_t insert_data_message(t_model_message* model_message);
+cJSON* get_all_new_messages_of(char* username);
+cJSON* get_all_messages_of(char* username);
 
 // Resource Table
 size_t insert_data_resource(t_model_resource* model_resource);

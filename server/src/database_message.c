@@ -42,25 +42,27 @@ int callback_get_messages(void *data, int argc, char **argv, char **azColName) {
         db_array_data->first = false;
     }
 
+
     t_model_message** array = (t_db_array_data**) db_array_data->array;
     int columns_number = 7;
-    array[db_array_data->size] = (t_model_message*)malloc(sizeof(t_model_message));
+    array[db_array_data->size] = (t_model_message*)new_model_message();
     for (int column_index = 0; column_index < columns_number; column_index++) {
-
         if (strcmp(azColName[column_index], "Id") == 0) {
-            array[column_index]->id = atoi(argv[column_index]);
+            array[db_array_data->size]->id = atoi(argv[column_index]);
         } else if (strcmp(azColName[column_index], "FromUser") == 0) {
             strcpy(array[db_array_data->size]->from_user, argv[column_index]);
         } else if (strcmp(azColName[column_index], "ToUser") == 0) {
             strcpy(array[db_array_data->size]->to_user, argv[column_index]);
         } else if (strcmp(azColName[column_index], "Type") == 0) {
-            array[column_index]->id = atoi(argv[column_index]);
+            array[db_array_data->size]->id = atoi(argv[column_index]);
         } else if (strcmp(azColName[column_index], "Data") == 0) {
             strcpy(array[db_array_data->size]->data, argv[column_index]);
         } else if (strcmp(azColName[column_index], "Date") == 0) {
             strcpy(array[db_array_data->size]->date, argv[column_index]);
         } else if (strcmp(azColName[column_index], "Status") == 0) {
-            array[column_index]->status = atoi(argv[column_index]);
+            array[db_array_data->size]->status = atoi(argv[column_index]);
+        } else {
+            perror("there we go but dont want\n");
         }
 
     }

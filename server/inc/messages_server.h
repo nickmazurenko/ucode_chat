@@ -9,5 +9,6 @@
 #include "database.h"
 
 char* add_message(cJSON* request);
+char* get_messages(cJSON* request);
 
 #endif

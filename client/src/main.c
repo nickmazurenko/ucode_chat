@@ -40,11 +40,11 @@ int main(int argc, char*argv[]) {
 
     // generate_cookies();
     // cJSON_DeleteItemFromObject(get_cookies(), "USERNAME");
-    // add_to_protocol_string(get_cookies(), "USERNAME", "r");
+    // add_to_protocol_string(get_cookies(), "USERNAME", "f");
 
     // cJSON_DeleteItemFromObject(get_cookies(), "TOKEN");
-    // add_to_protocol_string(get_cookies(), "TOKEN", "r");
+    // add_to_protocol_string(get_cookies(), "TOKEN", "f");
 
-    // controller_send_message("t", MESSAGE_TEXT, "hello6");
+    // controller_send_message("a", MESSAGE_TEXT, "hello2");
 
 }

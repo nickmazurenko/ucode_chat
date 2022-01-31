@@ -57,6 +57,12 @@ int select_action(char* request, char* response) {
         strcpy(response, response_buff);
         free(response_buff);
              
+    } else if (strcmp(action, "GET MSGS") == 0) {
+
+        char* response_buff = get_messages(request_obj);
+        strcpy(response, response_buff);
+        free(response_buff);
+
     }
 
     cJSON_Delete(request_obj);
