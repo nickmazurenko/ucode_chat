@@ -54,3 +54,4 @@ dkms.conf
 
 *.sqlite
 db.sqlite
+*.DS_Store

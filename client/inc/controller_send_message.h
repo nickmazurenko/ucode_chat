@@ -7,9 +7,11 @@
 #include "libmx.h"
 #include "string.h"
 #include "messages_requests.h"
-#include "user_data.h"
 
 
-int controller_send_message(char* to, e_message_data_types data_type, char* data);
 
+
+
+// int controller_send_message(char* to, e_message_data_types data_type, char* data);
+ t_model_message *controller_send_message(char* to, e_message_data_types data_type, char* data);
 #endif

@@ -38,20 +38,17 @@ int main(int argc, char*argv[]) {
     view_sign_in(sign_in_layout_info);
     gtk_widget_show(new_window);
     
-    generate_cookies();
     
-        cJSON_DeleteItemFromObject(get_cookies(), "USERNAME");
-    // add_to_protocol_string(get_cookies(), "USERNAME", "f");
-    add_to_protocol_string(get_cookies(), "USERNAME", "a");
+    
+    // cJSON_DeleteItemFromObject(get_cookies(), "USERNAME");
+    // add_to_protocol_string(get_cookies(), "USERNAME", "a");
 
 
-    cJSON_DeleteItemFromObject(get_cookies(), "TOKEN");
-    // add_to_protocol_string(get_cookies(), "TOKEN", "f");
-    add_to_protocol_string(get_cookies(), "TOKEN", "a");
+    // cJSON_DeleteItemFromObject(get_cookies(), "TOKEN");
+    // add_to_protocol_string(get_cookies(), "TOKEN", "a");
 
 
-    controller_send_message("f", MESSAGE_TEXT, "asfasfsaf");
-    controller_get_messages();
+    // controller_send_message("f", MESSAGE_TEXT, "asfasfsaf");
     
     gtk_main();
 

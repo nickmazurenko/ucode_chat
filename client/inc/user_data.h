@@ -6,7 +6,8 @@
 #include "protocol.h"
 
 
-void generate_cookies();
+// void generate_cookies();
+void generate_cookies(char *user, char *password);
 cJSON* get_cookies();
 
 #endif

@@ -50,12 +50,7 @@ G_MODULE_EXPORT void sign_in_clicked(GtkButton *button, t_current_window_info *c
         if (status){
             place_sign_entry_error(sign_in_info);
         } else {
-            NULL;
-            // change window to main page
-        //    view_home_page(current_layout_info);    //TODO: delete it
-        // view_second_era(current_layout_info);
-            // view_chat_window(current_layout_info);
-            view_home_page(current_layout_info);
+            controller_view_user_era(sign_in_info, current_layout_info);
         }
     }
 }

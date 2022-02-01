@@ -24,7 +24,6 @@ cJSON* add_to_protocol(cJSON* protocol, char* key, cJSON* value) {
 }
 
 cJSON* add_to_protocol_string(cJSON* protocol, char* key, char* value) {
-
     cJSON* value_obj = cJSON_CreateString(value);
 
     return add_to_protocol(protocol, key, value_obj);

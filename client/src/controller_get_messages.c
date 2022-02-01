@@ -9,7 +9,6 @@ void controller_get_messages(){
     for(int message_id = 0; message_id < count; message_id++) {
         insert_data_message(from_string_model_message(cJSON_GetArrayItem(current_user_messages, message_id)->valuestring));
     }
-
 }
 
 

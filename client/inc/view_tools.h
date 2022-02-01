@@ -7,6 +7,7 @@ typedef struct s_current_window_info {
   GtkBuilder *builder;
   GtkWidget *main_window;
   bool layout_exists;
+  void *data;
 }               t_current_window_info;
 
 void delete_sign_entry_error(GtkEntry **entries);

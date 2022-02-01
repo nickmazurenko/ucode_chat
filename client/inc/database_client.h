@@ -13,6 +13,8 @@
 #include "model_resource.h"
 #include "model_stone.h"
 
+#include "controller_send_message.h"
+
 #include "user_data.h"
 
 typedef struct s_db_array_data {
