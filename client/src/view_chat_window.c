@@ -1,5 +1,21 @@
 #include "view_chat_window.h"
 
+//tmp to delete
+static char *current_user_to_talk = NULL;
+
+ char *get_current_user_to_talk(void) {
+    return current_user_to_talk;
+}
+
+ void set_current_user_to_talk(char *new_user_to_talk) {
+    
+    if(current_user_to_talk) {
+        mx_strdel(&current_user_to_talk);
+    }
+    current_user_to_talk = mx_strdup(new_user_to_talk);
+
+}
+
 void view_chat_window(t_current_window_info *current_layout_info)
 {
 
@@ -11,8 +27,7 @@ void view_chat_window(t_current_window_info *current_layout_info)
                                               GTK_STYLE_PROVIDER(cssProvider),
                                               GTK_STYLE_PROVIDER_PRIORITY_USER);
     int count = 0;
-    t_model_message **model_message = get_all_messages_from_chat("a", &count);
-
+    
     char tmp[1024];
     int row = 0;
 
@@ -43,6 +58,10 @@ void view_chat_window(t_current_window_info *current_layout_info)
 
     GtkWidget *chat_window_grid = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "chat_window_grid"));
 
+    GtkWidget *home_chats_scrolled_window = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "home_chats_scrolled_window")); 
+
+    gtk_scrolled_window_set_policy(home_chats_scrolled_window, GTK_POLICY_AUTOMATIC, GTK_POLICY_NEVER);
+
     gtk_container_add(GTK_CONTAINER(current_layout_info->main_window), GTK_WIDGET(home_page_layout)); // ya huy znaet kakoy layout ebanut` zdes`
 
     gtk_container_add(GTK_CONTAINER(home_page_layout), GTK_WIDGET(chat_window_layout));
@@ -53,15 +72,10 @@ void view_chat_window(t_current_window_info *current_layout_info)
     gtk_grid_insert_column(GTK_GRID(chat_window_grid), 0);
     gtk_grid_insert_column(GTK_GRID(chat_window_grid), 1);
 
-    for (int i = 0; i < 20; i++)
-    {
-        GtkWidget *message_builder = gtk_builder_new_from_file(get_path_to_glade("message_labels.glade"));
-        gtk_grid_insert_row(GTK_GRID(chat_window_grid), i);
-        gtk_grid_attach(GTK_GRID(chat_window_grid), GTK_WIDGET(gtk_builder_get_object(message_builder, "invisible_label")), 1, i, 1, 1);
-    }
+    
 
     current_layout_info->data = (void *)(count + 20);
-    view_messages(model_message, current_layout_info, count);
+    
 
     gtk_widget_show_all(current_layout_info->main_window);
     
@@ -75,7 +89,6 @@ void view_messages(t_model_message **model_message, t_current_window_info *curre
     for (int message_id = 0; message_id < size; message_id++)
     {
         GtkWidget *message_builder = gtk_builder_new_from_file(get_path_to_glade("message_labels.glade"));
-        fprintf(stderr, "\n\n USER :%s\n\n", model_message[message_id]->from_user);
 
         gtk_grid_insert_row(GTK_GRID(chat_window_grid), message_id + 20);
         if (!strcmp(model_message[message_id]->from_user, get_from_protocol_string(get_cookies(), "USERNAME")))
@@ -108,10 +121,7 @@ void view_message(t_model_message *model_message, t_current_window_info *current
 
     int current_id = ((int)(current_layout_info->data)) + 1;
 
-    fprintf(stderr, "\n\nTHERER %s\n", model_message->data);
-
     GtkWidget *message_builder = gtk_builder_new_from_file(get_path_to_glade("message_labels.glade"));
-    fprintf(stderr, "\n\n USER :%s\n\n", model_message->from_user);
 
     gtk_grid_insert_row(GTK_GRID(chat_window_grid), current_id);
     if (!strcmp(model_message->from_user, get_from_protocol_string(get_cookies(), "USERNAME")))
@@ -141,9 +151,11 @@ void send_message_button_clicked(GtkWidget *widget, t_current_window_info *curre
     GtkWidget *type_message_entry = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "type_message_entry"));
 
     char *message_str = mx_strdup(gtk_entry_get_text(type_message_entry));
-    t_model_message *message = controller_send_message("a", MESSAGE_TEXT, message_str);
-    fprintf(stderr, "\n\nTHERER %s\n", message->data);
-
+    // t_model_message *message = controller_send_message("a", MESSAGE_TEXT, message_str);
+    t_model_message *message = NULL;
+    if(current_user_to_talk) 
+        message = controller_send_message(get_current_user_to_talk(), MESSAGE_TEXT, message_str);
+    
     gtk_entry_set_text(type_message_entry, "");
 
     view_message(message, current_window_info);

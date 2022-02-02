@@ -35,6 +35,10 @@ void view_second_era(t_current_window_info *current_layout_info)
     second_era_elements->buttons[8] = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "button2_4"));
     second_era_elements->buttons[9] = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "button2_5"));
 
+    GtkWidget *home_chats_scrolled_window = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "home_chats_scrolled_window")); 
+    
+    gtk_scrolled_window_set_policy(home_chats_scrolled_window, GTK_POLICY_AUTOMATIC, GTK_POLICY_NEVER);
+
     GtkWidget *quiz_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "quiz_button"));
     set_quiz_on_button(quiz_button);
     GtkWidget *menu_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "menu_button"));

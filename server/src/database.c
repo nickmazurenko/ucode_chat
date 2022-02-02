@@ -104,6 +104,7 @@ t_db_array_data* create_db_array_data() {
     db_array_data->array = NULL;
     db_array_data->first = true;
     db_array_data->size  = 0;
+    db_array_data->capacity = 0;
 
     return db_array_data;
 }

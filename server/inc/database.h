@@ -18,6 +18,7 @@ typedef struct s_db_array_data {
     void* array;
     bool  first;
     int   size;
+    int   capacity;
 
 }              t_db_array_data;
 

@@ -7,9 +7,37 @@ int get_current_chat_count() {
 }
 
 
-void	on_column(GtkButton *b) {
+void	on_column(GtkButton *b, t_current_window_info *current_window_info) {
 	printf("You selected: %s\n", gtk_button_get_label (b));
-	}
+    int count = 0;
+    
+    GtkWidget *chat_window_grid = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "chat_window_grid"));
+
+
+    GList *children, *iter;
+
+    children = gtk_container_get_children(GTK_CONTAINER(chat_window_grid));
+    
+    for(iter = children; iter != NULL; iter = g_list_next(iter))
+        gtk_widget_destroy(GTK_WIDGET(iter->data));
+    
+    g_list_free(children);
+
+    t_model_message **model_message = get_all_messages_from_chat(gtk_button_get_label (b), &count);
+
+    set_current_user_to_talk(gtk_button_get_label (b));
+
+    for (int i = 0; i < 20; i++)
+    {
+        GtkWidget *message_builder = gtk_builder_new_from_file(get_path_to_glade("message_labels.glade"));
+        gtk_grid_insert_row(GTK_GRID(chat_window_grid), i);
+        gtk_grid_attach(GTK_GRID(chat_window_grid), GTK_WIDGET(gtk_builder_get_object(message_builder, "invisible_label")), 1, i, 1, 1);
+    }
+    
+    current_window_info->data = (void *)(count + 20);
+
+    view_messages(model_message, current_window_info, count);
+}
     
 
 gboolean add_drawing_area_clicked(GtkWidget *widget, t_current_window_info *current_window_info) {
@@ -61,6 +89,14 @@ void view_home_page(t_current_window_info *current_layout_info)
 
     view_chat_window(current_layout_info);
     
+    int user_chats_count = 0; 
+    char **user_chats = get_all_user_chats(get_from_protocol_string(get_cookies(), "USERNAME"), &user_chats_count); 
+
+    add_chats(user_chats, current_layout_info, user_chats_count);
+
+    for(int i = 0; i < user_chats_count;i++){ 
+        printf("USER CHATS: %s\n\n", user_chats[i]); 
+    }
 
     // TODO: add era checker;
     // add_draw_area(current_layout_info);
@@ -79,26 +115,15 @@ void view_home_page(t_current_window_info *current_layout_info)
 		}
     // g_signal_connect(draw_button, "clicked", G_CALLBACK(add_drawing_area_clicked), current_layout_info);
 	column = 0;
-	// while (1) {
-	// 	if (fgets(tmp, 1024, f1) == NULL) {
-	// 		fclose(f1);
-	// 		break;
-	// 		}
-	// 	tmp[strlen(tmp)-1] = 0; // remove newline byte
-	// 	gtk_grid_insert_column (GTK_GRID(home_chats_grid), column);
 
-	// 	button[column] = gtk_button_new_with_label (tmp);
-	// 	gtk_button_set_alignment (GTK_BUTTON(button[column]), 0.5, 0.0); // hor left, ver center
-    //     gtk_widget_set_size_request(button[column], 100, 100);
-	// 	gtk_grid_attach (GTK_GRID(home_chats_grid), button[column], column, 1, 1, 1);
-        
-	// 	g_signal_connect(button[column], "clicked", G_CALLBACK(on_column), NULL);
-	// 	column ++;
-	// 	}
-        char *str = mx_strdup("nick");
-        add_chat(str, current_layout_info);
         gtk_widget_show_all(home_page_layout);
 
+}
+
+void add_chats(char **username, t_current_window_info *current_window_info, int count) {
+    for(int chat_index = 0; chat_index < count; chat_index++) {
+        add_chat(username[chat_index], current_window_info);
+    }
 }
 
 
@@ -133,7 +158,7 @@ void add_chat(char *username, t_current_window_info *current_window_info) {
         gtk_widget_set_size_request(button, 100, 100);
 		gtk_grid_attach (GTK_GRID(home_chats_grid), button, get_current_chat_count(), 1, 1, 1);
         
-		g_signal_connect(button, "clicked", G_CALLBACK(on_column), NULL);
+		g_signal_connect(button, "clicked", G_CALLBACK(on_column), current_window_info);
 
     current_chat_count++;
 

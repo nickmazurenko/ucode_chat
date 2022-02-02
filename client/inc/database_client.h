@@ -22,6 +22,7 @@ typedef struct s_db_array_data {
     void* array;
     bool  first;
     int   size;
+    int   capacity;
 
 }              t_db_array_data;
 
@@ -47,6 +48,9 @@ size_t insert_data_user_data(t_model_user_data* model_user_data);
 // Message Table
 size_t insert_data_message(t_model_message* model_message); 
 t_model_message** get_all_messages_from_chat(char *from_user, int *size);
+
+int callback_get_user_chats(void *data, int argc, char **argv, char **azColName);
+char** get_all_user_chats(char *current_user, int *count);
 
 
 // Resource Table

@@ -38,10 +38,15 @@ int callback_get_messages(void *data, int argc, char **argv, char **azColName) {
     t_db_array_data* db_array_data = (t_db_array_data*)data;
 
     if (db_array_data->first) {
-        db_array_data->array = malloc(sizeof(t_model_message*) * argc);
+        db_array_data->capacity = 10;
+        db_array_data->array = malloc(sizeof(t_model_message*) * db_array_data->capacity);
         db_array_data->first = false;
     }
 
+    if (db_array_data->size == db_array_data->capacity) {
+        db_array_data->capacity += 10;
+        db_array_data->array = realloc((t_model_message**)db_array_data->array, db_array_data->capacity * sizeof(t_model_message*));
+    }
 
     t_model_message** array = (t_db_array_data**) db_array_data->array;
     int columns_number = 7;

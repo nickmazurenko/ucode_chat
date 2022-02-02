@@ -34,13 +34,17 @@ size_t insert_data_message(t_model_message* model_message) {
 }
 
 int callback_get_messages(void *data, int argc, char **argv, char **azColName) {
-    printf("\n\n\nid %i\n", argc);
-    fflush(stdout);
     t_db_array_data* db_array_data = (t_db_array_data*)data;
 
     if (db_array_data->first) {
-        db_array_data->array = malloc(sizeof(t_model_message*) * argc);
+        db_array_data->capacity = 10;
+        db_array_data->array = malloc(sizeof(t_model_message*) * db_array_data->capacity);
         db_array_data->first = false;
+    }
+
+    if (db_array_data->size == db_array_data->capacity) {
+        db_array_data->capacity += 10;
+        db_array_data->array = realloc((t_model_message**)db_array_data->array, db_array_data->capacity *  sizeof(t_model_message*));
     }
 
     t_model_message** array = (t_model_message**) db_array_data->array;
@@ -88,11 +92,9 @@ t_model_message** get_all_messages_from_chat(char *from_user, int *size) {
 
     char *current_user = get_from_protocol_string(get_cookies(), "USERNAME");
 
-    char *select_request = "SELECT * FROM Messages WHERE ((FromUser=('%s') OR FromUser=('%s')) AND (ToUser=('%s') OR ToUser=('%s')));";
-    // char *select_request = "SELECT * FROM Messages WHERE FromUser=('%s');";
+    char *select_request = "SELECT * FROM Messages WHERE ((FromUser=('%s') AND ToUser=('%s')) OR (ToUser=('%s') AND FromUser=('%s')));";
 
     asprintf(&sql_query, select_request, from_user, current_user, from_user, current_user);
-    // asprintf(&sql_query, select_request, "f");
 
     char *err_msg = NULL;
 
@@ -106,16 +108,72 @@ t_model_message** get_all_messages_from_chat(char *from_user, int *size) {
     }
     t_model_message** messages = (t_model_message**)select_result->array;
 
-    // cJSON* str_array = cJSON_CreateArray();
-
-    // for (int message_index = 0; message_index < select_result->size; message_index++) {
-    //     char* message_str = to_string_model_message(messages[message_index]);
-    //     cJSON* item = cJSON_CreateString(message_str);
-    //     free(message_str);
-    //     cJSON_AddItemToArray(str_array, item);
-    // }
     *size = select_result->size;
     sqlite3_close(db);
     free(select_result);
     return messages;
 }
+
+
+
+int callback_get_user_chats(void *data, int argc, char **argv, char **azColName) {
+    t_db_array_data* db_array_data = (t_db_array_data*)data;
+
+    if (db_array_data->first) {
+        db_array_data->capacity = 10;
+        db_array_data->array = malloc(sizeof(char *) * db_array_data->capacity);
+        db_array_data->first = false;
+    }
+
+    if (db_array_data->size == db_array_data->capacity) {
+        db_array_data->capacity += 10;
+        db_array_data->array = realloc(db_array_data->array, db_array_data->capacity * sizeof(char*));
+    }
+
+    char** array = (char**) db_array_data->array;
+    array[db_array_data->size] = mx_strdup(argv[0]);
+
+
+    db_array_data->size++;
+
+    return 0;
+}
+
+
+char** get_all_user_chats(char *current_user, int *count) {
+    sqlite3 *db;
+    
+    int err_status = 0;
+
+    if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
+        fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        exit(1);
+    }
+
+    char *sql_query = NULL;
+
+    // char *select_request = "SELECT DISTINCT ToUser FROM Messages WHERE FromUser=('%s');";
+    char *select_request = "SELECT ToUser From Messages UNION SELECT FromUser FROM Messages;";
+    // char *select_request = "SELECT DISTINCT ToUser, FromUser From Messages";
+
+    asprintf(&sql_query, select_request);
+
+    char *err_msg = NULL;
+
+    t_db_array_data* select_result = create_db_array_data();
+
+    if((err_status = sqlite3_exec(db, sql_query, callback_get_user_chats, select_result, &err_msg)) != SQLITE_OK) {
+        fprintf(stderr, "SQL_error: %s\n", err_msg);
+        sqlite3_free(err_msg);
+        sqlite3_close(db);
+        exit(1);
+    }
+    char** message_chats = (char**)select_result->array;
+    *count = select_result->size;
+
+    sqlite3_close(db);
+
+    return message_chats;
+}
+
