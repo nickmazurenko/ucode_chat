@@ -12,7 +12,7 @@
 #define BUFFER_SIZE 4096
 #define READ_SIZE   14336
 
-#define PORT 5000
+#define PORT 10001
 
 cJSON* create_protocol();
 cJSON* add_to_protocol(cJSON* protocol, char* key, cJSON* value);

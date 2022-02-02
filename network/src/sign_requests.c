@@ -41,7 +41,7 @@ char* create_sign_request(t_model_user* model_user, char* status) {
 bool send_sign_up_request(t_model_user* model_user) {
 
     char* request = create_sign_request(model_user, "SIGN UP");
-    char* response = send_request(request, "127.0.0.1", 5000);
+    char* response = send_request(request, "127.0.0.1", PORT);
     
     char* status = get_sign_status(response);
 
@@ -54,7 +54,7 @@ bool send_sign_up_request(t_model_user* model_user) {
 bool send_sign_in_request(t_model_user* model_user) {
 
     char* request = create_sign_request(model_user, "SIGN IN");
-    char* response = send_request(request, "127.0.0.1", 5000);
+    char* response = send_request(request, "127.0.0.1", PORT);
 
     char* status = get_sign_status(response);
 

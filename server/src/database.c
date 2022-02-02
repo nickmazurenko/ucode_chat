@@ -1,5 +1,11 @@
 #include "database.h"
 
+static sqlite3* database = NULL;
+
+sqlite3* get_database() {
+    return database;
+} 
+
 char* table_names[] = {
     "Users",
     "UsersData",
@@ -30,6 +36,8 @@ void init_tables() {
         exit(1);
     }
 
+    database = db;
+
     char *err_msg = NULL;
 
     for (int table_index = 0; tables_init[table_index] != NULL; table_index++) {
@@ -41,32 +49,31 @@ void init_tables() {
         }
     }
 
-    sqlite3_close(db);
+    // sqlite3_close(db);
 }
 
 void init_User_table() {
-    sqlite3 *db;
+    // sqlite3 *db;
     
     int err_status = 0;
 
-    if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
-        fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
-        sqlite3_close(db);
-        exit(1);
-    }    
+    // if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
+    //     fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
+    //     sqlite3_close(db);
+    //     exit(1);
+    // }    
 
     char *init_request = "CREATE TABLE IF NOT EXISTS Users (Id INTEGER PRIMARY KEY AUTOINCREMENT, Username TEXT, Password TEXT) ;";
                          
     char *err_msg = NULL;
 
-    if((err_status = sqlite3_exec(db, init_request, 0, 0, &err_msg)) != SQLITE_OK) {
+    if((err_status = sqlite3_exec(get_database(), init_request, 0, 0, &err_msg)) != SQLITE_OK) {
         fprintf(stderr, "SQL_error: %s\n", err_msg);
         sqlite3_free(err_msg);
-        sqlite3_close(db);
+        sqlite3_close(get_database());
         exit(1);
     }
 
-    sqlite3_close(db);
 }
 
 

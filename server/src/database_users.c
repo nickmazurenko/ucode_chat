@@ -22,7 +22,12 @@ int callback_get_user(void *data, int argc, char **argv, char **azColName) {
         *((t_model_user**)data) = NULL;
         return 1;
     }
-    else *((t_model_user**)data) = new_model_user(argv[1], argv[2]);
+    else {
+        *((t_model_user**)data) = new_model_user(argv[1], argv[2]);
+        (*((t_model_user**)data))->id = atol(argv[0]);
+        (*((t_model_user**)data))->user_data_id = atol(argv[3]);
+    }
+
     return 0;
 }
 
@@ -33,13 +38,13 @@ t_model_user* get_user_by_name(char* username) {
 
     int err_status = 0;
 
-    sqlite3 *db;
+    // sqlite3 *db;
     
-    if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
-        fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
-        sqlite3_close(db);
-        exit(1);
-    } 
+    // if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
+    //     fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
+    //     sqlite3_close(db);
+    //     exit(1);
+    // } 
 
     char *sql_query = NULL;
 
@@ -47,14 +52,14 @@ t_model_user* get_user_by_name(char* username) {
     asprintf(&sql_query, check_request, username);
     char *err_msg = NULL;
 
-    if((err_status = sqlite3_exec(db, sql_query, callback_get_user, (void*)&model_user, &err_msg)) != SQLITE_OK) {
+    if((err_status = sqlite3_exec(get_database(), sql_query, callback_get_user, (void*)&model_user, &err_msg)) != SQLITE_OK) {
         fprintf(stderr, "SQL_error: %s\n", err_msg);
         sqlite3_free(err_msg);
-        sqlite3_close(db);
+        sqlite3_close(get_database());
         exit(1);
     }
 
-    sqlite3_close(db);
+    // sqlite3_close(db);
 
     return model_user;
 }
@@ -63,13 +68,13 @@ t_model_user* get_user_by_name(char* username) {
 bool is_new_user(char *username) {
     int err_status = 0;
 
-    sqlite3 *db;
+    // sqlite3 *db;
     
-    if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
-        fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
-        sqlite3_close(db);
-        exit(1);
-    } 
+    // if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
+    //     fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
+    //     sqlite3_close(db);
+    //     exit(1);
+    // } 
 
     char *sql_query = NULL;
 
@@ -81,14 +86,14 @@ bool is_new_user(char *username) {
     
     int count = 0;
 
-    if((err_status = sqlite3_exec(db, sql_query, callback_count, &count, &err_msg)) != SQLITE_OK) {
+    if((err_status = sqlite3_exec(get_database(), sql_query, callback_count, &count, &err_msg)) != SQLITE_OK) {
         fprintf(stderr, "SQL_error: %s\n", err_msg);
         sqlite3_free(err_msg);
-        sqlite3_close(db);
+        sqlite3_close(get_database());
         exit(1);
     }
 
-    sqlite3_close(db);
+    // sqlite3_close(db);
 
 
     if(count == 0)
@@ -98,15 +103,15 @@ bool is_new_user(char *username) {
 
 
 bool is_user(char *username, char *password) {
-    sqlite3 *db;
+    // sqlite3 *db;
     
     int err_status = 0;
 
-    if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
-        fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
-        sqlite3_close(db);
-        exit(1);
-    } 
+    // if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
+    //     fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
+    //     sqlite3_close(db);
+    //     exit(1);
+    // } 
 
     char *sql_query = NULL;
 
@@ -118,14 +123,14 @@ bool is_user(char *username, char *password) {
     
     int count = 0;
 
-    if((err_status = sqlite3_exec(db, sql_query, callback_count, &count, &err_msg)) != SQLITE_OK) {
+    if((err_status = sqlite3_exec(get_database(), sql_query, callback_count, &count, &err_msg)) != SQLITE_OK) {
         fprintf(stderr, "SQL_error: %s\n", err_msg);
         sqlite3_free(err_msg);
-        sqlite3_close(db);
+        sqlite3_close(get_database());
         exit(1);
     }
 
-    sqlite3_close(db);
+    // sqlite3_close(db);
     
     if(count == 0)
         return false;
@@ -139,15 +144,15 @@ size_t insert_data_user(char *username, char *password) {
     size_t user_data_id = insert_data_user_data(user_data);
     free_model_user_data(&user_data);
 
-    sqlite3 *db;
+    // sqlite3 *db;
     
     int err_status = 0;
 
-    if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
-        fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
-        sqlite3_close(db);
-        exit(1);
-    }
+    // if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
+    //     fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
+    //     sqlite3_close(db);
+    //     exit(1);
+    // }
 
     char *insert_request = "INSERT INTO Users(Username, Password, UserData) VALUES('%s', '%s', '%zu');";
     char *sql_query = NULL;
@@ -156,17 +161,25 @@ size_t insert_data_user(char *username, char *password) {
     asprintf(&sql_query, insert_request, username, password, user_data_id);
 
     
-    if((err_status = sqlite3_exec(db, sql_query, callback_print_db, 0, &err_msg)) != SQLITE_OK) {
+    if((err_status = sqlite3_exec(get_database(), sql_query, callback_print_db, 0, &err_msg)) != SQLITE_OK) {
         fprintf(stderr, "SQL_error: %s\n", err_msg);
         sqlite3_free(err_msg);
-        sqlite3_close(db);
+        sqlite3_close(get_database());
         return 0;
         // exit(1);
     }
 
-    size_t user_id = sqlite3_last_insert_rowid(db);
+    size_t user_id = sqlite3_last_insert_rowid(get_database);
 
-    sqlite3_close(db);
+    // sqlite3_close(db);
 
     return user_id;
+}
+
+size_t get_user_data_id(char *username) {
+    t_model_user *model_user = get_user_by_name(username);
+    size_t user_data_id = model_user->user_data_id;
+    free_model_user(&model_user);
+
+    return user_data_id;
 }

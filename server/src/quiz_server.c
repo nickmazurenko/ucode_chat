@@ -57,7 +57,7 @@ cJSON* get_questions() {
 }
 
 char* quiz_server(cJSON* request) {
-
+    //TODO: validate user
     get_questions();
 
     char* username = get_from_protocol_string(request, "FROM");
@@ -109,9 +109,11 @@ char* quiz_server(cJSON* request) {
 
                     if  (strcmp(answer, correct_answer) == 0) {
                         // update user money
+                        update_user_money(username, 1);
                         add_to_protocol_string(response, "DATA", "CORRECT");
                     } else {
                         // update user  money
+                        update_user_money(username, -1);
                         add_to_protocol_string(response, "DATA", "INCORRECT");
                     }
                 } else {

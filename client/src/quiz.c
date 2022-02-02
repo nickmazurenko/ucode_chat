@@ -26,17 +26,24 @@ gboolean answer_clicked(GtkWidget *widget, t_quiz_info *quiz_info) {
     //     // place_answer_error(widget);
     // }
 
+    printf("there\n");
+    fflush(stdout);
+    if (get_from_protocol_string(get_cookies(), "QUESTION INDEX") == NULL) return true;
+
     cJSON* response = check_answer_request(get_cookies(), (char*)gtk_button_get_label(GTK_BUTTON(widget)));
+    if (get_from_protocol_string(get_cookies(), "QUESTION INDEX")) cJSON_DeleteItemFromObject(get_cookies(), "QUESTION INDEX");
 
     char* result = get_from_protocol_string(response, "DATA");
 
     if (strcmp(result, "CORRECT") == 0) {
-        gtk_popover_popdown(GTK_POPOVER(quiz_info->quiz_popover));
         printf("correct answer\n");
     } else {
         // change answer
         printf("incorrect answer\n");
     }
+
+    gtk_popover_popdown(GTK_POPOVER(quiz_info->quiz_popover));
+    quiz_info->pop_opened = 0;
 
     return true;
 }
@@ -45,12 +52,16 @@ gboolean answer_clicked(GtkWidget *widget, t_quiz_info *quiz_info) {
 
 gboolean quiz_button_clicked(GtkWidget *widget, t_quiz_info *quiz_info) {
     if(widget) {
+        static int i = 0;
 
         // get question from server
 
         // random question = get question from server
 
         cJSON* response = get_question_request(get_cookies());
+
+        printf("iteration: %i\n", i++);
+
         cJSON* random_question = cJSON_Parse(get_from_protocol_string(response, "DATA"));
 
         char*  question_index = get_from_protocol_string(response, "QUESTION INDEX");

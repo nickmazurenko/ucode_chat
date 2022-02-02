@@ -2,15 +2,15 @@
 
 size_t insert_data_message(t_model_message* model_message) {
 
-    sqlite3 *db;
+    // sqlite3 *db;
     
     int err_status = 0;
 
-    if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
-        fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
-        sqlite3_close(db);
-        exit(1);
-    }
+    // if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
+    //     fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
+    //     sqlite3_close(db);
+    //     exit(1);
+    // }
 
     char *insert_request = "INSERT INTO Messages(FromUser, ToUser, Type, Data, Date, Status) VALUES('%s', '%s', %i, '%s', '%s', %i);";
     char *sql_query = NULL;
@@ -18,16 +18,16 @@ size_t insert_data_message(t_model_message* model_message) {
 
     asprintf(&sql_query, insert_request, model_message->from_user, model_message->to_user, model_message->data_type, model_message->data, model_message->date, model_message->status);
 
-    if((err_status = sqlite3_exec(db, sql_query, callback_print_db, 0, &err_msg)) != SQLITE_OK) {
+    if((err_status = sqlite3_exec(get_database(), sql_query, callback_print_db, 0, &err_msg)) != SQLITE_OK) {
         fprintf(stderr, "SQL_error: %s\n", err_msg);
         sqlite3_free(err_msg);
-        sqlite3_close(db);
+        sqlite3_close(get_database());
         return 0;
         // exit(1);
     }
 
-    size_t message_id = sqlite3_last_insert_rowid(db);
-    sqlite3_close(db);
+    size_t message_id = sqlite3_last_insert_rowid(get_database());
+    // sqlite3_close(db);
 
     return message_id;
 
@@ -73,15 +73,15 @@ int callback_get_messages(void *data, int argc, char **argv, char **azColName) {
 }
 
 cJSON* get_all_new_messages_of(char* username) {
-    sqlite3 *db;
+    // sqlite3 *db;
     
     int err_status = 0;
 
-    if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
-        fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
-        sqlite3_close(db);
-        exit(1);
-    }
+    // if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
+    //     fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
+    //     sqlite3_close(db);
+    //     exit(1);
+    // }
 
     char *sql_query = NULL;
     char *select_request = "SELECT * FROM Messages WHERE FromUser=('%s') OR ToUser=('%s');";
@@ -90,10 +90,10 @@ cJSON* get_all_new_messages_of(char* username) {
 
     t_db_array_data* select_result = create_db_array_data();
 
-    if((err_status = sqlite3_exec(db, sql_query, callback_get_messages, select_result, &err_msg)) != SQLITE_OK) {
+    if((err_status = sqlite3_exec(get_database(), sql_query, callback_get_messages, select_result, &err_msg)) != SQLITE_OK) {
         fprintf(stderr, "SQL_error: %s\n", err_msg);
         sqlite3_free(err_msg);
-        sqlite3_close(db);
+        sqlite3_close(get_database());
         exit(1);
     }
 
@@ -110,22 +110,22 @@ cJSON* get_all_new_messages_of(char* username) {
         // TODO: set status in MESSAGE_RECEIVED after send
     }
 
-    sqlite3_close(db);
+    // sqlite3_close(db);
 
     return str_array;
 }
 
 cJSON* get_all_messages_of(char* username) {
 
-    sqlite3 *db;
+    // sqlite3 *db;
     
     int err_status = 0;
 
-    if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
-        fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
-        sqlite3_close(db);
-        exit(1);
-    }
+    // if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
+    //     fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
+    //     sqlite3_close(db);
+    //     exit(1);
+    // }
 
     char *sql_query = NULL;
     char *select_request = "SELECT * FROM Messages WHERE FromUser=('%s') OR ToUser=('%s');";
@@ -134,10 +134,10 @@ cJSON* get_all_messages_of(char* username) {
 
     t_db_array_data* select_result = create_db_array_data();
 
-    if((err_status = sqlite3_exec(db, sql_query, callback_get_messages, select_result, &err_msg)) != SQLITE_OK) {
+    if((err_status = sqlite3_exec(get_database(), sql_query, callback_get_messages, select_result, &err_msg)) != SQLITE_OK) {
         fprintf(stderr, "SQL_error: %s\n", err_msg);
         sqlite3_free(err_msg);
-        sqlite3_close(db);
+        // sqlite3_close(db);
         exit(1);
     }
 
@@ -152,7 +152,7 @@ cJSON* get_all_messages_of(char* username) {
         cJSON_AddItemToArray(str_array, item);
     }
 
-    sqlite3_close(db);
+    // sqlite3_close(db);
 
     return str_array;
 }
