@@ -33,6 +33,7 @@ size_t insert_data_user_data(t_model_user_data* model_user_data) {
 }
 
 int update_user_money(char *username, int add_money) {
+    errno = 0;
     perror("there\n");
     size_t user_data_id = get_user_data_id(username);
     size_t money = get_user_money(username);
