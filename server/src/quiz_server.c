@@ -76,7 +76,7 @@ char* quiz_server(cJSON* request) {
             printf("Error: Quiz server: subaction is null\n"); fflush(stdout);
 
         } else {
-                printf("there we go\n");fflush(stdout);
+                // printf("there we go\n");fflush(stdout);
 
             if (strcmp(subaction, "GET QUESTION") == 0) {
                 
@@ -96,26 +96,42 @@ char* quiz_server(cJSON* request) {
 
             } else if (strcmp(subaction, "CHECK ANSWER") == 0) {
                 
+                add_to_protocol_string(response, "STATUS", "OK");
                 char* answer = get_from_protocol_string(request, "DATA");
                 if (answer != NULL) {
                     char*  question_index_str = get_from_protocol_string(request, "QUESTION INDEX");
-                    int question_index = atoi(question_index_str);
 
-                    cJSON* question = get_from_protocol(questions_obj, question_index_str);
-
-                    // if question == NULL && if question index str == NULL
-
-                    char* correct_answer = get_from_protocol_string(question, "CORRECT_ANSWER");
-
-                    if  (strcmp(answer, correct_answer) == 0) {
-                        // update user money
-                        update_user_money(username, 1);
-                        add_to_protocol_string(response, "DATA", "CORRECT");
+                    if (question_index_str == NULL) {
+                        cJSON_DeleteItemFromObject(response, "STATUS");
+                        add_to_protocol_string(response, "STATUS", "ERROR");
+                        printf("Error: Question index is null\n");
                     } else {
-                        // update user  money
-                        update_user_money(username, -1);
-                        add_to_protocol_string(response, "DATA", "INCORRECT");
+                        int question_index = atoi(question_index_str);
+
+                        cJSON* question = get_from_protocol(questions_obj, question_index_str);
+
+                        if (question == NULL) {
+                            cJSON_DeleteItemFromObject(response, "STATUS");
+                            add_to_protocol_string(response, "STATUS", "ERROR");
+                            printf("Error: Question with index %s is undefined\n", question_index_str);
+                        } else {
+                            // if question == NULL && if question index str == NULL
+
+                            char* correct_answer = get_from_protocol_string(question, "CORRECT_ANSWER");
+
+                            if  (strcmp(answer, correct_answer) == 0) {
+                                // update user money
+                                update_user_money(username, 1);
+                                add_to_protocol_string(response, "DATA", "CORRECT");
+                            } else {
+                                // update user  money
+                                update_user_money(username, -1);
+                                add_to_protocol_string(response, "DATA", "INCORRECT");
+                            }
+                        }
                     }
+
+                    
                 } else {
                     printf("Error: Quiz server: answer is null\n"); fflush(stdout);
                 }
