@@ -70,7 +70,11 @@ int select_action(char* request, char* response) {
         strcpy(response, response_buff);
         free(response_buff);
 
-    }
+    } else if ( strcmp(action, "START_CHAT" ) == 0 ) {
+
+        start_chat(request, response);
+
+    } 
 
     cJSON_Delete(request_obj);
 

@@ -13,5 +13,8 @@
 
 void view_home_page(t_current_window_info *current_layout_info);
 void	on_column(GtkButton *b);
+int get_current_chat_count();
+
+void add_chat(char *username, t_current_window_info *current_window_info);
 
 #endif

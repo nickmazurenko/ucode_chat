@@ -119,3 +119,56 @@ cJSON* get_my_new_messages(cJSON* cookies) {
 }
 
 
+char *get_start_chat_status(char *response){
+    cJSON* response_obj = cJSON_Parse(response);
+    if (response_obj == NULL) {
+        printf("parse error\n");
+        return false;
+    }
+
+    cJSON* sign_status_obj = cJSON_GetObjectItemCaseSensitive(response_obj, "STATUS");
+    if (sign_status_obj == NULL) {
+        printf("sign status obj error\n");
+        return false;
+    }
+    char* status = sign_status_obj->valuestring;
+    // cJSON_Delete(response_obj);
+    // cJSON_Delete(sign_status_obj);
+
+    return status;
+}
+
+char* create_start_chat_request(char *username, char* status) {
+
+    char* data = username;
+
+    cJSON* protocol = create_protocol();
+    
+    cJSON* data_value = cJSON_CreateString(data);
+    cJSON* action_value = cJSON_CreateString(status);
+
+    add_to_protocol(protocol, "ACTION", action_value);
+    add_to_protocol(protocol, "DATA", data_value);
+
+    char* protocol_str = cJSON_Print(protocol);
+
+    cJSON_Delete(protocol);
+
+    return protocol_str;
+}
+
+
+bool send_start_chat_request(char *username) {
+    
+    char* request = create_start_chat_request(username, "START_CHAT");
+    char* response = send_request(request, get_server_ip(), PORT);
+
+    char* status = get_start_chat_status(response);
+
+    printf("%s\n", response);
+
+    return !strcmp(status, "SUCCESS");
+}
+
+
+

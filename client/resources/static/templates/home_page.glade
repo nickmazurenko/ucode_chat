@@ -14,9 +14,29 @@
         <property name="height-request">768</property>
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+
+        <child>
+          <object class="GtkMenuButton" id="add_chat_button">
+            <property name="width-request">100</property>
+            <property name="height-request">100</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
+            <property name="receives-default">True</property>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="x">1266</property>
+            <property name="y">668</property>
+          </packing>
+        </child>
+
+
         <child>
           <object class="GtkScrolledWindow" id="home_chats_scrolled_window">
-            <property name="width-request">1226</property>
+            <property name="width-request">1126</property>
             <property name="height-request">100</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>

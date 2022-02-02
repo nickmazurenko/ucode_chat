@@ -1,5 +1,12 @@
 #include "view_home_page.h"
 
+static int current_chat_count = 0;
+
+int get_current_chat_count() {
+    return current_chat_count;
+}
+
+
 void	on_column(GtkButton *b) {
 	printf("You selected: %s\n", gtk_button_get_label (b));
 	}
@@ -40,12 +47,18 @@ void view_home_page(t_current_window_info *current_layout_info)
 
     GtkWidget *quiz_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "quiz_button"));
 
+    GtkWidget *add_chat_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "add_chat_button"));
+
+
     GtkWidget *menu_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "menu_button"));
 
 
     // GtkWidget *draw_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "draw_button"));
     
     set_quiz_on_button(quiz_button);
+    
+    set_add_chat_on_button(add_chat_button, current_layout_info);
+
     view_chat_window(current_layout_info);
     
 
@@ -66,22 +79,62 @@ void view_home_page(t_current_window_info *current_layout_info)
 		}
     // g_signal_connect(draw_button, "clicked", G_CALLBACK(add_drawing_area_clicked), current_layout_info);
 	column = 0;
-	while (1) {
-		if (fgets(tmp, 1024, f1) == NULL) {
-			fclose(f1);
-			break;
-			}
-		tmp[strlen(tmp)-1] = 0; // remove newline byte
-		gtk_grid_insert_column (GTK_GRID(home_chats_grid), column);
+	// while (1) {
+	// 	if (fgets(tmp, 1024, f1) == NULL) {
+	// 		fclose(f1);
+	// 		break;
+	// 		}
+	// 	tmp[strlen(tmp)-1] = 0; // remove newline byte
+	// 	gtk_grid_insert_column (GTK_GRID(home_chats_grid), column);
 
-		button[column] = gtk_button_new_with_label (tmp);
-		gtk_button_set_alignment (GTK_BUTTON(button[column]), 0.5, 0.0); // hor left, ver center
-        gtk_widget_set_size_request(button[column], 100, 100);
-		gtk_grid_attach (GTK_GRID(home_chats_grid), button[column], column, 1, 1, 1);
+	// 	button[column] = gtk_button_new_with_label (tmp);
+	// 	gtk_button_set_alignment (GTK_BUTTON(button[column]), 0.5, 0.0); // hor left, ver center
+    //     gtk_widget_set_size_request(button[column], 100, 100);
+	// 	gtk_grid_attach (GTK_GRID(home_chats_grid), button[column], column, 1, 1, 1);
         
-		g_signal_connect(button[column], "clicked", G_CALLBACK(on_column), NULL);
-		column ++;
-		}
+	// 	g_signal_connect(button[column], "clicked", G_CALLBACK(on_column), NULL);
+	// 	column ++;
+	// 	}
+        char *str = mx_strdup("nick");
+        add_chat(str, current_layout_info);
         gtk_widget_show_all(home_page_layout);
+
+}
+
+
+void add_chat(char *username, t_current_window_info *current_window_info) {
+    gtk_builder_add_from_file(current_window_info->builder, get_path_to_glade("user_chat_button.glade"), NULL);
+    
+
+    // gtk_builder_add_from_file(current_window_info->builder, get_path_to_glade("home_page.glade"), NULL);
+
+    GtkWidget *button = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "person_chat_button"));
+    // GtkWidget *button;
+    GtkWidget *image = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "user_image"));
+
+    GtkWidget *home_chats_grid = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "home_chats_grid"));
+
+    GdkPixbuf *image_pixbuf = gdk_pixbuf_new_from_file_at_size(get_path_to_image("rock.png"), 80, 80, NULL);
+
+    gtk_grid_insert_column (GTK_GRID(home_chats_grid), get_current_chat_count());
+
+    // gtk_grid_attach (GTK_GRID(home_chats_grid), button, get_current_chat_count(), 1, 1, 1);
+
+    	// gtk_grid_insert_column (GTK_GRID(home_chats_grid), get_current_chat_count());
+
+		// button = gtk_button_new_with_label (username);
+        gtk_button_set_label(button, username);
+
+	    gtk_image_set_from_pixbuf(GTK_IMAGE(image), image_pixbuf);
+        
+        
+
+		gtk_button_set_alignment (GTK_BUTTON(button), 0.5, 0.0); // hor left, ver center
+        gtk_widget_set_size_request(button, 100, 100);
+		gtk_grid_attach (GTK_GRID(home_chats_grid), button, get_current_chat_count(), 1, 1, 1);
+        
+		g_signal_connect(button, "clicked", G_CALLBACK(on_column), NULL);
+
+    current_chat_count++;
 
 }

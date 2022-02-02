@@ -116,3 +116,41 @@ char* get_messages(cJSON* request) {
 
     return response_json;
 }
+
+bool start_chat(char *request, char *response) {
+    bool result = false;
+
+
+    cJSON* request_obj = cJSON_Parse(request);
+    if(request_obj == NULL){
+        perror("parse error sign in");
+    }
+
+    char *username_to_find = get_from_protocol_string(request_obj, "DATA");
+
+    if(request_obj == NULL){
+        perror("get obj error sign in");
+    }
+
+
+    cJSON *start_chat_status = create_protocol();
+
+    // check user in db
+        perror("START_CHAT_ERROR");
+
+    if (!is_new_user(username_to_find)) {
+        add_to_protocol_string(start_chat_status, "STATUS", "SUCCESS");
+        result = true;
+    } else {
+        result = false;
+        add_to_protocol_string(start_chat_status, "STATUS", "ERORR");
+    }
+
+    strcpy(response, cJSON_Print(start_chat_status));
+
+    cJSON_Delete(request_obj);
+    cJSON_Delete(start_chat_status);
+    // cJSON_Delete(user_json);
+
+    return result;
+}

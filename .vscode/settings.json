@@ -23,6 +23,10 @@
         "database_client.h": "c",
         "messages_requests.h": "c",
         "libmx.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "quiz.h": "c",
+        "get_file.h": "c",
+        "messages_server.h": "c",
+        "gtk.h": "c"
     }
 }
