@@ -37,7 +37,7 @@ void view_second_era(t_current_window_info *current_layout_info)
 
     GtkWidget *home_chats_scrolled_window = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "home_chats_scrolled_window")); 
     
-    gtk_scrolled_window_set_policy(home_chats_scrolled_window, GTK_POLICY_AUTOMATIC, GTK_POLICY_NEVER);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(home_chats_scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_NEVER);
 
     GtkWidget *quiz_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "quiz_button"));
     set_quiz_on_button(quiz_button);
@@ -65,7 +65,7 @@ void view_second_era(t_current_window_info *current_layout_info)
 		tmp[strlen(tmp)-1] = 0; // remove newline byte
 		
 		button[column] = gtk_button_new_with_label (tmp);
-		gtk_button_set_alignment (GTK_BUTTON(button[column]), 0.5, 0.0); // hor left, ver center
+		// gtk_button_set_alignment (GTK_BUTTON(button[column]), 0.5, 0.0); // hor left, ver center
         gtk_widget_set_size_request(button[column], 100, 100);
 		gtk_grid_attach (GTK_GRID(home_chats_grid), button[column], column, 1, 1, 1); // (..., ..., 1, 1) 2,1 3,1 4,1 5,1 1,2 2,2 3,2 4,2 5,2
         
@@ -74,7 +74,7 @@ void view_second_era(t_current_window_info *current_layout_info)
 	}
 
     if(!second_era_elements->words)
-        second_era_elements->words = get_words_from_file("second_era_words");
+        second_era_elements->words = get_words_from_file("./server/resources/second_era_words");
     count_words(second_era_elements);
     set_words_on_buttons(second_era_elements);
 
@@ -132,7 +132,7 @@ t_second_era_elements *create_second_era_elements() {
 }
 
 void add_word_to_message(GtkWidget *widget, t_second_era_elements *second_era_elements) {
-    char *word = gtk_button_get_label(GTK_BUTTON(widget));
+    char *word = (char*)gtk_button_get_label(GTK_BUTTON(widget));
 
     char* buff = NULL;
     if(second_era_elements->message) {
@@ -150,7 +150,7 @@ void add_word_to_message(GtkWidget *widget, t_second_era_elements *second_era_el
             if (buff) 
                 free(buff);
             
-                gtk_entry_set_text(second_era_elements->entry, second_era_elements->message);
+                gtk_entry_set_text(GTK_ENTRY(second_era_elements->entry), second_era_elements->message);
         }
     } else {
 
@@ -160,7 +160,7 @@ void add_word_to_message(GtkWidget *widget, t_second_era_elements *second_era_el
             if (buff) 
                 free(buff);
             
-        gtk_entry_set_text(second_era_elements->entry, second_era_elements->message);
+        gtk_entry_set_text(GTK_ENTRY(second_era_elements->entry), second_era_elements->message);
     }
     printf("%s\n", second_era_elements->message);
 }

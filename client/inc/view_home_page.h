@@ -10,6 +10,7 @@
 #include "user_info.h"
 #include "resources.h"
 #include "view_chat_window.h"
+#include "controller_start_chat.h"
 
 
 

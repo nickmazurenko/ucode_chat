@@ -10,7 +10,7 @@ int get_current_chat_count() {
 void	on_column(GtkButton *b, t_current_window_info *current_window_info) {
 	printf("You selected: %s\n", gtk_button_get_label (b));
     int count = 0;
-    
+    int *count_tmp = (int*)malloc(sizeof(int));
     GtkWidget *chat_window_grid = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "chat_window_grid"));
 
 
@@ -33,8 +33,8 @@ void	on_column(GtkButton *b, t_current_window_info *current_window_info) {
         gtk_grid_insert_row(GTK_GRID(chat_window_grid), i);
         gtk_grid_attach(GTK_GRID(chat_window_grid), GTK_WIDGET(gtk_builder_get_object(message_builder, "invisible_label")), 1, i, 1, 1);
     }
-    
-    current_window_info->data = (void *)(count + 20);
+    *count_tmp = count + 20;
+    current_window_info->data = (void *)(count_tmp);
 
     view_messages(model_message, current_window_info, count);
 }
@@ -85,7 +85,7 @@ void view_home_page(t_current_window_info *current_layout_info)
     
     set_quiz_on_button(quiz_button);
     
-    set_add_chat_on_button(add_chat_button, current_layout_info);
+    set_add_chat_on_button(GTK_WIDGET(add_chat_button), current_layout_info);
 
     view_chat_window(current_layout_info);
     
@@ -116,7 +116,7 @@ void view_home_page(t_current_window_info *current_layout_info)
     // g_signal_connect(draw_button, "clicked", G_CALLBACK(add_drawing_area_clicked), current_layout_info);
 	column = 0;
 
-        gtk_widget_show_all(home_page_layout);
+        gtk_widget_show_all(GTK_WIDGET(home_page_layout));
 
 }
 
@@ -148,13 +148,13 @@ void add_chat(char *username, t_current_window_info *current_window_info) {
     	// gtk_grid_insert_column (GTK_GRID(home_chats_grid), get_current_chat_count());
 
 		// button = gtk_button_new_with_label (username);
-        gtk_button_set_label(button, username);
+        gtk_button_set_label(GTK_BUTTON(button), username);
 
 	    gtk_image_set_from_pixbuf(GTK_IMAGE(image), image_pixbuf);
         
         
 
-		gtk_button_set_alignment (GTK_BUTTON(button), 0.5, 0.0); // hor left, ver center
+		// gtk_button_set_alignment (GTK_BUTTON(button), 0.5, 0.0); // hor left, ver center
         gtk_widget_set_size_request(button, 100, 100);
 		gtk_grid_attach (GTK_GRID(home_chats_grid), button, get_current_chat_count(), 1, 1, 1);
         
