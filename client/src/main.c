@@ -21,6 +21,8 @@ int main(int argc, char*argv[]) {
     GtkBuilder* main_window_builder = gtk_builder_new_from_file(get_path_to_glade("main_window.glade"));
     // gtk_builder_add_from_file(main_window_builder, get_path_to_glade("main_window.glade"), NULL);
     
+    
+
     GtkWidget *new_window = GTK_WIDGET(gtk_builder_get_object(main_window_builder, "main_window"));
     g_signal_connect(new_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
     GtkCssProvider *cssProvider = gtk_css_provider_new();

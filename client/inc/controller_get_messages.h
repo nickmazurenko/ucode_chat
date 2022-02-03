@@ -6,6 +6,7 @@
 #include "user_data.h"
 
 void controller_get_messages();
+t_model_message** controller_get_new_messages(int* count);
 
 
 #endif

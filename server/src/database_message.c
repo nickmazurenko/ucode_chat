@@ -48,7 +48,7 @@ int callback_get_messages(void *data, int argc, char **argv, char **azColName) {
         db_array_data->array = realloc((t_model_message**)db_array_data->array, db_array_data->capacity * sizeof(t_model_message*));
     }
 
-    t_model_message** array = (t_db_array_data**) db_array_data->array;
+    t_model_message** array = (t_model_message**) db_array_data->array;
     int columns_number = 7;
     array[db_array_data->size] = (t_model_message*)new_model_message();
     for (int column_index = 0; column_index < columns_number; column_index++) {
@@ -77,6 +77,22 @@ int callback_get_messages(void *data, int argc, char **argv, char **azColName) {
     return 0;
 }
 
+int update_message_status(size_t message_id, e_message_status message_status) {
+    int err_status = 0;
+    char *sql_query = NULL;
+    char *update_request = "UPDATE Messages SET Status=%i WHERE Id=%zu;";
+    asprintf(&sql_query, update_request, message_status, message_id);
+    char *err_msg = NULL;
+
+    if((err_status = sqlite3_exec(get_database(), sql_query, callback_print_db, NULL, &err_msg)) != SQLITE_OK) {
+        fprintf(stderr, "SQL_error: %s\n", err_msg);
+        sqlite3_free(err_msg);
+        // sqlite3_close(db);
+        exit(1);
+    }
+    return 0;
+}
+
 cJSON* get_all_new_messages_of(char* username) {
     // sqlite3 *db;
     
@@ -89,7 +105,7 @@ cJSON* get_all_new_messages_of(char* username) {
     // }
 
     char *sql_query = NULL;
-    char *select_request = "SELECT * FROM Messages WHERE FromUser=('%s') OR ToUser=('%s');";
+    char *select_request = "SELECT * FROM Messages WHERE (ToUser=('%s') AND (STATUS=0));";
     asprintf(&sql_query, select_request, username, username);
     char *err_msg = NULL;
 
@@ -106,12 +122,15 @@ cJSON* get_all_new_messages_of(char* username) {
 
     cJSON* str_array = cJSON_CreateArray();
     for (int message_index = 0; message_index < select_result->size; message_index++) {
-        if (messages[message_index]->status == MESSAGE_SENT) {
+        // if (messages[message_index]->status == MESSAGE_SENT) {
+            if (messages[message_index]->status == MESSAGE_SENT) {
+                update_message_status(messages[message_index]->id, MESSAGE_RECEIVED);
+            }
             char* message_str = to_string_model_message(messages[message_index]);
             cJSON* item = cJSON_CreateString(message_str);
             free(message_str);
             cJSON_AddItemToArray(str_array, item);
-        }
+        // }
         // TODO: set status in MESSAGE_RECEIVED after send
     }
 
@@ -133,7 +152,7 @@ cJSON* get_all_messages_of(char* username) {
     // }
 
     char *sql_query = NULL;
-    char *select_request = "SELECT * FROM Messages WHERE FromUser=('%s') OR ToUser=('%s');";
+    char *select_request = "SELECT * FROM Messages WHERE (FromUser=('%s') OR ToUser=('%s'));";
     asprintf(&sql_query, select_request, username, username);
     char *err_msg = NULL;
 
@@ -150,6 +169,10 @@ cJSON* get_all_messages_of(char* username) {
     cJSON* str_array = cJSON_CreateArray();
 
     for (int message_index = 0; message_index < select_result->size; message_index++) {
+        
+        if (messages[message_index]->status == MESSAGE_SENT) {
+            update_message_status(messages[message_index]->id, MESSAGE_RECEIVED);
+        }
 
         char* message_str = to_string_model_message(messages[message_index]);
         cJSON* item = cJSON_CreateString(message_str);

@@ -76,10 +76,10 @@ void view_chat_window(t_current_window_info *current_layout_info)
     gtk_grid_insert_column(GTK_GRID(chat_window_grid), 0);
     gtk_grid_insert_column(GTK_GRID(chat_window_grid), 1);
 
-    int* count_tmp = malloc(sizeof(int));
-    *count_tmp = count + 20;
+    // int* count_tmp = malloc(sizeof(int));
+    // *count_tmp = count + 20;
 
-    current_layout_info->data = (void *)(count_tmp);
+    current_layout_info->message_position_y = count + 20;
     
 
     gtk_widget_show_all(current_layout_info->main_window);
@@ -124,7 +124,7 @@ void view_message(t_model_message *model_message, t_current_window_info *current
     GtkWidget *label;
     GtkWidget *chat_window_grid = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "chat_window_grid"));
 
-    int current_id = *((int*)(current_layout_info->data)) + 1;
+    int current_id = current_layout_info->message_position_y + 1;
 
     GtkBuilder *message_builder = gtk_builder_new_from_file(get_path_to_glade("message_labels.glade"));
 
@@ -151,7 +151,7 @@ void view_message(t_model_message *model_message, t_current_window_info *current
 
     int *current_id_tmp = &current_id;
 
-    current_layout_info->data = (void*)current_id_tmp;
+    current_layout_info->message_position_y = current_id;
 }
 
 void send_message_button_clicked(GtkWidget *widget, t_current_window_info *current_window_info)

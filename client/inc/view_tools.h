@@ -8,6 +8,7 @@ typedef struct s_current_window_info {
   GtkWidget *main_window;
   bool layout_exists;
   void *data;
+  int message_position_y;
 }               t_current_window_info;
 
 void delete_sign_entry_error(GtkEntry **entries);

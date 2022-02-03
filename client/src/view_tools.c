@@ -5,6 +5,7 @@ t_current_window_info *create_current_window_info(void) {
   current_window_info->builder = gtk_builder_new();
   current_window_info->main_window = NULL;
   current_window_info->layout_exists = false;
+  current_window_info->message_position_y = 0;
   return current_window_info;
 }
 

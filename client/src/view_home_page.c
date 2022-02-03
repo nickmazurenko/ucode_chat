@@ -1,9 +1,30 @@
 #include "view_home_page.h"
+#include "controller_get_messages.h"
 
 static int current_chat_count = 0;
+static int thread_id = 0;
 
 int get_current_chat_count() {
     return current_chat_count;
+}
+
+void callback_update_messages(t_current_window_info *current_window_info) {
+
+    int count = 0;
+    t_model_message** messages = controller_get_new_messages(&count);
+
+    if (count != 0) {
+        // view_messages(messages, current_window_info, count);
+        for (int i = 0; i < count; i++) {
+            view_message(messages[i], current_window_info);
+            free_model_message(&(messages[i]));
+        }
+        free(messages);
+    }
+    g_source_remove(thread_id);
+
+    thread_id = g_timeout_add(5000, callback_update_messages, current_window_info);
+
 }
 
 
@@ -33,10 +54,14 @@ void	on_column(GtkButton *b, t_current_window_info *current_window_info) {
         gtk_grid_insert_row(GTK_GRID(chat_window_grid), i);
         gtk_grid_attach(GTK_GRID(chat_window_grid), GTK_WIDGET(gtk_builder_get_object(message_builder, "invisible_label")), 1, i, 1, 1);
     }
-    *count_tmp = count + 20;
-    current_window_info->data = (void *)(count_tmp);
+    // *count_tmp = count + 20;
+    // current_window_info->data = (void *)(count_tmp);
+
+    current_window_info->message_position_y = count + 20;
 
     view_messages(model_message, current_window_info, count);
+
+    thread_id = g_timeout_add(5000, callback_update_messages, current_window_info);
 }
     
 

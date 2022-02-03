@@ -52,11 +52,11 @@ int update_user_money(char *username, int add_money) {
         exit(1);
     }
 
-    char *update_request = "UPDATE UsersData SET Money = '%zu';";
+    char *update_request = "UPDATE UsersData SET Money = '%zu' WHERE Id=%zu;";
     char *sql_query = NULL;
     char *err_msg = NULL;
 
-    asprintf(&sql_query, update_request, money);
+    asprintf(&sql_query, update_request, money, user_data_id);
 
     if((err_status = sqlite3_exec(db, sql_query, callback_print_db, 0, &err_msg)) != SQLITE_OK) {
         fprintf(stderr, "SQL_error: %s\n", err_msg);
