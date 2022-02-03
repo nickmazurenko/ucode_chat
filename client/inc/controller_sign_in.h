@@ -4,6 +4,7 @@
 #include "model.h"
 #include "sign_requests.h"
 #include "view_tools.h"
+#include "view_home_page.h"
 
 int controller_sign_in(char* user_name, char* password);
 void controller_view_user_era(GtkWidget **sign_in_info, t_current_window_info *current_window_info);

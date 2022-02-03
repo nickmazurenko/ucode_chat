@@ -62,9 +62,9 @@ void view_chat_window(t_current_window_info *current_layout_info)
 
     gtk_scrolled_window_set_policy(home_chats_scrolled_window, GTK_POLICY_AUTOMATIC, GTK_POLICY_NEVER);
 
-    gtk_container_add(GTK_CONTAINER(current_layout_info->main_window), GTK_WIDGET(home_page_layout)); // ya huy znaet kakoy layout ebanut` zdes`
+    // gtk_container_add(GTK_CONTAINER(current_layout_info->main_window), GTK_WIDGET(home_page_layout)); // ya huy znaet kakoy layout ebanut` zdes`
 
-    gtk_container_add(GTK_CONTAINER(home_page_layout), GTK_WIDGET(chat_window_layout));
+    // gtk_container_add(GTK_CONTAINER(home_page_layout), GTK_WIDGET(chat_window_layout));
 
     current_layout_info->layout_exists = true;
 
@@ -72,9 +72,10 @@ void view_chat_window(t_current_window_info *current_layout_info)
     gtk_grid_insert_column(GTK_GRID(chat_window_grid), 0);
     gtk_grid_insert_column(GTK_GRID(chat_window_grid), 1);
 
-    
+    int* count_tmp = malloc(sizeof(int));
+    *count_tmp = count + 20;
 
-    current_layout_info->data = (void *)(count + 20);
+    current_layout_info->data = (void *)(count_tmp);
     
 
     gtk_widget_show_all(current_layout_info->main_window);
@@ -119,7 +120,7 @@ void view_message(t_model_message *model_message, t_current_window_info *current
     GtkWidget *label;
     GtkWidget *chat_window_grid = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "chat_window_grid"));
 
-    int current_id = ((int)(current_layout_info->data)) + 1;
+    int current_id = *((int*)(current_layout_info->data)) + 1;
 
     GtkWidget *message_builder = gtk_builder_new_from_file(get_path_to_glade("message_labels.glade"));
 
