@@ -16,5 +16,9 @@
     <property name="image">user_image</property>
     <property name="image-position">top</property>
     <property name="always-show-image">True</property>
+    <style>
+      <class name="user_button"/>
+    </style>
   </object>
+
 </interface>

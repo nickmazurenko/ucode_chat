@@ -126,6 +126,12 @@ void show_quiz(cJSON* question_data) {
 
 void set_quiz_on_button(GtkWidget *button) {
 
+    GtkCssProvider *cssProvider = gtk_css_provider_new();
+    gtk_css_provider_load_from_path(cssProvider, get_path_to_style("quiz.css"), NULL);
+    gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
+                                              GTK_STYLE_PROVIDER(cssProvider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
+
     cJSON *quiz_questions;
 
     if (quiz_builder == NULL || quiz_question_label == NULL) {

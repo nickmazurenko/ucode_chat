@@ -46,6 +46,9 @@
             <property name="lines">20</property>
             <property name="xalign">0.5</property>
             <property name="yalign">0.5</property>
+            <style>
+              <class name="quiz_label"/>
+            </style>
             <attributes>
               <attribute name="font-desc" value="Segoe Print Bold 14"/>
               <attribute name="style" value="normal"/>
