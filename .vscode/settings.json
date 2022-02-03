@@ -31,6 +31,9 @@
         "__bit_reference": "c",
         "__split_buffer": "c",
         "string": "c",
-        "vector": "c"
+        "vector": "c",
+        "controller_get_messages.h": "c",
+        "select_action.h": "c",
+        "resources_server.h": "c"
     }
 }

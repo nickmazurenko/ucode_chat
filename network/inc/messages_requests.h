@@ -2,6 +2,7 @@
 #define MESSAGES_REQUESTS
 
 #include "send_request.h"
+#include "send_file.h"
 #include "model_message.h"
 #include "cJSON.h"
 

@@ -23,7 +23,15 @@ char* send_message(t_model_message* model_message, cJSON* protocol) {
     } else if (model_message->data_type == MESSAGE_FILE) {
 
         // after file json data == model_message
+        add_to_protocol_string(protocol, "DATA", message_json);
+        request = cJSON_Print(protocol);
 
+        // printf("\nTHERE REQUEST: %s\n", request);
+
+        //TODO:
+        response = send_file(model_message->data, request, get_server_ip(), PORT);
+        free(message_json);
+        free(request);
 
     } else if (model_message->data_type == MESSAGE_STONE) {
         // after file json data == model_message

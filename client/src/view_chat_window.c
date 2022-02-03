@@ -47,14 +47,10 @@ void view_chat_window(t_current_window_info *current_layout_info)
     GtkWidget *send_message_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "send_message_button"));
 
     g_signal_connect(send_message_button, "clicked", G_CALLBACK(send_message_button_clicked), current_layout_info);
-
-    // get to know how to automatically scroll
     
-    // GtkWidget *chat_viewport = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "chat_window_viewport"));
-    
-    // GtkAdjustment *adjustment = gtk_viewport_get_vadjustment(GTK_VIEWPORT(chat_viewport));
-    
-    // gtk_adjustment_set_value(adjustment, gtk_adjustment_get_upper(adjustment));
+    GtkWidget *file_chooser_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "gtkfile_chooser_button"));  
+ 
+    g_signal_connect(file_chooser_button, "file-set", G_CALLBACK(send_file_as_message), current_layout_info);
 
     
     
@@ -154,3 +150,20 @@ void send_message_button_clicked(GtkWidget *widget, t_current_window_info *curre
         view_message(message, current_window_info);
     }
 }
+
+gboolean send_file_as_message(GtkWidget *widget, t_current_window_info * current_window_info){ 
+ 
+ 
+    GtkWidget *file_chooser = GTK_FILE_CHOOSER(gtk_builder_get_object(current_window_info->builder, "gtkfile_chooser_button")); 
+ 
+    // GFile * received_file = gtk_file_chooser_get_current_folder_file(file_chooser); 
+    char *selected_file = gtk_file_chooser_get_filename(file_chooser); 
+    
+    controller_send_message(get_current_user_to_talk(), MESSAGE_FILE, selected_file);
+
+    printf("\nTHERE CHOOSED FILE: %s\n", selected_file); 
+
+
+}
+ 
+
