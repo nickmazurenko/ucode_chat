@@ -19,6 +19,7 @@ cJSON* create_protocol() {
 cJSON* set_in_protocol_string(cJSON* protocol, char* key, char*value) {
     if (get_from_protocol_string(protocol, key)) cJSON_DeleteItemFromObject(protocol, key);
     add_to_protocol_string(protocol, key, value);
+    return protocol;
 }
 
 cJSON* add_to_protocol(cJSON* protocol, char* key, cJSON* value) {
