@@ -50,11 +50,11 @@ void view_chat_window(t_current_window_info *current_layout_info)
 
     // get to know how to automatically scroll
     
-    GtkWidget *chat_viewport = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "chat_window_viewport"));
+    // GtkWidget *chat_viewport = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "chat_window_viewport"));
     
-    GtkAdjustment *adjustment = gtk_viewport_get_vadjustment(GTK_VIEWPORT(chat_viewport));
+    // GtkAdjustment *adjustment = gtk_viewport_get_vadjustment(GTK_VIEWPORT(chat_viewport));
     
-    gtk_adjustment_set_value(adjustment, gtk_adjustment_get_upper(adjustment));
+    // gtk_adjustment_set_value(adjustment, gtk_adjustment_get_upper(adjustment));
 
     
     
@@ -86,73 +86,58 @@ void view_chat_window(t_current_window_info *current_layout_info)
     
 }
 
-void view_messages(t_model_message **model_message, t_current_window_info *current_layout_info, int size)
-{
-    GtkWidget *label[size];
-    GtkWidget *chat_window_grid = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "chat_window_grid"));
-
-    for (int message_id = 0; message_id < size; message_id++)
-    {
-        GtkBuilder *message_builder = gtk_builder_new_from_file(get_path_to_glade("message_labels.glade"));
-
-        gtk_grid_insert_row(GTK_GRID(chat_window_grid), message_id + 20);
-        if (!strcmp(model_message[message_id]->from_user, get_from_protocol_string(get_cookies(), "USERNAME")))
-        {
-
-            label[message_id] = GTK_WIDGET(gtk_builder_get_object(message_builder, "current_user_msg_label"));
-
-            gtk_label_set_text(GTK_LABEL(label[message_id]), model_message[message_id]->data);
-
-            gtk_grid_attach(GTK_GRID(chat_window_grid), label[message_id], 1, message_id + 20, 1, 1);
-        }
-        else
-        {
-
-            label[message_id] = GTK_WIDGET(gtk_builder_get_object(message_builder, "other_user_msg_label"));
-            gtk_label_set_text(GTK_LABEL(label[message_id]), model_message[message_id]->data);
-
-            gtk_label_set_xalign(GTK_LABEL(label[message_id]), 0.5);
-            gtk_label_set_justify(GTK_LABEL(label[message_id]), GTK_JUSTIFY_LEFT);
-            gtk_grid_attach(GTK_GRID(chat_window_grid), label[message_id], 0, message_id + 20, 1, 1);
-        }
-    }
-
-}
-
-void view_message(t_model_message *model_message, t_current_window_info *current_layout_info)
-{
-    GtkWidget *label;
-    GtkWidget *chat_window_grid = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "chat_window_grid"));
-
-    int current_id = current_layout_info->message_position_y + 1;
-
-    GtkBuilder *message_builder = gtk_builder_new_from_file(get_path_to_glade("message_labels.glade"));
-
-    gtk_grid_insert_row(GTK_GRID(chat_window_grid), current_id);
-    if (!strcmp(model_message->from_user, get_from_protocol_string(get_cookies(), "USERNAME")))
-    {
-
-        label = GTK_WIDGET(gtk_builder_get_object(message_builder, "current_user_msg_label"));
-
-        gtk_label_set_text(GTK_LABEL(label), model_message->data);
-
-        gtk_grid_attach(GTK_GRID(chat_window_grid), label, 1, current_id, 1, 1);
-    }
-    else
-    {
-
-        label = GTK_WIDGET(gtk_builder_get_object(message_builder, "other_user_msg_label"));
-        gtk_label_set_text(GTK_LABEL(label), model_message->data);
-
-        gtk_label_set_xalign(GTK_LABEL(label), 0.5);
-        gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_LEFT);
-        gtk_grid_attach(GTK_GRID(chat_window_grid), label, 0, current_id, 1, 1);
-    }
-
-    int *current_id_tmp = &current_id;
-
-    current_layout_info->message_position_y = current_id;
-}
+void view_messages(t_model_message **model_message, t_current_window_info *current_layout_info, int size) 
+{ 
+    GtkWidget *label[size]; 
+    GtkWidget *chat_window_grid = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "chat_window_grid")); 
+ 
+    for (int message_id = 0; message_id < size; message_id++) 
+    { 
+        view_message(model_message[message_id], current_layout_info); 
+    } 
+ 
+} 
+ 
+void view_message(t_model_message *model_message, t_current_window_info *current_layout_info) 
+{ 
+    GtkWidget *label; 
+    GtkWidget *chat_window_grid = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "chat_window_grid")); 
+ 
+    int current_id = current_layout_info->message_position_y + 1; 
+ 
+    GtkBuilder *message_builder = gtk_builder_new_from_file(get_path_to_glade("message_labels.glade")); 
+ 
+    gtk_grid_insert_row(GTK_GRID(chat_window_grid), current_id); 
+    if (!strcmp(model_message->from_user, get_from_protocol_string(get_cookies(), "USERNAME"))) 
+    { 
+ 
+        label = GTK_WIDGET(gtk_builder_get_object(message_builder, "current_user_msg_label")); 
+        gtk_label_set_text(GTK_LABEL(label), model_message->data); 
+ 
+        gtk_grid_attach(GTK_GRID(chat_window_grid), label, 1, current_id, 1, 1); 
+    } 
+ 
+    else 
+    { 
+ 
+        label = GTK_WIDGET(gtk_builder_get_object(message_builder, "other_user_msg_label")); 
+        gtk_label_set_text(GTK_LABEL(label), model_message->data); 
+ 
+        gtk_label_set_xalign(GTK_LABEL(label), 0.5); 
+        gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_LEFT); 
+        gtk_grid_attach(GTK_GRID(chat_window_grid), label, 0, current_id, 1, 1); 
+    } 
+ 
+    int *current_id_tmp = &current_id; 
+ 
+    current_layout_info->message_position_y = current_id; 
+ 
+    GtkWidget *chat_viewport = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "chat_window_viewport")); 
+     
+    GtkAdjustment *adjustment = gtk_viewport_get_vadjustment(GTK_VIEWPORT(chat_viewport)); 
+    gtk_adjustment_set_upper(adjustment, gtk_adjustment_get_upper(adjustment) + 100); 
+    gtk_adjustment_set_value(adjustment, gtk_adjustment_get_upper(adjustment)); 
+} 
 
 void send_message_button_clicked(GtkWidget *widget, t_current_window_info *current_window_info)
 {
