@@ -23,6 +23,7 @@ char*  get_file_from_protocol(cJSON* protocol, char* key, size_t* file_size);
 cJSON* get_from_protocol(cJSON* protocol, char* key);
 char*  get_from_protocol_string(cJSON* protocol, char* key);
 double get_from_protocol_number(cJSON* protocol, char* key);
+cJSON* set_in_protocol_string(cJSON* protocol, char* key, char*value);
 
 char* screen_file(char* file_bytes, size_t file_size, size_t *screened_size);
 char* unscreen_file(char* screened, size_t screened_size, size_t* file_size);
