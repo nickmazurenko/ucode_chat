@@ -54,18 +54,21 @@ bool sign_in(char* request, char *response) {
     char* user_str = user_json->valuestring;
 
     t_model_user* user = from_string_model_user(user_str);
+    // TODO: use hash
+    char* token = user->password;
 
     cJSON *sign_in_status = create_protocol();
 
     // check user in db
-        perror("THERE");
+        // perror("THERE");
 
     if (is_user(user->name, user->password)) {
         add_to_protocol_string(sign_in_status, "STATUS", "SUCCESS");
+        add_to_protocol_string(sign_in_status, "TOKEN", token);
         result = true;
     } else {
         result = false;
-        add_to_protocol_string(sign_in_status, "STATUS", "ERORR");
+        add_to_protocol_string(sign_in_status, "STATUS", "ERROR");
     }
 
     strcpy(response, cJSON_Print(sign_in_status));
