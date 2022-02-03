@@ -62,11 +62,11 @@ char* get_messages(cJSON* request) {
 
             if (strcmp(subaction, "GET ALL MSGS") == 0) {
                 
-                messages = get_all_messages_of(username);
+                messages = json_get_all_messages_of(username);
 
             } else if (strcmp(subaction, "GET NEW MSGS") == 0) {
 
-                messages = get_all_new_messages_of(username);
+                messages = json_get_new_messages_of(username);
 
             } else {
                 

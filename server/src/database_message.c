@@ -77,6 +77,76 @@ int callback_get_messages(void *data, int argc, char **argv, char **azColName) {
     return 0;
 }
 
+int callback_get_messages_json(void *data, int argc, char** argv, char** azColName) {
+
+    cJSON* messages = (cJSON*)data;
+
+    cJSON* message  = cJSON_CreateObject();
+
+    size_t message_id = atol(argv[0]);
+    update_message_status(message_id, MESSAGE_RECEIVED);
+    int data_type = atol(argv[3]);
+    int status = atol(argv[6]);
+
+    add_to_protocol_number(message, "id", message_id);
+    add_to_protocol_string(message, "from_user", argv[1]);
+    add_to_protocol_string(message, "to_user", argv[2]);
+    add_to_protocol_number(message, "data_type", data_type);
+    add_to_protocol_string(message, "data", argv[4]);
+    add_to_protocol_string(message, "date", argv[5]);
+    add_to_protocol_string(message, "status", argv[6]);
+
+    char* message_str = cJSON_Print(message);
+    cJSON* message_str_json = cJSON_CreateString(message_str);
+    
+    free(message_str);
+
+    cJSON_AddItemToArray(messages, message_str_json);
+    return 0;
+}
+
+cJSON* json_get_all_messages_of(char* username) {
+
+    cJSON* messages = cJSON_CreateArray();
+
+    int err_status = 0;
+
+    char *sql_query = NULL;
+    char *select_request = "SELECT * FROM Messages WHERE (FromUser=('%s') OR ToUser=('%s'));";
+    asprintf(&sql_query, select_request, username, username);
+    char *err_msg = NULL;
+
+    if((err_status = sqlite3_exec(get_database(), sql_query, callback_get_messages_json, messages, &err_msg)) != SQLITE_OK) {
+        fprintf(stderr, "SQL_errorthere: %s\n", err_msg);
+        sqlite3_free(err_msg);
+        sqlite3_close(get_database());
+        exit(1);
+    }
+
+    return messages;
+
+}
+
+cJSON* json_get_new_messages_of(char* username) {
+    cJSON* messages = cJSON_CreateArray();
+
+    int err_status = 0;
+
+    char *sql_query = NULL;
+    char *select_request = "SELECT * FROM Messages WHERE (ToUser=('%s') AND FromUser!=('%s') AND (STATUS=%i));";
+    asprintf(&sql_query, select_request, username, username, MESSAGE_SENT);
+    char *err_msg = NULL;
+
+    if((err_status = sqlite3_exec(get_database(), sql_query, callback_get_messages_json, messages, &err_msg)) != SQLITE_OK) {
+        fprintf(stderr, "SQL_errorthere: %s\n", err_msg);
+        sqlite3_free(err_msg);
+        sqlite3_close(get_database());
+        exit(1);
+    }
+
+    return messages;
+}
+
 int update_message_status(size_t message_id, e_message_status message_status) {
     int err_status = 0;
     char *sql_query = NULL;

@@ -52,6 +52,8 @@ int callback_get_user_money(void *data, int argc, char **argv, char **azColName)
 size_t insert_data_message(t_model_message* model_message);
 cJSON* get_all_new_messages_of(char* username);
 cJSON* get_all_messages_of(char* username);
+cJSON* json_get_all_messages_of(char* username);
+cJSON* json_get_new_messages_of(char* username);
 
 // Resource Table
 size_t insert_data_resource(t_model_resource* model_resource);
