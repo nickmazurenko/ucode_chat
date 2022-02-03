@@ -55,3 +55,5 @@ dkms.conf
 *.sqlite
 db.sqlite
 *.DS_Store
+
+./server/resources/tmp/*
