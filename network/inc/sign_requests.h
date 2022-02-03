@@ -10,6 +10,6 @@
 char* create_sign_request(t_model_user* model_user, char* action);
 
 bool send_sign_up_request(t_model_user* model_user);
-bool send_sign_in_request(t_model_user* model_user);
+cJSON* send_sign_in_request(t_model_user* model_user);
 
 #endif
