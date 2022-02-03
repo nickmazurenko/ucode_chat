@@ -151,13 +151,13 @@ char** get_all_user_chats(char *current_user, int *count) {
         exit(1);
     }
 
-    char *sql_query = NULL;
+    // char *sql_query = NULL;
 
     // char *select_request = "SELECT DISTINCT ToUser FROM Messages WHERE FromUser=('%s');";
-    char *select_request = "SELECT ToUser From Messages UNION SELECT FromUser FROM Messages;";
+    char *sql_query = "SELECT ToUser From Messages UNION SELECT FromUser FROM Messages;";
     // char *select_request = "SELECT DISTINCT ToUser, FromUser From Messages";
 
-    asprintf(&sql_query, select_request);
+    // asprintf(&sql_query, select_request);
 
     char *err_msg = NULL;
 

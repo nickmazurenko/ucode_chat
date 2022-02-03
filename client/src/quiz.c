@@ -146,7 +146,7 @@ void set_quiz_on_button(GtkWidget *button) {
     quiz_popover = gtk_popover_new (button);
     gtk_container_add (GTK_CONTAINER (quiz_popover), quiz_layout);
     gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), quiz_popover);
-    gtk_popover_set_position(quiz_popover, GTK_POS_RIGHT);
+    gtk_popover_set_position(GTK_POPOVER(quiz_popover), GTK_POS_RIGHT);
 
     GtkWidget *answer_buttons[4];
     answer_buttons[0] = GTK_WIDGET(gtk_builder_get_object(quiz_builder, "answer_button_1"));

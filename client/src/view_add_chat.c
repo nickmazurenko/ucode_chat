@@ -5,7 +5,7 @@ void add_chat_clicked(GtkWidget *widget, t_current_window_info *current_window_i
     
     GtkWidget *add_chat_entry = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "add_chat_entry"));
 
-    char *user_to_find = gtk_entry_get_text(GTK_ENTRY(add_chat_entry));
+    char *user_to_find = (char*)gtk_entry_get_text(GTK_ENTRY(add_chat_entry));
    
 
     if(user_to_find && strlen(user_to_find) > 0) {
@@ -16,7 +16,7 @@ void add_chat_clicked(GtkWidget *widget, t_current_window_info *current_window_i
             NULL;
         }
     }
-    gtk_entry_set_text(add_chat_entry, "");
+    gtk_entry_set_text(GTK_ENTRY(add_chat_entry), "");
 
 }
 

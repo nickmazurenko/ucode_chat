@@ -11,7 +11,7 @@ void set_user_info_on_button(GtkWidget *button) {
     user_info_popover = gtk_popover_new (button);
     gtk_container_add (GTK_CONTAINER (user_info_popover), user_info_layout);
     gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), user_info_popover);
-    gtk_popover_set_position(user_info_popover, GTK_POS_RIGHT);
+    gtk_popover_set_position(GTK_POPOVER(user_info_popover), GTK_POS_RIGHT);
     // gtk_widget_show_all (user_info_popover); TODO: mojet delete ?
 
     GtkLabel *status_info = GTK_LABEL( gtk_builder_get_object(builder, "status_info"));
