@@ -11,6 +11,7 @@ t_model_user_data* new_model_user_data() {
     model_user_data->era      = PRIMITIVE_SOCIETY;
     model_user_data->status   = ONLINE;
     model_user_data->money    = 0;
+    model_user_data->avatar_id= 0;
 
     return model_user_data;
 }
@@ -27,6 +28,7 @@ char*         to_string_model_user_data(t_model_user_data* model_user_data) {
     add_to_protocol_number(user_data, "era", model_user_data->era);
     add_to_protocol_number(user_data, "status", model_user_data->status);
     add_to_protocol_number(user_data, "money", model_user_data->money);
+    add_to_protocol_number(user_data, "avatar_id", model_user_data->money);
 
     char* user_data_str = cJSON_Print(user_data);
     cJSON_Delete(user_data);
@@ -52,6 +54,7 @@ t_model_user_data* from_string_model_user_data(char* json) {
     model_user_data->era = (int)get_from_protocol_number(user_data, "era");
     model_user_data->status = (int)get_from_protocol_number(user_data, "status");
     model_user_data->money = (size_t)get_from_protocol_number(user_data, "money");
+    model_user_data->avatar_id = (size_t)get_from_protocol_number(user_data, "avatar_id");
 
     cJSON_Delete(user_data);
 

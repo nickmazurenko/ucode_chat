@@ -31,7 +31,9 @@ int select_action(char* request, char* response) {
 
     } else if ( strcmp(action, "SET AVATAR") == 0 ) {
         
-        set_avatar(request);
+        char* response_buff = set_avatar(request_obj);
+        strcpy(response, response_buff);
+        free(response_buff);
     
     } else if ( strcmp(action, "GET FILE FOR WRITE") == 0 ) {
 

@@ -178,6 +178,11 @@ size_t insert_data_user(char *username, char *password) {
 
 size_t get_user_data_id(char *username) {
     t_model_user *model_user = get_user_by_name(username);
+
+    if (model_user == NULL) {
+        return 0;
+    }
+
     size_t user_data_id = model_user->user_data_id;
     free_model_user(&model_user);
 

@@ -31,6 +31,7 @@ typedef struct s_model_user_data {
     char*           email;
     e_eras          era;
     size_t          money;
+    size_t          avatar_id;
 
 }              t_model_user_data;
 

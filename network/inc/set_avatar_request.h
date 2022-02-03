@@ -7,7 +7,7 @@
 #include "protocol.h"
 #include "send_file.h"
 
-char* send_set_avatar_request(char* path_to_file);
+char* send_set_avatar_request(char* path_to_file, char* username, char* token);
 
 
 #endif

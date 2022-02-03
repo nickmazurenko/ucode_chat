@@ -46,6 +46,7 @@ size_t get_user_money(char *username);
 // User Data Table
 size_t insert_data_user_data(t_model_user_data* model_user_data);
 int update_user_money(char *username, int add_money);
+int update_user_avatar(char* username, int avatar_id);
 int callback_get_user_money(void *data, int argc, char **argv, char **azColName);
 
 // Message Table

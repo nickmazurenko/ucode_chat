@@ -77,10 +77,16 @@ char* file_end(char* request, char* response) {
     }
     // TODO: add file path to after save action
     cJSON* after_save_action = cJSON_GetObjectItemCaseSensitive(protocol, "DATA");
+    cJSON* after_save_request = cJSON_Parse(after_save_action->valuestring);
+    add_to_protocol_string(after_save_request, "PATH TO FILE", get_from_protocol_string(protocol, "PATH TO FILE"));
 
-    select_action(after_save_action->valuestring, response);
+    char* after_save = cJSON_Print(after_save_request);
+
+    select_action(after_save, response);
 
     cJSON_Delete(protocol);
+    cJSON_Delete(after_save_request);
+    free(after_save);
 
     return response;
 }

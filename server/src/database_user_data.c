@@ -12,11 +12,11 @@ size_t insert_data_user_data(t_model_user_data* model_user_data) {
         exit(1);
     }
 
-    char *insert_request = "INSERT INTO UsersData(About, Status, TNumber, Email, Era, Money) VALUES('%s', %i, '%s', '%s', %i, %zu);";
+    char *insert_request = "INSERT INTO UsersData(About, Status, TNumber, Email, Era, Money, AvatarId) VALUES('%s', %i, '%s', '%s', %i, %zu, %zu);";
     char *sql_query = NULL;
     char *err_msg = NULL;
 
-    asprintf(&sql_query, insert_request, model_user_data->about, model_user_data->status, model_user_data->t_number, model_user_data->email, model_user_data->era, model_user_data->money);
+    asprintf(&sql_query, insert_request, model_user_data->about, model_user_data->status, model_user_data->t_number, model_user_data->email, model_user_data->era, model_user_data->money, model_user_data->avatar_id);
 
     if((err_status = sqlite3_exec(db, sql_query, callback_print_db, 0, &err_msg)) != SQLITE_OK) {
         fprintf(stderr, "SQL_error: %s\n", err_msg);
@@ -32,9 +32,33 @@ size_t insert_data_user_data(t_model_user_data* model_user_data) {
     return user_data_id;
 }
 
+int update_user_avatar(char* username, int avatar_id) {
+    errno = 0;
+    size_t user_data_id = get_user_data_id(username);
+
+
+    int err_status = 0;
+
+    char *update_request = "UPDATE UsersData SET AvatarId = '%i' WHERE Id=%zu;";
+    char *sql_query = NULL;
+    char *err_msg = NULL;
+
+    asprintf(&sql_query, update_request, avatar_id, user_data_id);
+
+    if((err_status = sqlite3_exec(get_database(), sql_query, callback_print_db, 0, &err_msg)) != SQLITE_OK) {
+        fprintf(stderr, "SQL_error: %s\n", err_msg);
+        sqlite3_free(err_msg);
+        sqlite3_close(get_database());
+        return 1;
+        // exit(1);
+    }
+
+
+    return 0;
+}
+
 int update_user_money(char *username, int add_money) {
     errno = 0;
-    perror("there\n");
     size_t user_data_id = get_user_data_id(username);
     size_t money = get_user_money(username);
     if (add_money < 0 && abs(add_money) > money) 
@@ -42,15 +66,8 @@ int update_user_money(char *username, int add_money) {
     else
         money += add_money;
 
-    sqlite3 *db;
     
     int err_status = 0;
-
-    if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
-        fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
-        sqlite3_close(db);
-        exit(1);
-    }
 
     char *update_request = "UPDATE UsersData SET Money = '%zu' WHERE Id=%zu;";
     char *sql_query = NULL;
@@ -58,15 +75,14 @@ int update_user_money(char *username, int add_money) {
 
     asprintf(&sql_query, update_request, money, user_data_id);
 
-    if((err_status = sqlite3_exec(db, sql_query, callback_print_db, 0, &err_msg)) != SQLITE_OK) {
+    if((err_status = sqlite3_exec(get_database(), sql_query, callback_print_db, 0, &err_msg)) != SQLITE_OK) {
         fprintf(stderr, "SQL_error: %s\n", err_msg);
         sqlite3_free(err_msg);
-        sqlite3_close(db);
+        sqlite3_close(get_database());
         return 1;
         // exit(1);
     }
 
-    sqlite3_close(db);
 
     return 0;
 }
