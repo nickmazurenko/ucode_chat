@@ -4,7 +4,7 @@
 static char *current_user_to_talk = NULL;
 
  char *get_current_user_to_talk(void) {
-    return current_user_to_talk;
+    return get_from_protocol_string(get_cookies(), "TO USER");
 }
 
  void set_current_user_to_talk(char *new_user_to_talk) {
@@ -149,7 +149,8 @@ void send_message_button_clicked(GtkWidget *widget, t_current_window_info *curre
     if(current_user_to_talk) 
         message = controller_send_message(get_current_user_to_talk(), MESSAGE_TEXT, message_str);
     
-    gtk_entry_set_text(GTK_ENTRY(type_message_entry), "");
-
-    view_message(message, current_window_info);
+    if (message != NULL) {
+        gtk_entry_set_text(GTK_ENTRY(type_message_entry), "");
+        view_message(message, current_window_info);
+    }
 }

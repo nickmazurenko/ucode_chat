@@ -34,6 +34,9 @@ gboolean callback_update_messages(gpointer* user_data) {
 
 void	on_column(GtkButton *b, t_current_window_info *current_window_info) {
 	printf("You selected: %s\n", gtk_button_get_label (b));
+
+    set_in_protocol_string(get_cookies(), "TO USER", gtk_button_get_label(b));
+
     int count = 0;
     int *count_tmp = (int*)malloc(sizeof(int));
     GtkWidget *chat_window_grid = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "chat_window_grid"));
