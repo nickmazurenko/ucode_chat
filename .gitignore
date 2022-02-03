@@ -57,3 +57,4 @@ db.sqlite
 *.DS_Store
 
 server/resources/tmp/*
+client/resources/tmp/*
