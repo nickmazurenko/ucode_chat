@@ -105,7 +105,7 @@ cJSON* get_all_new_messages_of(char* username) {
     // }
 
     char *sql_query = NULL;
-    char *select_request = "SELECT * FROM Messages WHERE (ToUser=('%s') AND (STATUS=0));";
+    char *select_request = "SELECT * FROM Messages WHERE (ToUser=('%s') AND FromUser!=('%s') AND (STATUS=0));";
     asprintf(&sql_query, select_request, username, username);
     char *err_msg = NULL;
 

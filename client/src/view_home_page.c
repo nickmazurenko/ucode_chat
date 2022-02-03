@@ -19,6 +19,8 @@ void callback_update_messages(t_current_window_info *current_window_info) {
             view_message(messages[i], current_window_info);
             free_model_message(&(messages[i]));
         }
+        mx_printstr("\a");
+        fflush(stdout);
         free(messages);
     }
     g_source_remove(thread_id);
