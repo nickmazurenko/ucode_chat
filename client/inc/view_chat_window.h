@@ -22,6 +22,8 @@ gboolean send_file_as_message(GtkWidget *widget, t_current_window_info * current
 void set_current_user_to_talk(char *new_user_to_talk);
 char *get_current_user_to_talk(void);
 
+void delete_labels_array();
+
 
 
 #endif

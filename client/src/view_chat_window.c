@@ -26,6 +26,24 @@ void add_to_labels_array(GtkWidget* button, size_t id) {
     current_size++;
 }
 
+void delete_labels_array() {
+
+    for (int i = 0; i < current_size; i++) {
+        free(labels_array[i]);
+    }
+    if (labels_array != NULL){
+        printf("there we go\n");
+        fflush(stdout);
+        free(labels_array);
+        labels_array = NULL;
+    }
+    printf("there we go also\n");
+    fflush(stdout);
+    capacity = 0;
+    current_size = 0;
+
+}
+
 void callback_click_message(GtkWidget* b, t_current_window_info *current_window_info) {
     size_t id = 0;
     for (int i = 0; i < current_size; i++) {
