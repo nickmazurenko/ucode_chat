@@ -1,9 +1,6 @@
 #include "view_chat_window.h"
 
-void callback_click_message(GtkWidget *b, GdkEventButton *event,  t_model_message* model_message) {
-    
-    printf("message id: %zu\n", model_message->id);
-}
+
 
 //tmp to delete
 static char *current_user_to_talk = NULL;
