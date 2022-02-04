@@ -2,19 +2,40 @@
 
 static GtkGrid*   message_actions_grid = NULL;
 static long selected_message = -1;
+static GtkLabel* selected_message_label = NULL;
 
 
-void callback_edit_message(GtkWidget *b, GdkEventButton *event,  t_model_message* model_message) {
+void callback_edit_message(GtkWidget *b, GdkEventButton *event,  char* text) {
     if (selected_message != -1)
         printf("edit message: %i\n", selected_message);
+    
+    GtkGrid* edit_grid = gtk_grid_new();
+    gtk_grid_insert_row(edit_grid, 0);
+    gtk_grid_insert_row(edit_grid, 1);
+
+    GtkEntry* entry = gtk_entry_new();
+    gtk_entry_set_text(entry, gtk_label_get_text(selected_message_label));
+
+    GtkButton* send_edited = gtk_button_new_with_label("Send");
+
+    gtk_grid_attach(edit_grid, entry, 0, 0, 1, 1);
+    gtk_grid_attach(edit_grid, send_edited, 0, 1, 1, 1);
+
+    GtkPopover* edit_popover = gtk_popover_new(b);
+    gtk_popover_set_position(edit_popover, GTK_POS_RIGHT);
+
+    gtk_container_add(GTK_CONTAINER(edit_popover), edit_grid);
+
+    gtk_widget_show_all(edit_popover);
 }
 
-void callback_reply_message(GtkWidget *b, GdkEventButton *event,  t_model_message* model_message) {
-    if (selected_message != -1)
+void callback_reply_message(GtkWidget *b, GdkEventButton *event,  char* text) {
+    if (selected_message != -1) {
         printf("reply message: %i\n", selected_message);
+    }
 }
 
-void callback_forward_message(GtkWidget *b, GdkEventButton *event,  t_model_message* model_message) {
+void callback_forward_message(GtkWidget *b, GdkEventButton *event,  char* text) {
     if (selected_message != -1)
         printf("forward message: %i\n", selected_message);
 }
@@ -47,6 +68,7 @@ void create_message_actions_grid() {
 void callback_message_actions_popover_closed(GtkWidget* popover, GdkEventButton* event, gpointer* data) {
     gtk_widget_destroy(popover);
     selected_message = -1;
+    selected_message_label = NULL;
     message_actions_grid = NULL;
 }
 
@@ -56,6 +78,7 @@ void show_message_actions_popover(GtkWidget* label) {
     }
 
     GtkWidget* message_popover =  gtk_popover_new (label);
+    selected_message_label = label;
     gtk_container_add(GTK_CONTAINER(message_popover), GTK_WIDGET(message_actions_grid));
     gtk_popover_set_position(message_popover, GTK_POS_RIGHT);
     gtk_widget_show_all(message_popover);
