@@ -22,4 +22,9 @@ int get_current_chat_count();
 
 void add_chat(char *username, t_current_window_info *current_window_info);
 void add_chats(char **username, t_current_window_info *current_window_info, int count);
+
+
+
+char *request_file_if_not_exist(char *file);
+bool is_client_file(char *path);
 #endif

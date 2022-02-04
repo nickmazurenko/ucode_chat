@@ -175,10 +175,10 @@ void add_chat(char *username, t_current_window_info *current_window_info) {
     GtkWidget *home_chats_grid = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "home_chats_grid"));
 
     t_model_resource *avatar = send_get_avatar_request(username);
+
     insert_data_resource(avatar);
 
-
-    GdkPixbuf *image_pixbuf = gdk_pixbuf_new_from_file_at_size(get_path_to_image("rock.png"), 80, 80, NULL);
+    GdkPixbuf *image_pixbuf = gdk_pixbuf_new_from_file_at_size(request_file_if_not_exist(avatar->path), 80, 80, NULL);
 
     gtk_grid_insert_column (GTK_GRID(home_chats_grid), get_current_chat_count());
 
@@ -201,4 +201,26 @@ void add_chat(char *username, t_current_window_info *current_window_info) {
 
     current_chat_count++;
 
+}
+
+char *request_file_if_not_exist(char *file) {
+    char *path = mx_replace_substr(file, "./server", "./client");
+    printf("RESOURCE PATH%s\n", path);
+    if(is_client_file(path)) {
+        return path;
+    } else {
+        char *server_path = mx_replace_substr(file, "./server", "");
+        get_file(server_path);
+        return path;
+    }
+}
+
+bool is_client_file(char *path) {
+    FILE *file;
+    if(!(file = fopen(path, "r"))) {
+        return 0;
+    } else {
+        fclose(file);
+        return 1;
+    }
 }
