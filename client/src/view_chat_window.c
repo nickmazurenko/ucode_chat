@@ -1,5 +1,39 @@
 #include "view_chat_window.h"
 
+
+typedef struct s_button_index {
+
+    GtkWidget* button;
+    size_t     id;
+
+}              t_button_index;
+
+static t_button_index** labels_array = NULL;
+static int capacity = 0;
+static int current_size = 0;
+
+void add_to_labels_array(GtkWidget* button, size_t id) {
+
+    if (current_size == capacity) {
+        capacity += 10;
+        labels_array = realloc(labels_array, capacity * sizeof(t_button_index*));
+    }
+
+    t_button_index* b_i = (malloc(sizeof(t_button_index)));
+    b_i->button = button;
+    b_i->id = id;
+    labels_array[current_size] = b_i;
+    current_size++;
+}
+
+void callback_click_message(GtkWidget* b, t_current_window_info *current_window_info) {
+    size_t id = 0;
+    for (int i = 0; i < current_size; i++) {
+        if (labels_array[i]->button == b) id = labels_array[i]->id;
+    }
+    printf("%zu\n", id);
+}
+
 //tmp to delete
 static char *current_user_to_talk = NULL;
 
@@ -104,13 +138,20 @@ void view_message(t_model_message *model_message, t_current_window_info *current
     GtkBuilder *message_builder = gtk_builder_new_from_file(get_path_to_glade("message_labels.glade")); 
  
     gtk_grid_insert_row(GTK_GRID(chat_window_grid), current_id); 
+
+    GtkWidget* box = gtk_event_box_new();
+
     if (!strcmp(model_message->from_user, get_from_protocol_string(get_cookies(), "USERNAME"))) 
     { 
  
         label = GTK_WIDGET(gtk_builder_get_object(message_builder, "current_user_msg_label")); 
-        gtk_label_set_text(GTK_LABEL(label), model_message->data); 
+        gtk_label_set_text(GTK_LABEL(label), model_message->data);
+
+        gtk_container_add(box, label);
  
-        gtk_grid_attach(GTK_GRID(chat_window_grid), label, 1, current_id, 1, 1); 
+        gtk_grid_attach(GTK_GRID(chat_window_grid), box, 1, current_id, 1, 1); 
+        gtk_widget_show (box);
+
     } 
  
     else 
@@ -118,13 +159,20 @@ void view_message(t_model_message *model_message, t_current_window_info *current
  
         label = GTK_WIDGET(gtk_builder_get_object(message_builder, "other_user_msg_label")); 
         gtk_label_set_text(GTK_LABEL(label), model_message->data); 
- 
+
+        gtk_container_add(box, label);
+
         gtk_label_set_xalign(GTK_LABEL(label), 0.5); 
         gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_LEFT); 
-        gtk_grid_attach(GTK_GRID(chat_window_grid), label, 0, current_id, 1, 1); 
+        gtk_grid_attach(GTK_GRID(chat_window_grid), box, 0, current_id, 1, 1); 
+        gtk_widget_show (box);
+
     } 
  
     int *current_id_tmp = &current_id; 
+
+    add_to_labels_array(box, model_message->id);
+    g_signal_connect(box, "button_press_event", callback_click_message, NULL);
  
     current_layout_info->message_position_y = current_id; 
  
