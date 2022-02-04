@@ -13,5 +13,5 @@ char* get_messages(cJSON* request);
 bool start_chat(char *request, char *response);
 
 bool get_avatar(char *request, char *response);
-
+bool get_resource(char *request, char *response);
 #endif

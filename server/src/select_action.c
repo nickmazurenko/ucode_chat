@@ -80,7 +80,13 @@ int select_action(char* request, char* response) {
 
         get_avatar(request, response);
 
+    } else if ( strcmp(action, "GET_RESOURCE" ) == 0) {
+
+        get_resource(request, response);
+
     }
+
+        
 
     cJSON_Delete(request_obj);
 

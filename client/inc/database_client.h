@@ -59,4 +59,7 @@ size_t insert_data_resource(t_model_resource* model_resource);
 // Stones Table
 size_t insert_data_stone(t_model_stone* model_stone);
 
+t_model_resource *get_resource_by_id(char *id);
+int callback_get_resource(void *data, int argc, char **argv, char **azColName);
+
 #endif

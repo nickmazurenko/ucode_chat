@@ -30,6 +30,8 @@ char* send_message(t_model_message* model_message, cJSON* protocol) {
 
         //TODO:
         response = send_file(model_message->data, request, get_server_ip(), PORT);
+
+
         free(message_json);
         free(request);
 

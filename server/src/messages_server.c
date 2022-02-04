@@ -204,3 +204,22 @@ bool get_avatar(char *request, char *response) {
     printf("%s\n", response);
     fflush(stdout);
 }
+
+
+
+bool get_resource(char *request, char *response) {
+    cJSON *get_avatar_response = create_protocol();
+
+    cJSON *request_cjson = cJSON_Parse(request);
+
+    char *id = get_from_protocol_string(request_cjson, "DATA");
+    
+    t_model_resource *resource = get_resource_by_id(atoi(id));
+
+    add_to_protocol_string(get_avatar_response, "DATA", to_string_model_resource(resource));
+
+    strcpy(response, cJSON_Print(get_avatar_response));
+
+    printf("%s\n", response);
+    fflush(stdout);
+}

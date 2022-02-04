@@ -1,5 +1,6 @@
 #include "controller_send_message.h"
-
+#include "get_avatar_request.h"
+#include "database_client.h"
 //  int controller_send_message(char* to, e_message_data_types data_type, char* data) {
 
 //     t_model_message* model_message = new_model_message();
@@ -50,8 +51,15 @@
         // TODO: in response get message id and add to db this message --> done
         
         // change and check
+        
+        
         t_model_message * model_message_tmp = from_string_model_message(get_from_protocol_string(cJSON_Parse(response), "DATA"));
 
+        t_model_resource *file_to_save = send_get_resource_request(model_message_tmp->data);
+        
+        insert_data_resource(file_to_save);
+
+        // free_model_resource(&file_to_save);
 
         insert_data_message(model_message_tmp);
 
