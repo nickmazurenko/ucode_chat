@@ -46,7 +46,7 @@ int select_action(char* request, char* response) {
     } else if ( strcmp(action, "FILE END") == 0 ) {
 
         file_end(request, response);
-        add_resources(request_obj); // TODO: add response
+    
     } else if (strcmp(action, "GET FILE") == 0) {
         
         char* response_buff = send_file_server(request);

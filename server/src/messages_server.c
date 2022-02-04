@@ -14,13 +14,43 @@ char* add_message(cJSON* request) {
         strcpy(model_message->date, get_from_protocol_string(request, "DATE"));
         model_message->status = MESSAGE_SENT;
 
-        int msg_id = insert_data_message(model_message);
 
-        model_message->id = msg_id;
+        if(model_message->data_type == MESSAGE_TEXT){
 
-        add_to_protocol_string(response, "DATA", to_string_model_message(model_message));
+            int msg_id = insert_data_message(model_message);
 
-        free_model_message(&model_message);
+            model_message->id = msg_id;
+
+            add_to_protocol_string(response, "DATA", to_string_model_message(model_message));
+
+            free_model_message(&model_message);
+        } else if (model_message->data_type == MESSAGE_FILE){
+
+            char *tmp_id = get_from_protocol_string(request, "PATH TO FILE");
+            char *full_path = mx_strjoin("./server/resources/tmp/", tmp_id);
+
+            t_model_resource *model_resource = new_model_resource();
+            strcpy(model_resource->path, full_path);
+            strcpy(model_resource->name, model_message->data);
+            memset(model_message->data, 0, BUFFER_SIZE);
+
+            int resource_id = insert_data_resource(model_resource);
+
+            strcpy(model_message->data, mx_itoa(resource_id));
+            model_resource->id = resource_id;
+
+            int msg_id = insert_data_message(model_message);
+            model_message->id = msg_id;
+
+            add_to_protocol_string(response, "DATA", to_string_model_message(model_message));
+
+            free_model_message(&model_message);
+            free_model_resource(&model_resource);
+
+        } else if (model_message->data_type == MESSAGE_STONE){
+            NULL;
+            //TODO: add stones case
+        }
 
         
         
