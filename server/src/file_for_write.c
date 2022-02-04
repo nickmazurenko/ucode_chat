@@ -45,7 +45,7 @@ char* save_file(char* request, char* response) {
         char* create_file_command = "touch ";
         create_file_command = mx_strjoin(create_file_command, path_to_file);
         system(create_file_command);
-        FILE* file = fopen(path_to_file, "a");
+        file = fopen(path_to_file, "a");
     }
 
     cJSON* file_data_obj = cJSON_GetObjectItemCaseSensitive(request_obj, "DATA");

@@ -10,17 +10,24 @@ char* read_request(int conn_fd, char* request, int* read_number) {
     size_t buff_size = 14336;
     
 
-
+    errno = 0;
     while ( (*read_number = read(conn_fd, request, buff_size - 1)) > 0 )
-    {
+    {   
         // bzero(request, BUFFER_SIZE);
         request[*read_number - 1] = '\0';
         request[*read_number - 2] = '\0';
+        // printf("there we go %i\n", *read_number);
+        // fflush(stdout);
+
         // read_number = read(conn_fd, request, buff_size);
         break;
     }
     *read_number = *read_number - 2;
-    printf(request);
+    if (*read_number < 500) {
+        printf("request:\n%s\n", request);
+    } else {
+        printf("request too big\n");
+    }
 
     return request;
 }
