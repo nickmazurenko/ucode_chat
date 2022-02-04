@@ -46,7 +46,7 @@ int select_action(char* request, char* response) {
     } else if ( strcmp(action, "FILE END") == 0 ) {
 
         file_end(request, response);
-    
+        // add_resources(request_obj); // TODO: add response
     } else if (strcmp(action, "GET FILE") == 0) {
         
         char* response_buff = send_file_server(request);
@@ -76,7 +76,11 @@ int select_action(char* request, char* response) {
 
         start_chat(request, response);
 
-    } 
+    } else if ( strcmp(action, "GET_AVATAR" ) == 0) {
+
+        get_avatar(request, response);
+
+    }
 
     cJSON_Delete(request_obj);
 

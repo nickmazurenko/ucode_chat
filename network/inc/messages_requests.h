@@ -5,6 +5,7 @@
 #include "send_file.h"
 #include "model_message.h"
 #include "cJSON.h"
+#include "get_file.h"
 
 char* send_message(t_model_message* model_message, cJSON* protocol);
 cJSON* get_all_my_messages(cJSON* cookies);

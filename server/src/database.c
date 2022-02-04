@@ -48,6 +48,12 @@ void init_tables() {
             exit(1);
         }
     }
+    t_model_resource *default_avatar = new_model_resource();
+    default_avatar->id = 1;
+    mx_strcpy(default_avatar->name, "horse.jpeg");
+    mx_strcpy(default_avatar->path, "./server/resources/images/avatars/horse.jpeg");
+    if(!get_resource_by_id(1)->id)
+        insert_data_resource(default_avatar);
 
     // sqlite3_close(db);
 }

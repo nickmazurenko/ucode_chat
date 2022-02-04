@@ -11,7 +11,7 @@ t_model_user_data* new_model_user_data() {
     model_user_data->era      = PRIMITIVE_SOCIETY;
     model_user_data->status   = ONLINE;
     model_user_data->money    = 0;
-    model_user_data->avatar_id= 0;
+    model_user_data->avatar_id= 1;
 
     return model_user_data;
 }

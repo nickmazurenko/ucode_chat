@@ -3,6 +3,7 @@
 
 
 #include "messages_requests.h"
+#include "get_avatar_request.h"
 #include "user_data.h"
 
 void controller_get_messages();

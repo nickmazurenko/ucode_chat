@@ -12,7 +12,7 @@ char* table_names[] = {
 char* tables_init[] = {
 
     "CREATE TABLE IF NOT EXISTS Messages (Id INTEGER PRIMARY KEY, FromUser TEXT, ToUser TEXT, Type INTEGER, Data TEXT, Date CHAR, Status INTEGER) ;",
-    "CREATE TABLE IF NOT EXISTS Resources (Id INTEGER PRIMARY KEY, Path TEXT, Name TEXT) ;",
+    "CREATE TABLE IF NOT EXISTS Resources (Id, Path TEXT, Name TEXT) ;",
     "CREATE TABLE IF NOT EXISTS Stones (Id INTEGER PRIMARY KEY, Path TEXT) ;",
     NULL
 };

@@ -184,3 +184,23 @@ bool start_chat(char *request, char *response) {
 
     return result;
 }
+
+bool get_avatar(char *request, char *response) {
+    cJSON *get_avatar_response = create_protocol();
+
+    cJSON *request_cjson = cJSON_Parse(request);
+
+    char *username = get_from_protocol_string(request_cjson, "DATA");
+
+    
+
+    t_model_resource *resource = get_resource_by_id(get_user_avatar_id(username));
+
+
+    add_to_protocol_string(get_avatar_response, "DATA", to_string_model_resource(resource));
+
+    strcpy(response, cJSON_Print(get_avatar_response));
+
+    printf("%s\n", response);
+    fflush(stdout);
+}

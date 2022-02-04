@@ -56,6 +56,12 @@ cJSON* get_all_messages_of(char* username);
 cJSON* json_get_all_messages_of(char* username);
 cJSON* json_get_new_messages_of(char* username);
 
+t_model_resource *get_resource_by_id(size_t id);
+int callback_get_resource(void *data, int argc, char **argv, char **azColName);
+
+int callback_get_user_avatar_id(void *data, int argc, char **argv, char **azColName);
+size_t get_user_avatar_id(char *username);
+
 // Resource Table
 size_t insert_data_resource(t_model_resource* model_resource);
 

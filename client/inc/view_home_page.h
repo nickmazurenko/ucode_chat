@@ -12,6 +12,8 @@
 #include "view_chat_window.h"
 #include "controller_start_chat.h"
 
+#include "get_avatar_request.h"
+
 
 
 void view_home_page(t_current_window_info *current_layout_info);

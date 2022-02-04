@@ -173,6 +173,10 @@ void add_chat(char *username, t_current_window_info *current_window_info) {
 
     GtkWidget *home_chats_grid = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "home_chats_grid"));
 
+    t_model_resource *avatar = send_get_avatar_request(username);
+    insert_data_resource(avatar);
+
+
     GdkPixbuf *image_pixbuf = gdk_pixbuf_new_from_file_at_size(get_path_to_image("rock.png"), 80, 80, NULL);
 
     gtk_grid_insert_column (GTK_GRID(home_chats_grid), get_current_chat_count());
