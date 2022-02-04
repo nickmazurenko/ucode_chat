@@ -1,55 +1,8 @@
 #include "view_chat_window.h"
 
-
-typedef struct s_button_index {
-
-    GtkWidget* button;
-    size_t     id;
-
-}              t_button_index;
-
-static t_button_index** labels_array = NULL;
-static int capacity = 0;
-static int current_size = 0;
-
-void add_to_labels_array(GtkWidget* button, size_t id) {
-
-    if (current_size == capacity) {
-        capacity += 10;
-        labels_array = realloc(labels_array, capacity * sizeof(t_button_index*));
-    }
-
-    t_button_index* b_i = (malloc(sizeof(t_button_index)));
-    b_i->button = button;
-    b_i->id = id;
-    labels_array[current_size] = b_i;
-    current_size++;
-}
-
-void delete_labels_array() {
-
-    for (int i = 0; i < current_size; i++) {
-        free(labels_array[i]);
-    }
-    if (labels_array != NULL){
-        printf("there we go\n");
-        fflush(stdout);
-        free(labels_array);
-        labels_array = NULL;
-    }
-    printf("there we go also\n");
-    fflush(stdout);
-    capacity = 0;
-    current_size = 0;
-
-}
-
-void callback_click_message(GtkWidget* b, t_current_window_info *current_window_info) {
-    size_t id = 0;
-    for (int i = 0; i < current_size; i++) {
-        if (labels_array[i]->button == b) id = labels_array[i]->id;
-    }
-    printf("%zu\n", id);
+void callback_click_message(GtkWidget *b, GdkEventButton *event,  t_model_message* model_message) {
+    
+    printf("message id: %zu\n", model_message->id);
 }
 
 //tmp to delete
@@ -104,7 +57,7 @@ void view_chat_window(t_current_window_info *current_layout_info)
  
     g_signal_connect(file_chooser_button, "file-set", G_CALLBACK(send_file_as_message), current_layout_info);
 
-    
+
     
     GtkLayout *chat_window_layout = GTK_LAYOUT(gtk_builder_get_object(current_layout_info->builder, "chat_window_layout")); /// rename --> done
 
@@ -189,8 +142,7 @@ void view_message(t_model_message *model_message, t_current_window_info *current
  
     int *current_id_tmp = &current_id; 
 
-    add_to_labels_array(box, model_message->id);
-    g_signal_connect(box, "button_press_event", callback_click_message, NULL);
+    g_signal_connect(box, "button_press_event", callback_click_message, model_message);
  
     current_layout_info->message_position_y = current_id; 
  

@@ -35,7 +35,6 @@ gboolean callback_update_messages(gpointer* user_data) {
 void	on_column(GtkButton *b, t_current_window_info *current_window_info) {
 	printf("You selected: %s\n", gtk_button_get_label (b));
 
-    delete_labels_array();
 
     set_in_protocol_string(get_cookies(), "TO USER", gtk_button_get_label(b));
 
