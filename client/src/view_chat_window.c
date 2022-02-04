@@ -94,7 +94,12 @@ void view_messages(t_model_message **model_message, t_current_window_info *curre
  
     for (int message_id = 0; message_id < size; message_id++) 
     { 
-        view_message(model_message[message_id], current_layout_info); 
+        if(model_message[message_id]->data_type == MESSAGE_TEXT){
+            view_message(model_message[message_id], current_layout_info); 
+        } else if (model_message[message_id]->data_type == MESSAGE_FILE) {
+            // view_file(model_message[message_id], current_layout_info);
+            NULL;
+        }   
     } 
  
 } 
@@ -171,17 +176,16 @@ void send_message_button_clicked(GtkWidget *widget, t_current_window_info *curre
 
 gboolean send_file_as_message(GtkWidget *widget, t_current_window_info * current_window_info){ 
  
- 
     GtkWidget *file_chooser = GTK_FILE_CHOOSER(gtk_builder_get_object(current_window_info->builder, "gtkfile_chooser_button")); 
  
-    // GFile * received_file = gtk_file_chooser_get_current_folder_file(file_chooser); 
     char *selected_file = gtk_file_chooser_get_filename(file_chooser); 
-    
-    controller_send_message(get_current_user_to_talk(), MESSAGE_FILE, selected_file);
-
-    printf("\nTHERE CHOOSED FILE: %s\n", selected_file); 
-
+    t_model_message *message = NULL;
+    if(current_user_to_talk) 
+        message = controller_send_message(get_current_user_to_talk(), MESSAGE_FILE, selected_file);
+    if (message != NULL) {
+        gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(file_chooser));
+        view_message(message, current_window_info);
+    }
 
 }
- 
 
