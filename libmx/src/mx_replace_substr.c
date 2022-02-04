@@ -1,4 +1,6 @@
 #include "libmx.h"
+#include "string.h"
+#include "assert.h"
 
 char *mx_replace_substr(const char *s1, const char *s2, const char *s3)
 {
