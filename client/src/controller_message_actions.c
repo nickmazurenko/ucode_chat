@@ -46,6 +46,7 @@ void create_message_actions_grid() {
 
 void callback_message_actions_popover_closed(GtkWidget* popover, GdkEventButton* event, gpointer* data) {
     gtk_widget_destroy(popover);
+    selected_message = -1;
     message_actions_grid = NULL;
 }
 
