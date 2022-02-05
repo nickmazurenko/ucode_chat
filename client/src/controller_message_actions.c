@@ -103,12 +103,8 @@ char *get_correct_path(char *path, char *name){
 }
 
 void callback_click_message(GtkWidget *b, GdkEventButton *event,  t_model_message* model_message) {
-    if(event->type == GDK_2BUTTON_PRESS || event->type == GDK_3BUTTON_PRESS) {
+    if(event->type == GDK_BUTTON_PRESS  &&  event->button == 3) {
         printf("message id: %zu\n", model_message->id);
-        // GtkMenu* menu = gtk_menu_new();
-        // GtkMenuItem* edit = gtk_menu_item_new_with_label("Edit");
-        // gtk_menu_shell_append(GTK_MENU_SHELL(menu), edit);
-
         GList* childs = gtk_container_get_children(GTK_CONTAINER(b));
         GtkLabel* label = GTK_LABEL(childs->data);
         
@@ -116,7 +112,7 @@ void callback_click_message(GtkWidget *b, GdkEventButton *event,  t_model_messag
         selected_message = (long)model_message->id;
 
         g_list_free(childs);
-    } else if(GTK_IS_IMAGE(gtk_container_get_children(GTK_CONTAINER(b))->data)){
+    } else if(GTK_IS_IMAGE(gtk_container_get_children(GTK_CONTAINER(b))->data) && (event->type == GDK_BUTTON_PRESS  &&  event->button == 1)){
 
         t_model_resource *msg_resource = get_resource_by_id(model_message->data);
         char * real_path = mx_replace_substr(msg_resource->path, "./server", "./client");
