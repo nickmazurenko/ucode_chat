@@ -109,30 +109,31 @@ char* get_messages(cJSON* request) {
         if (messages) {
         
             char* messages_str = cJSON_Print(messages);
+            if(strcmp(messages_str, "[]") != 0) {
 
-            char* file_name = get_next_file_for_write();
-            char* path_to_file = "./server/resources/tmp/";
-            
-            path_to_file = mx_strjoin(path_to_file, file_name);
+                char* file_name = get_next_file_for_write();
+                char* path_to_file = "./server/resources/tmp/";
+                
+                path_to_file = mx_strjoin(path_to_file, file_name);
 
-            FILE* file = fopen(path_to_file, "w");
+                FILE* file = fopen(path_to_file, "w");
 
-            fwrite(messages_str, sizeof(char), strlen(messages_str), file);
+                fwrite(messages_str, sizeof(char), strlen(messages_str), file);
 
 
-            fclose(file);
+                fclose(file);
 
-            free(path_to_file);
-            path_to_file = "/resources/tmp/";
-            path_to_file = mx_strjoin(path_to_file, file_name);
+                free(path_to_file);
+                path_to_file = "/resources/tmp/";
+                path_to_file = mx_strjoin(path_to_file, file_name);
 
-            add_to_protocol_string(response, "DATA", path_to_file);
-            add_to_protocol_string(response, "STATUS", "OK");
+                add_to_protocol_string(response, "DATA", path_to_file);
+                add_to_protocol_string(response, "STATUS", "OK");
 
-            free(file_name);
-            free(path_to_file);
-
-            cJSON_Delete(messages);
+                free(file_name);
+                free(path_to_file);
+            }
+                cJSON_Delete(messages);
 
         }
 
