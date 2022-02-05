@@ -5,6 +5,7 @@
 #include "protocol.h"
 #include <string.h>
 #include <stdlib.h>
+#include "model_defines.h"
 
 typedef struct s_model_resource {
 

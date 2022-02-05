@@ -12,6 +12,7 @@
 #include "model_message.h"
 #include "model_resource.h"
 #include "model_stone.h"
+#include "model_store.h"
 
 typedef struct s_db_array_data {
 
@@ -47,7 +48,14 @@ size_t get_user_money(char *username);
 size_t insert_data_user_data(t_model_user_data* model_user_data);
 int update_user_money(char *username, int add_money);
 int update_user_avatar(char* username, int avatar_id);
-int callback_get_user_money(void *data, int argc, char **argv, char **azColName);
+int callback_get_user_size_t(void *data, int argc, char **argv, char **azColName);
+int update_user_about(char *username, char *about);
+char *get_user_about(char *username);
+int callback_get_user_str(void *data, int argc, char **argv, char **azColName);
+int update_user_tnumber(char *username, char *tnumber);
+char *get_user_tnumber(char *username);
+int update_user_email(char *username, char *email);
+char *get_user_email(char *username);
 
 // Message Table
 size_t insert_data_message(t_model_message* model_message);
@@ -68,7 +76,8 @@ size_t insert_data_resource(t_model_resource* model_resource);
 // Stones Table
 size_t insert_data_stone(t_model_stone* model_stone);
 
-
+// Store Table
+void fill_database_store();
 
 
 #endif

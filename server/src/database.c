@@ -22,6 +22,7 @@ char* tables_init[] = {
     "CREATE TABLE IF NOT EXISTS Messages (Id INTEGER PRIMARY KEY AUTOINCREMENT, FromUser TEXT, ToUser TEXT, Type INTEGER, Data TEXT, Date CHAR, Status INTEGER) ;",
     "CREATE TABLE IF NOT EXISTS Resources (Id INTEGER PRIMARY KEY AUTOINCREMENT, Path TEXT, Name TEXT) ;",
     "CREATE TABLE IF NOT EXISTS Stones (Id INTEGER PRIMARY KEY AUTOINCREMENT, Path TEXT) ;",
+    "CREATE TABLE IF NOT EXISTS Store (Id INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT UNIQUE, Path TEXT, Price INTEGER, Era INTEGER) ;",
     NULL
 };
 
@@ -52,8 +53,11 @@ void init_tables() {
     default_avatar->id = 1;
     mx_strcpy(default_avatar->name, "horse.jpeg");
     mx_strcpy(default_avatar->path, "./server/resources/images/avatars/horse.jpeg");
-    if(!get_resource_by_id(1)->id == 0)
+
+    if(get_resource_by_id(1)->id == 0)
         insert_data_resource(default_avatar);
+
+    fill_database_store();
 
     // sqlite3_close(db);
 }

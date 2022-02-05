@@ -6,6 +6,7 @@
 #include "cJSON.h"
 
 #include "protocol.h"
+#include "model_defines.h"
 
 typedef struct s_model_user {
 
