@@ -44,6 +44,7 @@
         "set_avatar_request.h": "c",
         "get_resources_request.h": "c",
         "server.h": "c",
-        "set_avatar.h": "c"
+        "set_avatar.h": "c",
+        "controller_message_actions.h": "c"
     }
 }

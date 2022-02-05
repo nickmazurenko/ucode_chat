@@ -86,18 +86,59 @@ void show_message_actions_popover(GtkWidget* label) {
     g_signal_connect(message_popover, "closed", callback_message_actions_popover_closed, NULL);
 }
 
-void callback_click_message(GtkWidget *b, GdkEventButton *event,  t_model_message* model_message) {
-
-    printf("message id: %zu\n", model_message->id);
-    // GtkMenu* menu = gtk_menu_new();
-    // GtkMenuItem* edit = gtk_menu_item_new_with_label("Edit");
-    // gtk_menu_shell_append(GTK_MENU_SHELL(menu), edit);
-
-    GList* childs = gtk_container_get_children(GTK_CONTAINER(b));
-    GtkLabel* label = GTK_LABEL(childs->data);
-    
-    show_message_actions_popover(label);
-    selected_message = (long)model_message->id;
-
-    g_list_free(childs);
+char *get_correct_path(char *path, char *name){
+        char * real_path = mx_replace_substr(path, "./server", "./client");
+        real_path = mx_replace_substr(real_path, "\r\n", "");
+        int name_len = strlen(name);
+        int dot_idx;
+        for(dot_idx = name_len; dot_idx >= 0; dot_idx--){ 
+            if(name[dot_idx] == '.' ){
+                break;
+            }
+        }
+        char *real_path_delete = real_path;
+        real_path = mx_strjoin(real_path, name + dot_idx); 
+        mx_strdel(&real_path_delete);
+        return real_path;
 }
+
+void callback_click_message(GtkWidget *b, GdkEventButton *event,  t_model_message* model_message) {
+    if(event->type == GDK_2BUTTON_PRESS || event->type == GDK_3BUTTON_PRESS) {
+        printf("message id: %zu\n", model_message->id);
+        // GtkMenu* menu = gtk_menu_new();
+        // GtkMenuItem* edit = gtk_menu_item_new_with_label("Edit");
+        // gtk_menu_shell_append(GTK_MENU_SHELL(menu), edit);
+
+        GList* childs = gtk_container_get_children(GTK_CONTAINER(b));
+        GtkLabel* label = GTK_LABEL(childs->data);
+        
+        show_message_actions_popover(label);
+        selected_message = (long)model_message->id;
+
+        g_list_free(childs);
+    } else if(GTK_IS_IMAGE(gtk_container_get_children(GTK_CONTAINER(b))->data)){
+
+        t_model_resource *msg_resource = get_resource_by_id(model_message->data);
+        char * real_path = mx_replace_substr(msg_resource->path, "./server", "./client");
+
+        char * real_path_tmp = get_correct_path(msg_resource->path, msg_resource->name);
+
+        char* mv_command = NULL;
+        char *rename_command_mask = "cp '%s' '%s'";
+        asprintf(&mv_command, rename_command_mask, real_path, real_path_tmp );
+
+        real_path = get_correct_path(msg_resource->path, msg_resource->name);
+
+        fflush(stdout);
+        system(mv_command);
+        char* open_command = mx_strjoin("open ", real_path_tmp);
+        system(open_command);
+
+        mx_strdel(&open_command);
+        mx_strdel(&real_path);
+        mx_strdel(&real_path_tmp);
+        mx_strdel(&real_path);
+        mx_strdel(&mv_command);
+    }
+}
+

@@ -44,9 +44,7 @@ void view_message(t_model_message *model_message, t_current_window_info *current
     gtk_grid_insert_row(GTK_GRID(chat_window_grid), current_id); 
 
     GtkWidget* box = gtk_event_box_new();
-
-    if (!strcmp(model_message->from_user, get_from_protocol_string(get_cookies(), "USERNAME"))) 
-    { 
+    if (!strcmp(model_message->from_user, get_from_protocol_string(get_cookies(), "USERNAME"))) { 
  
         label = GTK_WIDGET(gtk_builder_get_object(message_builder, "current_user_msg_label")); 
         gtk_label_set_text(GTK_LABEL(label), model_message->data);
@@ -55,11 +53,7 @@ void view_message(t_model_message *model_message, t_current_window_info *current
  
         gtk_grid_attach(GTK_GRID(chat_window_grid), box, 1, current_id, 1, 1); 
         gtk_widget_show (box);
-
-    } 
- 
-    else 
-    { 
+    } else { 
  
         label = GTK_WIDGET(gtk_builder_get_object(message_builder, "other_user_msg_label")); 
         gtk_label_set_text(GTK_LABEL(label), model_message->data); 
@@ -89,51 +83,43 @@ void view_file(t_model_message *model_message, t_current_window_info *current_la
     GtkWidget *chat_window_grid = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "chat_window_grid")); 
 
     int current_id = current_layout_info->message_position_y + 1; 
+    GtkBuilder *message_builder = gtk_builder_new_from_file(get_path_to_glade("message_image.glade")); 
 
     gtk_grid_insert_row(GTK_GRID(chat_window_grid), current_id); 
 
     GtkWidget* box = gtk_event_box_new();
 
+    t_model_resource *msg_resource = get_resource_by_id(model_message->data);
+    char * real_path = request_file_if_not_exist(msg_resource->path);
+    GdkPixbuf *image_pixbuf = gdk_pixbuf_new_from_file_at_size(real_path, 100, 100, NULL);
+
     if(!strcmp(model_message->from_user, get_from_protocol_string(get_cookies(), "USERNAME"))){
-        
-        t_model_resource *msg_resource = get_resource_by_id(model_message->data);
-        char * real_path = request_file_if_not_exist(msg_resource->path);
+        image = GTK_WIDGET(gtk_builder_get_object(message_builder, "current_user_msg_image"));
 
-        GdkPixbuf *image_pixbuf = gdk_pixbuf_new_from_file_at_size(real_path, 100, 100, NULL);
         if (image_pixbuf) {
-            GtkBuilder *message_builder = gtk_builder_new_from_file(get_path_to_glade("message_image.glade")); 
-
-            image = GTK_WIDGET(gtk_builder_get_object(message_builder, "current_user_msg_image"));
             gtk_image_set_from_pixbuf(GTK_IMAGE(image), image_pixbuf);
         } else {
-            GtkBuilder *message_builder = gtk_builder_new_from_file(get_path_to_glade("message_labels.glade")); 
-            image = GTK_WIDGET(gtk_builder_get_object(message_builder, "current_user_msg_label")); 
-            gtk_label_set_text(GTK_LABEL(image), "CLICK TO OPEN");
+            image_pixbuf = gdk_pixbuf_new_from_file_at_size(get_path_to_image("click.jpeg"), 100, 100, NULL);
+            gtk_image_set_from_pixbuf(GTK_IMAGE(image), image_pixbuf);
         }
         gtk_container_add(GTK_CONTAINER(box), image);      
         gtk_grid_attach(GTK_GRID(chat_window_grid), box, 1, current_id, 1, 1); 
         gtk_widget_show (box);
 
     } else {
-        t_model_resource *msg_resource = get_resource_by_id(model_message->data);
-        char * real_path = request_file_if_not_exist(msg_resource->path);
+        image = GTK_WIDGET(gtk_builder_get_object(message_builder, "other_user_msg_image"));
 
-        GdkPixbuf *image_pixbuf = gdk_pixbuf_new_from_file_at_size(real_path, 100, 100, NULL);
         if (image_pixbuf) {
-            GtkBuilder *message_builder = gtk_builder_new_from_file(get_path_to_glade("message_image.glade")); 
-
-            image = GTK_WIDGET(gtk_builder_get_object(message_builder, "other_user_msg_image"));
             gtk_image_set_from_pixbuf(GTK_IMAGE(image), image_pixbuf);
         } else {
-            GtkBuilder *message_builder = gtk_builder_new_from_file(get_path_to_glade("message_labels.glade")); 
-            image = GTK_WIDGET(gtk_builder_get_object(message_builder, "other_user_msg_label")); 
-            gtk_label_set_text(GTK_LABEL(image), "CLICK TO OPEN");
+            image_pixbuf = gdk_pixbuf_new_from_file_at_size(get_path_to_image("click.jpeg"), 100, 100, NULL);
+            gtk_image_set_from_pixbuf(GTK_IMAGE(image), image_pixbuf);
         }
+
         gtk_container_add(GTK_CONTAINER(box), image);      
         gtk_grid_attach(GTK_GRID(chat_window_grid), box, 0, current_id, 1, 1); 
         gtk_widget_show (box);
     }
-
 
     g_signal_connect(box, "button_press_event", callback_click_message, model_message);
  
