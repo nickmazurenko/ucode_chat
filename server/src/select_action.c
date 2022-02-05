@@ -84,6 +84,26 @@ int select_action(char* request, char* response) {
 
         get_resource(request, response);
 
+    } else if ( strcmp(action, "GET_USER_DATA" ) == 0) {
+        char *subaction = get_from_protocol_string(request_obj, "SUBACTION");
+
+        if (!subaction)
+            get_user_data(request, response);
+        else if (strcmp(subaction, "GET_USER_MONEY") == 0) {
+            get_user_data_money(request, response);
+        }
+    // } else if (strcmp(action, "SET_USER_DATA") == 0) {
+    //     char *subaction = get_from_protocol_string(request_obj, "SUBACTION");
+
+    //     if (!subaction)
+    //         get_user_data(request, response);
+    //     else if (strcmp(subaction, "SET_USER_ABOUT") == 0) {
+    //         set_user_about_subaction(request, response);
+    //     else if (strcmp(subaction, "SET_USER_TNUMBER") == 0) {
+    //         set_user_tnumber_subaction(request, response);
+    //     else if (strcmp(subaction, "SET_USER_EMAIL") == 0) {
+    //         set_user_email_suaction(request, response);
+    //     }
     }
 
         

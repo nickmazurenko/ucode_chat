@@ -192,8 +192,6 @@ bool get_avatar(char *request, char *response) {
 
     char *username = get_from_protocol_string(request_cjson, "DATA");
 
-    
-
     t_model_resource *resource = get_resource_by_id(get_user_avatar_id(username));
 
 
@@ -219,6 +217,45 @@ bool get_resource(char *request, char *response) {
     add_to_protocol_string(get_avatar_response, "DATA", to_string_model_resource(resource));
 
     strcpy(response, cJSON_Print(get_avatar_response));
+
+    printf("%s\n", response);
+    fflush(stdout);
+}
+
+bool get_user_data(char *request, char *response) {
+    cJSON *get_user_data_response = create_protocol();
+
+    cJSON *request_cjson = cJSON_Parse(request);
+
+    char *username = get_from_protocol_string(request_cjson, "DATA");
+    
+    size_t user_data_id = get_user_data_id(username);
+    
+    t_model_user_data *model_user_data = get_user_data_by_username(username);
+
+    add_to_protocol_string(get_user_data_response, "DATA", to_string_model_user_data(model_user_data));
+
+    strcpy(response, cJSON_Print(get_user_data_response));
+
+    printf("%s\n", response);
+    fflush(stdout);
+}
+
+bool get_user_data_money(char *request, char *response) {
+    cJSON *get_user_data_response = create_protocol();
+
+    cJSON *request_cjson = cJSON_Parse(request);
+
+    size_t user_data_id = get_from_protocol_number(request_cjson, "DATA");
+    // printf("USER DATA ID: %zu\n", user_data_id);
+    // fflush(stdout);
+    // size_t user_data_id = get_user_data_id(user_data_id);
+    
+    int money = get_user_money_by_user_data_id(user_data_id);
+
+    add_to_protocol_number(get_user_data_response, "DATA", money);
+
+    strcpy(response, cJSON_Print(get_user_data_response));
 
     printf("%s\n", response);
     fflush(stdout);

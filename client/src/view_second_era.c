@@ -42,7 +42,7 @@ void view_second_era(t_current_window_info *current_layout_info)
     GtkWidget *quiz_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "quiz_button"));
     set_quiz_on_button(quiz_button);
     GtkWidget *menu_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "menu_button"));
-    set_user_info_on_button(menu_button);
+    set_user_info_on_button(menu_button, current_layout_info);
 
     gtk_container_add(GTK_CONTAINER(current_layout_info->main_window), GTK_WIDGET(home_page_layout));
     current_layout_info->layout_exists = true;

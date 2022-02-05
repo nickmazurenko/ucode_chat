@@ -112,17 +112,17 @@
         </child>
         <child>
           <!-- n-columns=1 n-rows=2 -->
-          <object class="GtkGrid" id="mail_grid">
+          <object class="GtkGrid" id="email_grid">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <child>
-              <object class="GtkLabel" id="mail_lable">
+              <object class="GtkLabel" id="email_lable">
                 <property name="name">ma</property>
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="label" translatable="yes">Mail</property>
+                <property name="label" translatable="yes">Email</property>
                 <attributes>
                   <attribute name="font-desc" value="Segoe Print Bold 10"/>
                 </attributes>
@@ -133,12 +133,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="mail_info">
+              <object class="GtkLabel" id="email_info">
                 <property name="name">ma</property>
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="label" translatable="yes">Mail</property>
+                <!-- <property name="label" translatable="yes">Email</property> -->
                 <attributes>
                   <attribute name="font-desc" value="Segoe Print Bold 10"/>
                 </attributes>
@@ -180,7 +180,6 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="label" translatable="yes">Era</property>
                 <attributes>
                   <attribute name="font-desc" value="Segoe Print Bold 10"/>
                 </attributes>
@@ -198,16 +197,16 @@
         </child>
         <child>
           <!-- n-columns=1 n-rows=2 -->
-          <object class="GtkGrid" id="level_grid">
+          <object class="GtkGrid" id="money_grid">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <child>
-              <object class="GtkLabel" id="level_lable">
+              <object class="GtkLabel" id="money_lable">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="label" translatable="yes">level</property>
+                <property name="label" translatable="yes">Money</property>
                 <attributes>
                   <attribute name="font-desc" value="Segoe Print Bold 10"/>
                 </attributes>
@@ -218,11 +217,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="level_info">
+              <object class="GtkLabel" id="money">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="label" translatable="yes">level</property>
+                <property name="label" translatable="yes">Money</property>
                 <attributes>
                   <attribute name="font-desc" value="Segoe Print Bold 10"/>
                 </attributes>

@@ -119,7 +119,7 @@ void view_home_page(t_current_window_info *current_layout_info)
     // TODO: add era checker;
     // add_draw_area(current_layout_info);
  
-    set_user_info_on_button(menu_button);
+    set_user_info_on_button(menu_button, current_layout_info);
 
 
     gtk_container_add(GTK_CONTAINER(current_layout_info->main_window), GTK_WIDGET(home_page_layout));

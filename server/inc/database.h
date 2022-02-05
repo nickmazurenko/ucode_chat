@@ -42,7 +42,8 @@ size_t insert_data_user(char *username, char *password);
 bool is_verified_user(char* username, char* token);
 t_model_user* get_user_by_name(char* username);
 size_t get_user_data_id(char *username);
-size_t get_user_money(char *username);
+size_t get_user_money_by_username(char *username);
+size_t get_user_money_by_user_data_id(size_t user_data_id);
 
 // User Data Table
 size_t insert_data_user_data(t_model_user_data* model_user_data);
@@ -56,6 +57,8 @@ int update_user_tnumber(char *username, char *tnumber);
 char *get_user_tnumber(char *username);
 int update_user_email(char *username, char *email);
 char *get_user_email(char *username);
+t_model_user_data *get_user_data_by_username(char *username);
+int callback_get_user_data(void *data, int argc, char **argv, char **azColName);
 
 // Message Table
 size_t insert_data_message(t_model_message* model_message);

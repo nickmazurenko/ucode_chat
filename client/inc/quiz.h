@@ -7,6 +7,7 @@
 #include "resources.h"
 #include "quiz_requests.h"
 #include "user_data.h"
+#include "user_info.h"
 
 typedef struct s_quiz_info {
     GtkBuilder *builder;
