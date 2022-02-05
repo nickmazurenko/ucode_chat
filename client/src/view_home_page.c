@@ -13,7 +13,8 @@ gboolean callback_update_messages(gpointer* user_data) {
     if (count != 0) {
         // view_messages(messages, current_window_info, count);
         for (int i = 0; i < count; i++) {
-            view_message(messages[i], current_window_info);
+            if(!strcmp(messages[i]->from_user, get_current_user_to_talk()))
+                view_message(messages[i], current_window_info);
             free_model_message(&(messages[i]));
         }
         mx_printstr("\a");
