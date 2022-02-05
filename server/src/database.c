@@ -54,7 +54,7 @@ void init_tables() {
     mx_strcpy(default_avatar->name, "horse.jpeg");
     mx_strcpy(default_avatar->path, "./server/resources/images/avatars/horse.jpeg");
 
-    if(get_resource_by_id(1)->id == 0)
+    if(strcmp(get_resource_by_id(1)->path, default_avatar->path))
         insert_data_resource(default_avatar);
 
     fill_database_store();
