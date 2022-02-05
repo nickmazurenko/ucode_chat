@@ -1,8 +1,5 @@
 #include "server.h"
-#include "cJSON.h"
-#include "string.h"
-#include "database.h"
-#include <sys/stat.h>
+
 
 
 char* read_request(int conn_fd, char* request, int* read_number) {

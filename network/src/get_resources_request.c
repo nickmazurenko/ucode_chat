@@ -1,4 +1,4 @@
-#include "get_avatar_request.h"
+#include "get_resources_request.h"
 
 t_model_resource* send_get_avatar_request(char* username) {
 

@@ -69,7 +69,7 @@ void view_second_era(t_current_window_info *current_layout_info)
         gtk_widget_set_size_request(button[column], 100, 100);
 		gtk_grid_attach (GTK_GRID(home_chats_grid), button[column], column, 1, 1, 1); // (..., ..., 1, 1) 2,1 3,1 4,1 5,1 1,2 2,2 3,2 4,2 5,2
         
-		g_signal_connect(button[column], "clicked", G_CALLBACK(on_column), NULL);
+		g_signal_connect(button[column], "clicked", G_CALLBACK(choose_chat), NULL);
 		column++;
 	}
 

@@ -7,6 +7,8 @@
 #include "model_message.h"
 #include "protocol.h"
 #include "database.h"
+#include "file_for_write.h"
+
 
 char* add_message(cJSON* request);
 char* get_messages(cJSON* request);

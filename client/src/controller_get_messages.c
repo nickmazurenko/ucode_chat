@@ -1,5 +1,4 @@
 #include "controller_get_messages.h"
-#include "view_chat_window.h"
 
 void controller_get_messages(){
     init_tables();

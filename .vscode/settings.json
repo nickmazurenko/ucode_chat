@@ -37,6 +37,13 @@
         "resources_server.h": "c",
         "bitset": "c",
         "file_for_write.h": "c",
-        "get_avatar_request.h": "c"
+        "get_avatar_request.h": "c",
+        "view_messages.h": "c",
+        "controller_start_chat.h": "c",
+        "view.h": "c",
+        "set_avatar_request.h": "c",
+        "get_resources_request.h": "c",
+        "server.h": "c",
+        "set_avatar.h": "c"
     }
 }
