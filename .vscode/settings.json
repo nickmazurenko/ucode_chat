@@ -46,6 +46,7 @@
         "server.h": "c",
         "set_avatar.h": "c",
         "controller_message_actions.h": "c",
-        "view_stone_age_page.h": "c"
+        "view_stone_age_page.h": "c",
+        "choose_chat.h": "c"
     }
 }
