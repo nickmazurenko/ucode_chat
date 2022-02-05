@@ -45,6 +45,7 @@
         "get_resources_request.h": "c",
         "server.h": "c",
         "set_avatar.h": "c",
-        "controller_message_actions.h": "c"
+        "controller_message_actions.h": "c",
+        "view_stone_age_page.h": "c"
     }
 }
