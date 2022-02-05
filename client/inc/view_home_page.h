@@ -11,15 +11,19 @@
 #include "resources.h"
 #include "view_chat_window.h"
 #include "controller_start_chat.h"
-
-#include "get_avatar_request.h"
+#include "controller_get_messages.h"
+#include "get_resources_request.h"
 
 
 
 void view_home_page(t_current_window_info *current_layout_info);
-void	on_column(GtkButton *b, t_current_window_info *current_window_info) ;
+void	choose_chat(GtkButton *b, t_current_window_info *current_window_info) ;
 int get_current_chat_count();
 
-void add_chat(char *username, t_current_window_info *current_window_info);
-void add_chats(char **username, t_current_window_info *current_window_info, int count);
+
+
+
+
+char *request_file_if_not_exist(char *file);
+bool is_client_file(char *path);
 #endif

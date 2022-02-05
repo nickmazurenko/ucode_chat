@@ -7,11 +7,13 @@
 #include "model_message.h"
 #include "protocol.h"
 #include "database.h"
+#include "file_for_write.h"
+
 
 char* add_message(cJSON* request);
 char* get_messages(cJSON* request);
 bool start_chat(char *request, char *response);
 
 bool get_avatar(char *request, char *response);
-
+bool get_resource(char *request, char *response);
 #endif

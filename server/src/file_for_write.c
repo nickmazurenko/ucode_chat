@@ -1,5 +1,4 @@
 #include "file_for_write.h"
-#include "select_action.h"
 
 void update_last_tmp_id(size_t new_last_tmp_id) {
 

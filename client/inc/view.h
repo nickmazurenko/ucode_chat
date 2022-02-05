@@ -4,6 +4,11 @@
 #include "libmx.h"
 #include "view_sign_up.h"
 #include "view_sign_in.h"
+#include "view_messages.h"
+#include "view_chat_window.h"
+#include "view_home_page.h"
+#include "view_second_era.h"
+#include "controller_start_chat.h"
 #include <gtk/gtk.h>
 
 #define DEFAULT_WIDTH 600

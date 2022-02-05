@@ -10,4 +10,6 @@
 // char* send_get_avatar_request(char* username);
 t_model_resource* send_get_avatar_request(char* username);
 
+t_model_resource* send_get_resource_request(char *id);
+
 #endif

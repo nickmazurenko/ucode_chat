@@ -5,6 +5,7 @@
 #include "cJSON.h"
 #include <stdlib.h>
 #include "protocol.h"
+#include "model_defines.h"
 
 typedef enum  user_statuses {
 
@@ -16,7 +17,11 @@ typedef enum  user_statuses {
 
 typedef enum   eras {
 
-    PRIMITIVE_SOCIETY,
+    STONE_AGE,
+    EGYPT,
+    MIDDLE_AGES,
+    ENLIGHTMENT,
+    MODERN_TIMES,
     NUMBER_OF_ERAS
 
 }              e_eras;

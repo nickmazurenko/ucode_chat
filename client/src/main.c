@@ -1,17 +1,7 @@
 #include "controller.h"
 #include "view.h"
 #include "resources.h"
-#include "set_avatar_request.h"
-#include "send_file.h"
-#include "get_file.h"
-
 #include "user_data.h"
-
-//temp
-#include "drawing_area.h"
-
-#include "controller_send_message.h"
-#include "controller_get_messages.h"
 
 
 

@@ -1,5 +1,4 @@
 #include "messages_server.h"
-#include "file_for_write.h"
 
 char* add_message(cJSON* request) {
 
@@ -110,30 +109,31 @@ char* get_messages(cJSON* request) {
         if (messages) {
         
             char* messages_str = cJSON_Print(messages);
+            if(strcmp(messages_str, "[]") != 0) {
 
-            char* file_name = get_next_file_for_write();
-            char* path_to_file = "./server/resources/tmp/";
-            
-            path_to_file = mx_strjoin(path_to_file, file_name);
+                char* file_name = get_next_file_for_write();
+                char* path_to_file = "./server/resources/tmp/";
+                
+                path_to_file = mx_strjoin(path_to_file, file_name);
 
-            FILE* file = fopen(path_to_file, "w");
+                FILE* file = fopen(path_to_file, "w");
 
-            fwrite(messages_str, sizeof(char), strlen(messages_str), file);
+                fwrite(messages_str, sizeof(char), strlen(messages_str), file);
 
 
-            fclose(file);
+                fclose(file);
 
-            free(path_to_file);
-            path_to_file = "/resources/tmp/";
-            path_to_file = mx_strjoin(path_to_file, file_name);
+                free(path_to_file);
+                path_to_file = "/resources/tmp/";
+                path_to_file = mx_strjoin(path_to_file, file_name);
 
-            add_to_protocol_string(response, "DATA", path_to_file);
-            add_to_protocol_string(response, "STATUS", "OK");
+                add_to_protocol_string(response, "DATA", path_to_file);
+                add_to_protocol_string(response, "STATUS", "OK");
 
-            free(file_name);
-            free(path_to_file);
-
-            cJSON_Delete(messages);
+                free(file_name);
+                free(path_to_file);
+            }
+                cJSON_Delete(messages);
 
         }
 
@@ -196,6 +196,25 @@ bool get_avatar(char *request, char *response) {
 
     t_model_resource *resource = get_resource_by_id(get_user_avatar_id(username));
 
+
+    add_to_protocol_string(get_avatar_response, "DATA", to_string_model_resource(resource));
+
+    strcpy(response, cJSON_Print(get_avatar_response));
+
+    printf("%s\n", response);
+    fflush(stdout);
+}
+
+
+
+bool get_resource(char *request, char *response) {
+    cJSON *get_avatar_response = create_protocol();
+
+    cJSON *request_cjson = cJSON_Parse(request);
+
+    char *id = get_from_protocol_string(request_cjson, "DATA");
+    
+    t_model_resource *resource = get_resource_by_id(atoi(id));
 
     add_to_protocol_string(get_avatar_response, "DATA", to_string_model_resource(resource));
 

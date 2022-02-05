@@ -4,11 +4,11 @@ t_model_user_data* new_model_user_data() {
 
     t_model_user_data* model_user_data = (t_model_user_data*)malloc(sizeof(t_model_user_data));
 
-    model_user_data->about =    mx_strnew(BUFFER_SIZE);
-    model_user_data->email =    mx_strnew(BUFSIZ);
-    model_user_data->t_number = mx_strnew(BUFSIZ);
+    model_user_data->about =    mx_strnew(ABOUT_SIZE);
+    model_user_data->email =    mx_strnew(EMAIL_SIZE);
+    model_user_data->t_number = mx_strnew(T_NUMBER_SIZE);
     model_user_data->id       = 0;
-    model_user_data->era      = PRIMITIVE_SOCIETY;
+    model_user_data->era      = STONE_AGE;
     model_user_data->status   = ONLINE;
     model_user_data->money    = 0;
     model_user_data->avatar_id= 1;

@@ -11,5 +11,7 @@
 
 void add_chat_clicked(GtkWidget *widget, t_current_window_info *current_window_info);
 void set_add_chat_on_button(GtkWidget *button, t_current_window_info *current_window_info);
+void add_chat(char *username, t_current_window_info *current_window_info);
+void add_chats(char **username, t_current_window_info *current_window_info, int count);
 
 #endif

@@ -5,6 +5,7 @@
 #include "protocol.h"
 #include <stdlib.h>
 #include <string.h>
+#include "model_defines.h"
 
 typedef struct s_model_stone {
 

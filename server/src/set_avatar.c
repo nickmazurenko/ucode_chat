@@ -1,5 +1,4 @@
 #include "set_avatar.h"
-#include "database.h"
 
 char* set_avatar(cJSON* request) {    
     printf("set avatar. move avatar to folder. set in db\n");

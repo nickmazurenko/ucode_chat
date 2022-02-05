@@ -10,17 +10,13 @@
 #include "model_message.h"
 #include "quiz.h"
 #include "resources.h"
-
+#include "controller_message_actions.h"
+#include "view_messages.h"
 
 
 void view_chat_window(t_current_window_info *current_layout_info);
-void send_message_button_clicked (GtkWidget *widget, t_current_window_info *current_window_info);
-void view_messages(t_model_message** model_message, t_current_window_info *current_layout_info, int size);
-void view_message(t_model_message *model_message, t_current_window_info *current_layout_info);
-gboolean send_file_as_message(GtkWidget *widget, t_current_window_info * current_window_info); // signal for file chooser
 
-void set_current_user_to_talk(char *new_user_to_talk);
-char *get_current_user_to_talk(void);
+void delete_labels_array();
 
 
 

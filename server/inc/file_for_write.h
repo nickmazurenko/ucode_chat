@@ -9,6 +9,8 @@
 #include "protocol.h"
 // #include <io.h>
 #include <sys/stat.h>
+#include "select_action.h"
+
 
 
 char* get_next_file_for_write();
