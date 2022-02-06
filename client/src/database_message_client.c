@@ -76,6 +76,55 @@ int callback_get_messages(void *data, int argc, char **argv, char **azColName) {
     return 0;
 }
 
+
+t_model_message *get_stone_message_from_chat(char *from_user, int *size){
+    sqlite3 *db;
+    
+    int err_status = 0;
+
+    if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
+        fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        exit(1);
+    }
+
+    char *sql_query = NULL;
+
+    char *current_user = get_from_protocol_string(get_cookies(), "USERNAME");
+
+    // char *select_request = "SELECT * FROM Messages WHERE ((((FromUser=('%s') AND ToUser=('%s')) OR (ToUser=('%s') AND FromUser=('%s'))) AND Type=('%i'))))));";
+    // char *select_request = "SELECT * FROM Messages WHERE (((FromUser = '%s' AND ToUser = '%s') OR (ToUser = '%s' AND FromUser = '%s')) AND Type = '%i' AND ID = (SELECT MAX(Id) FROM Messages));";
+    char *select_request = "SELECT * FROM Messages WHERE (Id IN (SELECT MAX(Id) FROM (SELECT * FROM Messages WHERE (((FromUser = '%s' AND ToUser = '%s') OR (ToUser = '%s' AND FromUser = '%s')) AND Type = '%i'))));";
+
+
+    asprintf(&sql_query, select_request, from_user, current_user, from_user, current_user, 2);
+
+    char *err_msg = NULL;
+
+    t_db_array_data* select_result = create_db_array_data();
+
+    if((err_status = sqlite3_exec(db, sql_query, callback_get_messages, select_result, &err_msg)) != SQLITE_OK) {
+        fprintf(stderr, "SQL_error: %s\n", err_msg);
+        sqlite3_free(err_msg);
+        sqlite3_close(db);
+        exit(1);
+    }
+    t_model_message** messages = (t_model_message**)select_result->array;
+
+    *size = select_result->size;
+    sqlite3_close(db);
+    free(select_result);
+    // return messages;
+    if(*size == 0){
+        fprintf(stderr, "\n\nNOTHING FOUND\n\n");
+        return NULL;
+    } else {
+        fprintf(stderr, "\n\nSOMETHING FOUND %i\n\n", *size);
+
+        return messages[*size - 1];
+    }
+}
+
 t_model_message** get_all_messages_from_chat(char *from_user, int *size) {
 
     sqlite3 *db;

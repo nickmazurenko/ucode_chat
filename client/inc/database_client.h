@@ -55,11 +55,14 @@ char** get_all_user_chats(char *current_user, int *count);
 
 // Resource Table
 size_t insert_data_resource(t_model_resource* model_resource);
+t_model_resource *get_resource_by_id(char *id);
+int callback_get_resource(void *data, int argc, char **argv, char **azColName);
+
 
 // Stones Table
 size_t insert_data_stone(t_model_stone* model_stone);
-
-t_model_resource *get_resource_by_id(char *id);
-int callback_get_resource(void *data, int argc, char **argv, char **azColName);
+t_model_stone *get_stone_by_id(char *id);
+int callback_get_stone(void *data, int argc, char **argv, char **azColName);
+t_model_message *get_stone_message_from_chat(char *from_user, int *size);
 
 #endif

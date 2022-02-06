@@ -46,7 +46,7 @@ int select_action(char* request, char* response) {
     } else if ( strcmp(action, "FILE END") == 0 ) {
 
         file_end(request, response);
-        // add_resources(request_obj); // TODO: add response
+
     } else if (strcmp(action, "GET FILE") == 0) {
         
         char* response_buff = send_file_server(request);
@@ -83,6 +83,10 @@ int select_action(char* request, char* response) {
     } else if ( strcmp(action, "GET_RESOURCE" ) == 0) {
 
         get_resource(request, response);
+
+    } else if ( strcmp(action, "GET_STONE" ) == 0) {
+
+        get_stone(request, response);
 
     } else if ( strcmp(action, "GET_USER_DATA" ) == 0) {
         char *subaction = get_from_protocol_string(request_obj, "SUBACTION");

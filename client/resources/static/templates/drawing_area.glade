@@ -6,23 +6,23 @@
     <property name="name">draw_layout</property>
     <property name="visible">True</property>
     <property name="can-focus">False</property>  
-    <property name="width">600</property>
-    <property name="height">800</property>
+    <property name="width">1214</property>
+    <property name="height">668</property>
     <child>
       <object class="GtkFixed" id="drawing_area_fixed">
         <property name="name">drawing_area_fixed</property>
-        <property name="width-request">800</property>
-        <property name="height-request">600</property>
+        <property name="width-request">1214</property>
+        <property name="height-request">668</property>
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <child>
           <object class="GtkImage" id="draw_image">
             <property name="name">draw_image</property>
             <property name="visible">True</property>
-            <property name="width-request">600</property>
-            <property name="height-request">600</property>
+            <property name="width-request">1214</property>
+            <property name="height-request">668</property>
             <property name="can-focus">False</property>
-            <property name="pixbuf">../images/rock.png</property>
+            <!-- <property name="pixbuf">../images/rock.png</property> -->
             <accessibility>
               <relation type="embeds" target="draw"/>
             </accessibility>
@@ -31,8 +31,8 @@
         <child>
           <object class="GtkDrawingArea" id="draw">
             <property name="name">draw</property>
-            <property name="width-request">800</property>
-            <property name="height-request">600</property>
+            <property name="width-request">1214</property>
+            <property name="height-request">668</property>
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <signal name="button-press-event" handler="on_draw_button_press_event" swapped="no"/>
@@ -43,7 +43,7 @@
         </child>
       </object>
       <packing>
-        <property name="x">140</property>
+        <property name="x">0</property>
       </packing>
     </child>
   </object>

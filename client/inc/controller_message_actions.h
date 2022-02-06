@@ -4,6 +4,7 @@
 #include <gtk/gtk.h>
 #include "model_message.h"
 #include "model_resource.h"
+#include "model_stone.h"
 #include "database_client.h"
 
 void callback_click_message(GtkWidget *b, GdkEventButton *event,  t_model_message* model_message);

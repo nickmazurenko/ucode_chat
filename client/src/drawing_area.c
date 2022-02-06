@@ -4,8 +4,12 @@
 
 t_point* saved = NULL;
 
+char *file_to_save_draw = NULL;
+
 void add_to_saved(t_point* point) {
 	// printf("to add x: %dy: %d\n", point->x, point->y);
+// printf("\n\n THERE add_to_saved start\n\n");
+
     if (saved == NULL) {
         saved = (t_point*)malloc(sizeof(t_point));
         saved->x = point->x;
@@ -23,9 +27,13 @@ void add_to_saved(t_point* point) {
         last->next->y = point->y;
         last->next->next = NULL;
     }
+// printf("\n\n THERE add_to_saved end\n\n");
+
 }
 
 void save_saved_to_file(t_point* saved, char* path_to_file) {
+// printf("\n\n THERE save_saved_to_file start\n\n");
+
     t_point* current = saved;
 	int size_of_saved = 0;
 	while(current != NULL) {
@@ -60,6 +68,8 @@ void save_saved_to_file(t_point* saved, char* path_to_file) {
 	fwrite(saved_points, sizeof(t_point), (size_of_saved - 1) , file);
 
     fclose(file);
+// printf("\n\n THERE save_saved_to_file end\n\n");
+	
 }
 
 t_point* read_saved_from_file(char* path_to_file) {
@@ -113,6 +123,8 @@ t_point* read_saved_from_file(char* path_to_file) {
 
     fclose(file);
 
+	
+
     return read;
 }
 
@@ -122,6 +134,8 @@ t_point* read_saved_from_file(char* path_to_file) {
 
 void draw_brush(GtkWidget *widget, gdouble x, gdouble y, GtkWidget *draw_area)
 {
+// printf("\n\n THERE draw_brush start\n\n");
+
 	point = malloc(sizeof(struct s_point));
 	if (point == NULL)
 	{
@@ -135,25 +149,39 @@ void draw_brush(GtkWidget *widget, gdouble x, gdouble y, GtkWidget *draw_area)
 	s_point_start = point;
 
 	add_to_saved(point);
+// printf("\n\n THERE draw_brush end\n\n");
+
 
 	//check for better effectivness
 	// gtk_widget_queue_draw(draw_area);
 
-	gtk_widget_queue_draw_area(draw_area, 0, 0, 2000, 2000);
+	gtk_widget_queue_draw_area(draw_area, 0, 0, 1214, 668);
 	
 }
 
 gboolean on_draw_button_press_event(GtkWidget *widget, GdkEventButton *event,  t_current_window_info* current_window_info)
 {
+// printf("\n\n THERE on_draw_button_press_event start\n\n");
+
 	GtkWidget *draw_area = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "draw"));
     draw_brush(widget, event->x, event->y, draw_area);
+// printf("\n\n THERE on_draw_button_press_event end\n\n");
+
 	return TRUE;
 }
 
 gboolean on_draw_button_release_event(GtkWidget *widget, GdkEventButton *event,  t_current_window_info* current_window_info)
 {
+// printf("\n\n THERE on_draw_button_release_event start\n\n");
 
-	save_saved_to_file(saved, "test_saved_points");
+	save_saved_to_file(saved, file_to_save_draw);
+	char *to_user = get_current_user_to_talk();
+	t_model_message *message = controller_send_message(to_user, MESSAGE_STONE, file_to_save_draw);
+	// if(strcmp (file_to_save_draw, "./client/resources/tmp/temp_draw") == 0){
+	// 	system(mx_strjoin("rm ", file_to_save_draw));
+	// 	printf("\n\n THERE DELETED\n\n");
+	// }
+// printf("\n\n THERE on_draw_button_release_event end\n\n");
 
     return TRUE;
 }
@@ -253,27 +281,44 @@ gboolean on_draw_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, t
 
 
 
-void add_draw_area(t_current_window_info *current_window_info) {
-	saved = read_saved_from_file("test_saved_points");
+void add_draw_area(t_current_window_info *current_window_info, t_model_message *model_message) {
+	// TODO: CLEAR DRAW AREA for users
+	system(mx_strjoin("rm ", "./client/resources/tmp/temp_draw"));
+	
+	saved = NULL;
+
+	
+	if(model_message){
+		t_model_stone *stone_msg = get_stone_by_id(model_message->data);
+		request_file_if_not_exist(stone_msg->path);
+		fprintf(stderr, "\n\n STONE ID: %s\n\n", model_message->data);
+
+		fprintf(stderr, "\n\n STONE MODEL: %s\n\n", to_string_model_stone(stone_msg));
+		fprintf(stderr, "\n\n STONE PATH: %s\n\n", stone_msg->path);
+		// saved = read_saved_from_file("test_saved_points");
+		char *draw_file_to_save_draw = mx_replace_substr(stone_msg->path, "./server", "./client");
+		saved = read_saved_from_file( draw_file_to_save_draw);
+	} else {
+		saved = NULL;
+	}
+	file_to_save_draw = mx_strdup("./client/resources/tmp/temp_draw");
 
 
-    // GtkLayout *home_page_layout = GTK_LAYOUT(gtk_builder_get_object(current_window_info->builder, "home_page_layout"));
-    GtkLayout *rock_layout = GTK_LAYOUT(gtk_builder_get_object(current_window_info->builder, "rock_layout"));
 
-
+    GtkLayout *rock_layout = GTK_LAYOUT(gtk_builder_get_object(current_window_info->builder, "chat_window_layout"));
 
 	gtk_builder_add_from_file(current_window_info->builder, get_path_to_glade("drawing_area.glade"), NULL);
     
 	GtkLayout *drawing_layout = GTK_LAYOUT(gtk_builder_get_object(current_window_info->builder, "draw_layout"));
 
-	gtk_widget_set_size_request(GTK_WIDGET(drawing_layout), 800, 600);
+	gtk_widget_set_size_request(GTK_WIDGET(drawing_layout), 1214, 668);
 	gtk_container_add(GTK_CONTAINER(rock_layout), GTK_WIDGET(drawing_layout));
 
 	current_window_info->layout_exists = true;
 
-	GdkPixbuf *image_pixbuf = gdk_pixbuf_new_from_file(get_path_to_image("rock.png"), NULL);
-    GtkWidget *image = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "draw_image"));
-	gtk_image_set_from_pixbuf(GTK_IMAGE(image), image_pixbuf);
+	// GdkPixbuf *image_pixbuf = gdk_pixbuf_new_from_file(get_path_to_image("rock.png"), NULL);
+    // GtkWidget *image = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "draw_image"));
+	// gtk_image_set_from_pixbuf(GTK_IMAGE(image), image_pixbuf);
 
 
     

@@ -13,6 +13,7 @@
 #include "controller_start_chat.h"
 #include "controller_get_messages.h"
 #include "get_resources_request.h"
+#include "user_data_request.h"
 
 
 void	choose_chat(GtkButton *b, t_current_window_info *current_window_info);

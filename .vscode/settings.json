@@ -47,6 +47,11 @@
         "set_avatar.h": "c",
         "controller_message_actions.h": "c",
         "view_stone_age_page.h": "c",
-        "choose_chat.h": "c"
+        "choose_chat.h": "c",
+        "database.h": "c",
+        "model_resource.h": "c",
+        "protocol.h": "c",
+        "stdlib.h": "c",
+        "model_defines.h": "c"
     }
 }

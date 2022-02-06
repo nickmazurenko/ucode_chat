@@ -31,13 +31,32 @@ void controller_view_user_era(GtkWidget **sign_in_info, t_current_window_info *c
 
     controller_get_messages();
 
-    // change window to second era
-    // view_second_era(current_window_info);
+    t_model_user_data * user_data = send_user_data_request((char *)gtk_entry_get_text(sign_in_info[0]));
 
-    // change window to text chat era
-    view_home_page(current_window_info);
+    // TODO: ALARM!!!! CHANGE ERA !!!!!!!
+    // user_data->era = MODERN_TIMES; //TODO: ALARM!!!! CHANGE ERA !!!!!!!
+    // TODO: ALARM!!!! CHANGE ERA !!!!!!!
+    if(user_data->era == STONE_AGE){
 
-    // view_stone_age_page(current_window_info );
+        view_stone_age_page(current_window_info );
+
+    } else if (user_data->era == EGYPT){
+
+        view_second_era(current_window_info);
+
+    } else if (user_data->era == MIDDLE_AGES){
+
+        // TODO: add view MIDDLE_AGES era
+
+    } else if (user_data->era == ENLIGHTMENT){
+
+        // TODO: add view EENLIGHTMENTGYPT era
+
+    }else if (user_data->era == MODERN_TIMES){
+
+        view_home_page(current_window_info);
+        
+    }
 
 }
 

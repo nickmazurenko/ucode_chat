@@ -47,8 +47,24 @@ char* add_message(cJSON* request) {
             free_model_resource(&model_resource);
 
         } else if (model_message->data_type == MESSAGE_STONE){
-            NULL;
-            //TODO: add stones case
+            char *tmp_id = get_from_protocol_string(request, "PATH TO FILE");
+            char *full_path = mx_strjoin("./server/resources/tmp/", tmp_id);
+
+            t_model_stone *model_stone = new_model_stone();
+            strcpy(model_stone->path, full_path);
+            memset(model_message->data, 0, BUFFER_SIZE);
+
+            int stone_id = insert_data_stone(model_stone);
+            strcpy(model_message->data, mx_itoa(stone_id));
+            model_stone->id = stone_id;
+
+            int msg_id = insert_data_message(model_message);
+            model_message->id = msg_id;
+
+            add_to_protocol_string(response, "DATA", to_string_model_message(model_message));
+
+            free_model_message(&model_message);
+            free_model_stone(&model_stone);
         }
 
         
@@ -256,6 +272,23 @@ bool get_user_data_money(char *request, char *response) {
     add_to_protocol_number(get_user_data_response, "DATA", money);
 
     strcpy(response, cJSON_Print(get_user_data_response));
+
+    printf("%s\n", response);
+    fflush(stdout);
+}
+
+bool get_stone(char *request, char *response) {
+    cJSON *get_stone_response = create_protocol();
+
+    cJSON *request_cjson = cJSON_Parse(request);
+
+    char *id = get_from_protocol_string(request_cjson, "DATA");
+    
+    t_model_stone *stone = get_stone_by_id(id);
+
+    add_to_protocol_string(get_stone_response, "DATA", to_string_model_stone(stone));
+
+    strcpy(response, cJSON_Print(get_stone_response));
 
     printf("%s\n", response);
     fflush(stdout);

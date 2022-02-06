@@ -9,7 +9,6 @@ void choose_chat(GtkButton *b, t_current_window_info *current_window_info) {
     set_in_protocol_string(get_cookies(), "TO USER", gtk_button_get_label(b));
 
     int count = 0;
-    int *count_tmp = (int*)malloc(sizeof(int));
     GtkWidget *chat_window_grid = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "chat_window_grid"));
 
 
@@ -22,19 +21,31 @@ void choose_chat(GtkButton *b, t_current_window_info *current_window_info) {
     
     g_list_free(children);
 
-    t_model_message **model_message = get_all_messages_from_chat((char*)gtk_button_get_label (b), &count);
 
-    set_current_user_to_talk((char*)gtk_button_get_label (b));
+    t_model_user_data *current_user_date = send_user_data_request(get_from_protocol_string(get_cookies(), "USERNAME"));
 
-    for (int i = 0; i < 20; i++)
-    {
-        GtkBuilder *message_builder = gtk_builder_new_from_file(get_path_to_glade("message_labels.glade"));
-        gtk_grid_insert_row(GTK_GRID(chat_window_grid), i);
-        gtk_grid_attach(GTK_GRID(chat_window_grid), GTK_WIDGET(gtk_builder_get_object(message_builder, "invisible_label")), 1, i, 1, 1);
+    t_model_user_data *other_user_data = send_user_data_request(gtk_button_get_label (b));
+
+    set_current_user_to_talk((char*)gtk_button_get_label (b)); //TODO:
+
+
+    if(other_user_data->era == STONE_AGE || current_user_date == STONE_AGE){ 
+        t_model_message *model_message = get_stone_message_from_chat((char*)gtk_button_get_label (b), &count);
+        add_draw_area(current_window_info, model_message);
+        printf("\n\n THERE STONE ERA\n\n");
+
+    } else {
+        t_model_message **model_message = get_all_messages_from_chat((char*)gtk_button_get_label (b), &count);
+        for (int i = 0; i < 20; i++)
+        {
+            GtkBuilder *message_builder = gtk_builder_new_from_file(get_path_to_glade("message_labels.glade"));
+            gtk_grid_insert_row(GTK_GRID(chat_window_grid), i);
+            gtk_grid_attach(GTK_GRID(chat_window_grid), GTK_WIDGET(gtk_builder_get_object(message_builder, "invisible_label")), 1, i, 1, 1);
+        }
+        current_window_info->message_position_y = count + 20;
+
+        view_messages(model_message, current_window_info, count);
     }
-    current_window_info->message_position_y = count + 20;
-
-    view_messages(model_message, current_window_info, count);
 
 }
 

@@ -4,6 +4,8 @@
 #include "model.h"
 #include "sign_requests.h"
 #include "view_tools.h"
+#include "view_stone_age_page.h"
+#include "view_second_era.h"
 #include "view_home_page.h"
 
 int controller_sign_in(char* user_name, char* password);

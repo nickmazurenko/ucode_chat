@@ -41,7 +41,7 @@ int callback_get_resource(void *data, int argc, char **argv, char **azColName) {
     if(argc != 0) {
         for(int column_index = 0; column_index < argc; column_index++) {
             if(!mx_strcmp(azColName[column_index], "Id"))
-                resource->id = mx_itoa(argv[column_index]);
+                resource->id = atoi(argv[column_index]);
             if(!mx_strcmp(azColName[column_index], "Path"))
                 mx_strcpy(resource->path, argv[column_index]);
             if(!mx_strcmp(azColName[column_index], "Name"))
