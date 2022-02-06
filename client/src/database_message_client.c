@@ -12,11 +12,10 @@ size_t insert_data_message(t_model_message* model_message) {
         exit(1);
     }
 
-    char *insert_request = "INSERT INTO Messages(Id, FromUser, ToUser, Type, Data, Date, Status) VALUES('%i', '%s', '%s', %i, '%s', '%s', %i);";
+    char *insert_request = "INSERT INTO Messages(Id, FromUser, ToUser, Type, Data, Date, Status, ForwardFrom) VALUES('%i', '%s', '%s', %i, '%s', '%s', %i, '%s');";
     char *sql_query = NULL;
     char *err_msg = NULL;
-
-    asprintf(&sql_query, insert_request, model_message->id, model_message->from_user, model_message->to_user, model_message->data_type, model_message->data, model_message->date, model_message->status);
+    asprintf(&sql_query, insert_request, model_message->id, model_message->from_user, model_message->to_user, model_message->data_type, model_message->data, model_message->date, model_message->status, model_message->forward_from);
 
     if((err_status = sqlite3_exec(db, sql_query, callback_print_db, 0, &err_msg)) != SQLITE_OK) {
         fprintf(stderr, "SQL_error: %s\n", err_msg);
@@ -67,6 +66,8 @@ int callback_get_messages(void *data, int argc, char **argv, char **azColName) {
             strcpy(array[db_array_data->size]->date, argv[column_index]);
         } else if (strcmp(azColName[column_index], "Status") == 0) {
             array[db_array_data->size]->status = atoi(argv[column_index]);
+        }else if (strcmp(azColName[column_index], "ForwardFrom") == 0) {
+            strcpy(array[db_array_data->size]->forward_from, argv[column_index]);
         }
 
     }
@@ -182,7 +183,7 @@ int callback_get_message(void *data, int argc, char **argv, char **azColName) {
     t_model_message* msg = (t_model_message*)data;
     if(argc != 0) {
         for(int column_index = 0; column_index < argc; column_index++) {
-            if(!mx_strcmp(azColName[column_index], "Id"))
+            if(!strcmp(azColName[column_index], "Id"))
                 msg->id = atoi(argv[column_index]);
             if(!strcmp(azColName[column_index], "FromUser")) {
                 strcpy(msg->from_user, argv[column_index]);
@@ -197,6 +198,8 @@ int callback_get_message(void *data, int argc, char **argv, char **azColName) {
                 strcpy(msg->date, argv[column_index]);
             if(!strcmp(azColName[column_index], "Status"))
                 msg->status = atoi(argv[column_index]);
+            if(!strcmp(azColName[column_index], "ForwardFrom"))
+                strcpy(msg->forward_from, argv[column_index]);
         }
     }    
     return 0;
