@@ -38,6 +38,36 @@ char* read_request(int conn_fd, char* request, int* read_number) {
     return request;
 }
 
+static cJSON* new_message_sockets = NULL;
+static int new_message_sockets_int[100];
+static int new_message_sockets_int_count = 0;
+
+int get_new_message_socket_of(char* username) {
+
+    return get_from_protocol_number(new_message_sockets, username);
+
+}
+
+bool socket_in_new_message_sockets(int socket) {
+    for (int i = 0; i < new_message_sockets_int_count; i++) {
+        if  (new_message_sockets_int[i] == socket) {
+            // printf("%s\n", "Socket for write new messages");
+            return true;
+        };
+    }
+    
+    return false;
+}
+
+void add_new_message_socket(char* username, int socket) {
+
+    if (new_message_sockets == NULL)
+        new_message_sockets = cJSON_CreateObject();
+
+    add_to_protocol_number(new_message_sockets, username, socket);
+    new_message_sockets_int[new_message_sockets_int_count++] = socket;
+
+}
 
 
 void* handle_request(void* data) {
@@ -45,31 +75,57 @@ void* handle_request(void* data) {
     char* request = calloc(READ_SIZE, sizeof(char));
     char* response_buffer = calloc(READ_SIZE, sizeof(char));
     int read_number = 0;
+    size_t response_buffer_length = 0;
+    printf("main connection: %i\n", conn_fd);
     // 
     while (1) {
         // read_request(conn_fd, request, &read_number);
-        int read_number = recv(conn_fd, request, 14336, 0);
-        if (read_number) {
-            // select_action(request, response_buffer);
-            printf(request);
-            select_action(request, response_buffer);
-            printf("response_buffer:\n %s\n", response_buffer);
+        if (!socket_in_new_message_sockets(conn_fd)) {
+            int read_number = recv(conn_fd, request, 14336, 0);
+            if (read_number) {
+                // select_action(request, response_buffer);
+                printf(request);
 
-            if (strlen(response_buffer) == 0)
-                strcpy(response_buffer, "200 OK\r\n\r\n");
+                cJSON* request_obj = cJSON_Parse(request);
+                char* action = get_from_protocol_string(request_obj, "ACTION");
+                char* username = get_from_protocol_string(request_obj, "FROM");
+                if (action != NULL && username != NULL && strcmp(action, "ADD NEW MESSAGES SOCKET") == 0) {
 
-            size_t response_buffer_length = strlen(response_buffer);
-            // write(conn_fd, response_buffer, response_buffer_length);
-            send(conn_fd, response_buffer, response_buffer_length, 0);
-            sleep(1);
-            
-            // sendto(conn_fd, response_buffer, strlen(response_buffer), 0, (struct sockaddr *)&client, sizeof(client_addres));
+                    add_new_message_socket(username, conn_fd);
+                    strcpy(response_buffer, "200 OK\r\n\r\n");
+                    send(conn_fd, response_buffer, 10, 0);
+                    pthread_exit(NULL);
+                    break;
+                }
 
-            // close(conn_fd);
-            memset(response_buffer, '\0', response_buffer_length);
-            memset(request, '\0', read_number);
+                select_action(request, response_buffer);
+                // printf("response_buffer:\n %s\n", response_buffer);
+
+                if (strlen(response_buffer) == 0)
+                    strcpy(response_buffer, "200 OK\r\n\r\n");
+
+                response_buffer_length = strlen(response_buffer);
+                // write(conn_fd, response_buffer, response_buffer_length);
+                send(conn_fd, response_buffer, response_buffer_length, 0);
+                
+
+                cJSON_Delete(request_obj);
+                
+                
+                // sendto(conn_fd, response_buffer, strlen(response_buffer), 0, (struct sockaddr *)&client, sizeof(client_addres));
+
+                // close(conn_fd);
+                memset(response_buffer, '\0', response_buffer_length);
+                memset(request, '\0', read_number);
+            }
+            // usleep(100);
+        } else {
+            // printf("there we go\n");
+            fflush(stdout);
+            // break;
         }
-        // usleep(100);
+        sleep(1);
+        
     }
 
 }
