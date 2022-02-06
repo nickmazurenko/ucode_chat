@@ -94,5 +94,5 @@ void add_chat(char *username, t_current_window_info *current_window_info) {
 		g_signal_connect(button, "clicked", G_CALLBACK(choose_chat), current_window_info);
 
     current_chat_count++;
-
+    
 }

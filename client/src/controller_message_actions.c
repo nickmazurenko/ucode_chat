@@ -78,14 +78,19 @@ void forward_clicked(GtkWidget *widget, t_current_window_info *current_window_in
     t_model_message *response = NULL;
     long* msg_id = (long)current_window_info->data;
     t_model_message *msg = get_message_by_id(msg_id);
+    fprintf(stderr, "\n\nFORWARD %s \n\n", msg->from_user);
+
+    msg->forward_from = mx_strdup(msg->from_user);
+    
     free(msg->to_user);
     msg->to_user = mx_strdup(gtk_button_get_label(GTK_BUTTON(widget)));
+    
     if(msg->data_type == MESSAGE_FILE) {
         t_model_resource *resource = get_resource_by_id(msg->data);
-        response = controller_send_message(msg->to_user, msg->data_type, resource->name);
+        response = controller_forward_message(msg->to_user, msg->data_type, resource->name, msg->forward_from);
 
     } else if(msg->data_type == MESSAGE_TEXT) {
-        response = controller_send_message(msg->to_user, msg->data_type, msg->data);
+        response = controller_forward_message(msg->to_user, msg->data_type, msg->data, msg->forward_from);
     }
     // view_message(response, current_window_info);
 }
