@@ -13,14 +13,14 @@
 #include "controller_start_chat.h"
 #include "controller_get_messages.h"
 #include "get_resources_request.h"
+#include "choose_chat.h"
 
 
 
 void view_home_page(t_current_window_info *current_layout_info);
-void	choose_chat(GtkButton *b, t_current_window_info *current_window_info) ;
 int get_current_chat_count();
 
-
+gboolean callback_update_messages(gpointer* user_data);
 
 
 

@@ -5,6 +5,9 @@
   <object class="GtkImage" id="user_image">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
+    <style>
+      <class name="user_image"/>
+    </style>
   </object>
   <object class="GtkButton" id="person_chat_button">
     <property name="label" translatable="yes">user name</property>
