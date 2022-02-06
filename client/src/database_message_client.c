@@ -47,7 +47,7 @@ int callback_get_messages(void *data, int argc, char **argv, char **azColName) {
     }
 
     t_model_message** array = (t_model_message**) db_array_data->array;
-    int columns_number = 7;
+    int columns_number = argc;
     array[db_array_data->size] = new_model_message();
 
     for (int column_index = 0; column_index < columns_number; column_index++) {

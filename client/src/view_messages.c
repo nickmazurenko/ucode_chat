@@ -50,8 +50,14 @@ void view_message(t_model_message *model_message, t_current_window_info *current
         gtk_label_set_text(GTK_LABEL(label), model_message->data);
 
         gtk_container_add(GTK_CONTAINER(box), label);
- 
+         if(strlen(model_message->forward_from) > 0) {
+            GtkWidget *forward_label = GTK_WIDGET(gtk_builder_get_object(message_builder, "current_forward_label")); 
+            gtk_label_set_text(forward_label, mx_strjoin("From: ",model_message->forward_from));
+            gtk_grid_attach(GTK_GRID(chat_window_grid), forward_label, 1, current_id, 1, 1); 
+            current_id++;
+        }
         gtk_grid_attach(GTK_GRID(chat_window_grid), box, 1, current_id, 1, 1); 
+
         gtk_widget_show (box);
     } else { 
  
@@ -60,9 +66,14 @@ void view_message(t_model_message *model_message, t_current_window_info *current
 
         gtk_container_add(GTK_CONTAINER(box), label);
 
-        gtk_label_set_xalign(GTK_LABEL(label), 0.5); 
-        gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_LEFT); 
+        if(strlen(model_message->forward_from) > 0) {
+            GtkWidget *forward_label = GTK_WIDGET(gtk_builder_get_object(message_builder, "other_forward_label")); 
+            gtk_label_set_text(forward_label, mx_strjoin("From: ",model_message->forward_from));
+            gtk_grid_attach(GTK_GRID(chat_window_grid), forward_label, 0, current_id, 1, 1); 
+            current_id++;
+        }
         gtk_grid_attach(GTK_GRID(chat_window_grid), box, 0, current_id, 1, 1); 
+
         gtk_widget_show (box);
 
     } 
@@ -84,6 +95,8 @@ void view_file(t_model_message *model_message, t_current_window_info *current_la
 
     int current_id = current_layout_info->message_position_y + 1; 
     GtkBuilder *message_builder = gtk_builder_new_from_file(get_path_to_glade("message_image.glade")); 
+    GtkBuilder *forward_builder = gtk_builder_new_from_file(get_path_to_glade("message_labels.glade")); 
+    
 
     gtk_grid_insert_row(GTK_GRID(chat_window_grid), current_id); 
 
@@ -102,7 +115,13 @@ void view_file(t_model_message *model_message, t_current_window_info *current_la
             image_pixbuf = gdk_pixbuf_new_from_file_at_size(get_path_to_image("click.jpeg"), 100, 100, NULL);
             gtk_image_set_from_pixbuf(GTK_IMAGE(image), image_pixbuf);
         }
-        gtk_container_add(GTK_CONTAINER(box), image);      
+        gtk_container_add(GTK_CONTAINER(box), image);   
+        if(strlen(model_message->forward_from) > 0) {
+            GtkWidget *forward_label = GTK_WIDGET(gtk_builder_get_object(forward_builder, "current_forward_label")); 
+            gtk_label_set_text(forward_label, mx_strjoin("From: ",model_message->forward_from));
+            gtk_grid_attach(GTK_GRID(chat_window_grid), forward_label, 1, current_id, 1, 1); 
+            current_id++;
+        }   
         gtk_grid_attach(GTK_GRID(chat_window_grid), box, 1, current_id, 1, 1); 
         gtk_widget_show (box);
 
@@ -116,7 +135,13 @@ void view_file(t_model_message *model_message, t_current_window_info *current_la
             gtk_image_set_from_pixbuf(GTK_IMAGE(image), image_pixbuf);
         }
 
-        gtk_container_add(GTK_CONTAINER(box), image);      
+        gtk_container_add(GTK_CONTAINER(box), image);     
+        if(strlen(model_message->forward_from) > 0) {
+            GtkWidget *forward_label = GTK_WIDGET(gtk_builder_get_object(forward_builder, "other_forward_label")); 
+            gtk_label_set_text(forward_label, mx_strjoin("From: ",model_message->forward_from));
+            gtk_grid_attach(GTK_GRID(chat_window_grid), forward_label, 0, current_id, 1, 1); 
+            current_id++;
+        } 
         gtk_grid_attach(GTK_GRID(chat_window_grid), box, 0, current_id, 1, 1); 
         gtk_widget_show (box);
     }
