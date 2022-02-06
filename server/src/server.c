@@ -1,10 +1,19 @@
 #include "server.h"
 
+typedef struct s_user_connection {
 
+    int read_fd;
+    int write_fd;
+
+}              t_user_connection;
+
+static int active_users_number = 0;
+
+t_user_connection active_users[50];
 
 char* read_request(int conn_fd, char* request, int* read_number) {
 
-    size_t buff_size = 14336;
+    size_t buff_size = READ_SIZE;
     
 
     errno = 0;
@@ -29,13 +38,60 @@ char* read_request(int conn_fd, char* request, int* read_number) {
     return request;
 }
 
+
+
+void* handle_request(void* data) {
+    int conn_fd = *((int*)data);
+    char* request = calloc(READ_SIZE, sizeof(char));
+    char* response_buffer = calloc(READ_SIZE, sizeof(char));
+    int read_number = 0;
+    // 
+    while (1) {
+        // read_request(conn_fd, request, &read_number);
+        int read_number = recv(conn_fd, request, 14336, 0);
+        if (read_number) {
+            // select_action(request, response_buffer);
+            printf(request);
+            select_action(request, response_buffer);
+            printf("response_buffer:\n %s\n", response_buffer);
+
+            if (strlen(response_buffer) == 0)
+                strcpy(response_buffer, "200 OK\r\n\r\n");
+
+            size_t response_buffer_length = strlen(response_buffer);
+            // write(conn_fd, response_buffer, response_buffer_length);
+            send(conn_fd, response_buffer, response_buffer_length, 0);
+            sleep(1);
+            
+            // sendto(conn_fd, response_buffer, strlen(response_buffer), 0, (struct sockaddr *)&client, sizeof(client_addres));
+
+            // close(conn_fd);
+            memset(response_buffer, '\0', response_buffer_length);
+            memset(request, '\0', read_number);
+        }
+        // usleep(100);
+    }
+
+}
+
+void create_user_thread(int conn_fd) {
+    // запустить поток с conn_fd и циклом
+    pthread_t user_thread;
+
+    int* p_conn_fd = (int*)malloc(sizeof(int));
+    *p_conn_fd = conn_fd;
+    
+    pthread_create(&user_thread, NULL, handle_request, p_conn_fd);
+
+}
+
 void run_server() {
 
-    init_tables();
+    // init_tables();
 
     int listen_fd = 0, conn_fd = 0;
     struct sockaddr_in serv_addr;
-    char* response_buffer = mx_strnew(READ_SIZE);
+    // char* response_buffer = mx_strnew(READ_SIZE);
 
     memset(&serv_addr, '0', sizeof(serv_addr));
 
@@ -48,11 +104,15 @@ void run_server() {
 
     bind(listen_fd, (struct sockaddr*)&serv_addr, sizeof(serv_addr));
 
-    listen(listen_fd, MAX_CONNECTIONS);
+    if (listen(listen_fd, MAX_CONNECTIONS)) {
+        perror("Error: ");
+    } else {
+        printf("Listening\n");
+    }
 
     printf("server runned\n");
 
-    char* request = mx_strnew(14336);
+    // char* request = mx_strnew(14336);
 
     while (1)
     {
@@ -63,23 +123,26 @@ void run_server() {
 
         conn_fd = accept(listen_fd, (struct sockaddr*)&client, &client_len);
 
+        // add thread
+
         // inet_ntop(AF_INET, &client, client_addres, BUFFER_SIZE);
-        int read_number = 0;
-        read_request(conn_fd, request, &read_number);
+        // int read_number = 0;
+        // read_request(conn_fd, request, &read_number);
         
-        select_action(request, response_buffer);
+        // select_action(request, response_buffer);
 
-        if (strlen(response_buffer) == 0)
-            strcpy(response_buffer, "200 OK\r\n\r\n");
-        // send(conn_fd, response_buffer, strlen(response_buffer), 0); 
-        size_t response_buffer_length = strlen(response_buffer);
-        write(conn_fd, response_buffer, response_buffer_length);
-        // sendto(conn_fd, response_buffer, strlen(response_buffer), 0, (struct sockaddr *)&client, sizeof(client_addres));
+        // if (strlen(response_buffer) == 0)
+        //     strcpy(response_buffer, "200 OK\r\n\r\n");
+        // // send(conn_fd, response_buffer, strlen(response_buffer), 0); 
+        // size_t response_buffer_length = strlen(response_buffer);
+        // write(conn_fd, response_buffer, response_buffer_length);
+        // // sendto(conn_fd, response_buffer, strlen(response_buffer), 0, (struct sockaddr *)&client, sizeof(client_addres));
 
-        close(conn_fd);
-        memset(response_buffer, '\0', response_buffer_length);
-        memset(request, '\0', read_number);
-        sleep(1);
+        // close(conn_fd);
+        // memset(response_buffer, '\0', response_buffer_length);
+        // memset(request, '\0', read_number);
+        // sleep(1);
+        create_user_thread(conn_fd);
     }
     
 
