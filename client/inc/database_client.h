@@ -62,4 +62,7 @@ size_t insert_data_stone(t_model_stone* model_stone);
 t_model_resource *get_resource_by_id(char *id);
 int callback_get_resource(void *data, int argc, char **argv, char **azColName);
 
+int callback_get_message(void *data, int argc, char **argv, char **azColName);
+t_model_message* get_message_by_id(size_t msg_id);
+
 #endif

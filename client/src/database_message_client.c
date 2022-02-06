@@ -177,3 +177,59 @@ char** get_all_user_chats(char *current_user, int *count) {
     return message_chats;
 }
 
+
+int callback_get_message(void *data, int argc, char **argv, char **azColName) {
+    t_model_message* msg = (t_model_message*)data;
+    if(argc != 0) {
+        for(int column_index = 0; column_index < argc; column_index++) {
+            if(!mx_strcmp(azColName[column_index], "Id"))
+                msg->id = atoi(argv[column_index]);
+            if(!strcmp(azColName[column_index], "FromUser")) {
+                strcpy(msg->from_user, argv[column_index]);
+            }
+            if(!strcmp(azColName[column_index], "ToUser"))
+                strcpy(msg->to_user, argv[column_index]);
+            if(!strcmp(azColName[column_index], "Type"))
+                msg->data_type = atoi(argv[column_index]);
+            if(!strcmp(azColName[column_index], "Data"))
+                strcpy(msg->data, argv[column_index]);
+            if(!strcmp(azColName[column_index], "Date"))
+                strcpy(msg->date, argv[column_index]);
+            if(!strcmp(azColName[column_index], "Status"))
+                msg->status = atoi(argv[column_index]);
+        }
+    }    
+    return 0;
+}
+
+t_model_message* get_message_by_id(size_t msg_id) {
+    sqlite3 *db;
+    
+    int err_status = 0;
+
+    if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
+        fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        exit(1);
+    }
+
+    char *sql_query = NULL;
+
+    char *select_request = "SELECT * FROM Messages WHERE Id=('%zu');";
+
+    asprintf(&sql_query, select_request, msg_id);
+    char *err_msg = NULL;
+
+    t_model_message *msg = new_model_message();
+    if((err_status = sqlite3_exec(db, sql_query, callback_get_message, msg, &err_msg)) != SQLITE_OK) {
+        fprintf(stderr, "SQL_error: %s\n", err_msg);
+        sqlite3_free(err_msg);
+        sqlite3_close(db);
+        exit(1);
+    }
+
+    sqlite3_close(db);
+
+    return msg;
+}
+
