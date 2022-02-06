@@ -50,8 +50,14 @@ void view_message(t_model_message *model_message, t_current_window_info *current
         gtk_label_set_text(GTK_LABEL(label), model_message->data);
 
         gtk_container_add(GTK_CONTAINER(box), label);
- 
+         if(strlen(model_message->forward_from) > 0) {
+            GtkWidget *forward_label = GTK_WIDGET(gtk_builder_get_object(message_builder, "current_forward_label")); 
+            gtk_label_set_text(forward_label, mx_strjoin("From: ",model_message->forward_from));
+            gtk_grid_attach(GTK_GRID(chat_window_grid), forward_label, 1, current_id, 1, 1); 
+            current_id++;
+        }
         gtk_grid_attach(GTK_GRID(chat_window_grid), box, 1, current_id, 1, 1); 
+
         gtk_widget_show (box);
     } else { 
  
@@ -60,9 +66,14 @@ void view_message(t_model_message *model_message, t_current_window_info *current
 
         gtk_container_add(GTK_CONTAINER(box), label);
 
-        gtk_label_set_xalign(GTK_LABEL(label), 0.5); 
-        gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_LEFT); 
+        if(strlen(model_message->forward_from) > 0) {
+            GtkWidget *forward_label = GTK_WIDGET(gtk_builder_get_object(message_builder, "other_forward_label")); 
+            gtk_label_set_text(forward_label, mx_strjoin("From: ",model_message->forward_from));
+            gtk_grid_attach(GTK_GRID(chat_window_grid), forward_label, 0, current_id, 1, 1); 
+            current_id++;
+        }
         gtk_grid_attach(GTK_GRID(chat_window_grid), box, 0, current_id, 1, 1); 
+
         gtk_widget_show (box);
 
     } 
@@ -84,6 +95,8 @@ void view_file(t_model_message *model_message, t_current_window_info *current_la
 
     int current_id = current_layout_info->message_position_y + 1; 
     GtkBuilder *message_builder = gtk_builder_new_from_file(get_path_to_glade("message_image.glade")); 
+    GtkBuilder *forward_builder = gtk_builder_new_from_file(get_path_to_glade("message_labels.glade")); 
+    
 
     gtk_grid_insert_row(GTK_GRID(chat_window_grid), current_id); 
 
@@ -102,7 +115,13 @@ void view_file(t_model_message *model_message, t_current_window_info *current_la
             image_pixbuf = gdk_pixbuf_new_from_file_at_size(get_path_to_image("click.jpeg"), 100, 100, NULL);
             gtk_image_set_from_pixbuf(GTK_IMAGE(image), image_pixbuf);
         }
-        gtk_container_add(GTK_CONTAINER(box), image);      
+        gtk_container_add(GTK_CONTAINER(box), image);   
+        if(strlen(model_message->forward_from) > 0) {
+            GtkWidget *forward_label = GTK_WIDGET(gtk_builder_get_object(forward_builder, "current_forward_label")); 
+            gtk_label_set_text(forward_label, mx_strjoin("From: ",model_message->forward_from));
+            gtk_grid_attach(GTK_GRID(chat_window_grid), forward_label, 1, current_id, 1, 1); 
+            current_id++;
+        }   
         gtk_grid_attach(GTK_GRID(chat_window_grid), box, 1, current_id, 1, 1); 
         gtk_widget_show (box);
 
@@ -116,7 +135,13 @@ void view_file(t_model_message *model_message, t_current_window_info *current_la
             gtk_image_set_from_pixbuf(GTK_IMAGE(image), image_pixbuf);
         }
 
-        gtk_container_add(GTK_CONTAINER(box), image);      
+        gtk_container_add(GTK_CONTAINER(box), image);     
+        if(strlen(model_message->forward_from) > 0) {
+            GtkWidget *forward_label = GTK_WIDGET(gtk_builder_get_object(forward_builder, "other_forward_label")); 
+            gtk_label_set_text(forward_label, mx_strjoin("From: ",model_message->forward_from));
+            gtk_grid_attach(GTK_GRID(chat_window_grid), forward_label, 0, current_id, 1, 1); 
+            current_id++;
+        } 
         gtk_grid_attach(GTK_GRID(chat_window_grid), box, 0, current_id, 1, 1); 
         gtk_widget_show (box);
     }
@@ -162,4 +187,105 @@ void send_file_as_message(GtkWidget *widget, t_current_window_info * current_win
         gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(file_chooser));
         view_file(message, current_window_info);
     }
+}
+
+static int new_messages_socket = 0;
+static char* new_message_str = NULL;
+
+void*
+ check_new_messages(t_current_window_info* window_info) {
+
+    cJSON* cookies = get_cookies();
+
+    if (new_messages_socket == 0) {
+
+        // connect to server
+        // ACTION: create user new messages socket
+        // FROM: username
+        // TOKEN: token
+
+        struct sockaddr_in* serv_addr = malloc(sizeof(struct sockaddr_in));
+    
+        memset(serv_addr, '0', sizeof(*serv_addr));
+
+        if((new_messages_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+        {
+            printf("\n Error : Could not create socket \n");
+            return NULL;
+        }
+
+        serv_addr->sin_family = AF_INET;
+        serv_addr->sin_port   = htons(PORT);
+
+
+        if(inet_pton(AF_INET, get_server_ip(), &(serv_addr->sin_addr)) <= 0)
+        {
+            printf("\n inet_pton error occured\n");
+            return NULL;
+        }
+
+        
+
+        if (connect(new_messages_socket, (struct sockaddr *)serv_addr, sizeof(*serv_addr)) < 0) {
+            printf("\n Error : Connect Failed \n");
+            return NULL;
+        }
+
+
+        cJSON* protocol = create_protocol();
+        add_to_protocol_string(protocol, "FROM", get_from_protocol_string(cookies, "USERNAME"));
+        add_to_protocol_string(protocol, "TOKEN", get_from_protocol_string(cookies, "TOKEN"));
+
+        add_to_protocol_string(protocol, "ACTION", "ADD NEW MESSAGES SOCKET");
+
+        char* request = cJSON_Print(protocol);
+        send(new_messages_socket, request, strlen(request), 0);
+        fflush(stdout);
+        char* response = mx_strnew(256);
+        
+        recv(new_messages_socket, response, 256, 0);
+
+        free(request);
+        free(response);
+    }
+
+    if (new_message_str == NULL) {
+        new_message_str  = mx_strnew(READ_SIZE);
+    }
+
+    int read_number = 0;
+    while (1) {
+
+        read_number = recv(new_messages_socket, new_message_str, READ_SIZE, 0);
+        fflush(stdout);
+        if (read_number && read_number != -1) {
+            // add message to db
+            // view message
+            t_model_message* model_message = from_string_model_message(new_message_str);
+            insert_data_message(model_message);
+            char* to_user = get_from_protocol_string(cookies, "TO USER");
+            if (to_user != NULL && strcmp(model_message->from_user, to_user) == 0) {
+                if (model_message->data_type == MESSAGE_TEXT)
+                    view_message(model_message, window_info);
+                else if (model_message->data_type == MESSAGE_FILE) {
+                    t_model_resource* resource = send_get_resource_request(model_message->data);
+                    pthread_t* current_thread = get_current_thread();
+                    pthread_join(*current_thread, NULL);
+                    insert_data_resource(resource);
+                    printf("before request\n");
+                    request_file_if_not_exist(resource->path);
+                    current_thread = get_current_thread();
+                    pthread_join(*current_thread, NULL);
+                    printf("after request\n");
+                    view_file(model_message, window_info);
+                }
+            }
+
+            memset(new_message_str, '\0', read_number);
+            sleep(1);
+
+        }
+    }
+
+
 }

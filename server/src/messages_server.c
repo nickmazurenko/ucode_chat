@@ -1,4 +1,5 @@
 #include "messages_server.h"
+#include "server.h"
 
 char* add_message(cJSON* request) {
 
@@ -22,7 +23,7 @@ char* add_message(cJSON* request) {
 
             add_to_protocol_string(response, "DATA", to_string_model_message(model_message));
 
-            free_model_message(&model_message);
+            // free_model_message(&model_message);
         } else if (model_message->data_type == MESSAGE_FILE){
 
             char *tmp_id = get_from_protocol_string(request, "PATH TO FILE");
@@ -43,7 +44,7 @@ char* add_message(cJSON* request) {
 
             add_to_protocol_string(response, "DATA", to_string_model_message(model_message));
 
-            free_model_message(&model_message);
+            // free_model_message(&model_message);
             free_model_resource(&model_resource);
 
         } else if (model_message->data_type == MESSAGE_STONE){
@@ -67,7 +68,19 @@ char* add_message(cJSON* request) {
             free_model_stone(&model_stone);
         }
 
-        
+        int socket_new_messages = get_new_message_socket_of(model_message->to_user);
+        printf("socket: %i\n", socket_new_messages);
+        printf("username: %s\n", username);
+        printf("from username: %s\n", model_message->from_user);
+
+        if (strcmp(username, model_message->to_user) != 0) {
+            int socket_new_messages = get_new_message_socket_of(model_message->to_user);
+            printf("socket: %i\n", socket_new_messages);
+            char* message_json = to_string_model_message(model_message);
+            send(socket_new_messages, message_json, strlen(message_json), 0);
+            sleep(1);
+        }
+        free_model_message(&model_message);
         
     } else {
         add_to_protocol_string(response, "DATA", "ERROR");

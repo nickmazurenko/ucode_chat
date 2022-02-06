@@ -33,6 +33,7 @@ typedef struct s_model_message {
     char*                data;
     char*                date;
     e_message_status     status;
+    char*               forward_from;
 
 }              t_model_message;
 

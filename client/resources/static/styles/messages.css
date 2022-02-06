@@ -8,6 +8,17 @@
     padding-right: 30px;
 }   
 
+.forward_label{
+    font-size: 8pt;
+    background-color: rgba(18, 117, 117, 0.2);
+    border-radius: 300px; 
+    border: solid #000000 0.8px;
+    padding-right: 10px;
+    padding-left: 10px;
+    font-weight: bolder;
+
+}   
+
 
 .user_button{
     background: rgba(0, 0, 0, 0.0);
@@ -15,6 +26,6 @@
     /* margin-top: 10px; */
     margin-bottom: 2px;
     margin-left: 10px;
-    margin-right: 10px;
+    /* margin-right: 10px; */
 }
 

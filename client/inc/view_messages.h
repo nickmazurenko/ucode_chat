@@ -25,4 +25,6 @@ void send_file_as_message(GtkWidget *widget, t_current_window_info * current_win
 void set_current_user_to_talk(char *new_user_to_talk);
 char *get_current_user_to_talk(void);
 
+void* check_new_messages(t_current_window_info* window_info);
+
 #endif

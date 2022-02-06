@@ -65,4 +65,7 @@ t_model_stone *get_stone_by_id(char *id);
 int callback_get_stone(void *data, int argc, char **argv, char **azColName);
 t_model_message *get_stone_message_from_chat(char *from_user, int *size);
 
+int callback_get_message(void *data, int argc, char **argv, char **azColName);
+t_model_message* get_message_by_id(size_t msg_id);
+
 #endif

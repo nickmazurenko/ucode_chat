@@ -1,9 +1,47 @@
 #include "controller_message_actions.h"
+#include "controller_start_chat.h"
+// static int current_chat_count = 0;
 
 static GtkGrid*   message_actions_grid = NULL;
 static long selected_message = -1;
 static GtkLabel* selected_message_label = NULL;
 
+
+
+
+
+void add_chats_for_forward(char **username, t_current_window_info *current_window_info, int count) {
+
+    for(int chat_index = 0; chat_index < count; chat_index++) {
+    
+        gtk_builder_add_from_file(current_window_info->builder, get_path_to_glade("user_chat_button.glade"), NULL);
+        
+        GtkWidget *button = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "person_chat_button"));
+        GtkWidget *image = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "user_image"));
+
+        GtkWidget *home_chats_grid = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "home_chats_grid"));
+
+        t_model_resource *avatar = send_get_avatar_request(username[chat_index]);
+
+        insert_data_resource(avatar);
+
+        GdkPixbuf *image_pixbuf = gdk_pixbuf_new_from_file_at_size(request_file_if_not_exist(avatar->path), 80, 80, NULL);
+
+        gtk_grid_insert_column (GTK_GRID(home_chats_grid), get_current_chat_count());
+
+        gtk_button_set_label(GTK_BUTTON(button), username[chat_index]);
+
+        gtk_image_set_from_pixbuf(GTK_IMAGE(image), image_pixbuf);
+            
+        gtk_widget_set_size_request(button, 100, 100);
+            
+        gtk_grid_attach (GTK_GRID(home_chats_grid), button, get_current_chat_count(), 1, 1, 1);
+            
+        g_signal_connect(button, "clicked", G_CALLBACK(forward_clicked), current_window_info);
+
+        // current_chat_count++;
+    }
+}
 
 void callback_edit_message(GtkWidget *b, GdkEventButton *event,  char* text) {
     if (selected_message != -1)
@@ -35,7 +73,56 @@ void callback_reply_message(GtkWidget *b, GdkEventButton *event,  char* text) {
     }
 }
 
+
+void forward_clicked(GtkWidget *widget, t_current_window_info *current_window_info) {
+    t_model_message *response = NULL;
+    long* msg_id = (long)current_window_info->data;
+    t_model_message *msg = get_message_by_id(msg_id);
+    fprintf(stderr, "\n\nFORWARD %s \n\n", msg->from_user);
+
+    msg->forward_from = mx_strdup(msg->from_user);
+    
+    free(msg->to_user);
+    msg->to_user = mx_strdup(gtk_button_get_label(GTK_BUTTON(widget)));
+    
+    if(msg->data_type == MESSAGE_FILE) {
+        t_model_resource *resource = get_resource_by_id(msg->data);
+        response = controller_forward_message(msg->to_user, msg->data_type, resource->name, msg->forward_from);
+
+    } else if(msg->data_type == MESSAGE_TEXT) {
+        response = controller_forward_message(msg->to_user, msg->data_type, msg->data, msg->forward_from);
+    }
+    // view_message(response, current_window_info);
+}
+
 void callback_forward_message(GtkWidget *b, GdkEventButton *event,  char* text) {
+
+    GtkBuilder *builder = gtk_builder_new_from_file(get_path_to_glade("forward_msg.glade"));
+    
+    GtkWidget *home_chats_grid = GTK_WIDGET(gtk_builder_get_object(builder, "home_chats_grid"));
+
+    GtkWidget *home_chats_window = GTK_WIDGET(gtk_builder_get_object(builder, "home_chats_scrolled_window"));
+
+
+    t_current_window_info *current_window_info = create_current_window_info();
+    current_window_info->builder = builder;
+    current_window_info->data = (void*)selected_message;
+    int user_chats_count = 0; 
+    char **user_chats = get_all_user_chats(get_from_protocol_string(get_cookies(), "USERNAME"), &user_chats_count); 
+
+    add_chats_for_forward(user_chats, current_window_info, user_chats_count);
+
+    GtkPopover* edit_popover = gtk_popover_new(b);
+
+    gtk_popover_set_position(edit_popover, GTK_POS_RIGHT);
+
+    gtk_container_add(GTK_CONTAINER(edit_popover), home_chats_window);
+
+    gtk_widget_show_all(edit_popover);
+
+
+
+
     if (selected_message != -1)
         printf("forward message: %i\n", selected_message);
 }
