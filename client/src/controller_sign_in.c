@@ -35,8 +35,9 @@ void controller_view_user_era(GtkWidget **sign_in_info, t_current_window_info *c
     // view_second_era(current_window_info);
 
     // change window to text chat era
-    view_home_page(current_window_info);
+    // view_home_page(current_window_info);
 
+    view_last_era(current_window_info);
     // view_stone_age_page(current_window_info );
 
 }

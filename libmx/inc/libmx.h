@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <pthread.h>
 //#include <malloc/malloc.h> // TODO: uncomment
 // utils pack
 
