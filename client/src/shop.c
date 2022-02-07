@@ -2,7 +2,7 @@
 
 
 void set_shop_on_button(GtkWidget *button) {
-    // send_set_user_era_request("a", "a", 1);
+    send_set_user_era_request("a", "a", 0);
 
     GtkCssProvider *cssProvider = gtk_css_provider_new(); 
 
@@ -11,9 +11,8 @@ void set_shop_on_button(GtkWidget *button) {
 
     GtkBuilder *builder;
     if (model_user_data->era == 0) {
-        model_user_data->era = 3;
-        gtk_css_provider_load_from_path(cssProvider, get_path_to_style("enlightment_shop.css"), NULL);
-        builder = gtk_builder_new_from_file(get_path_to_glade("shop_enlightment.glade"));
+        gtk_css_provider_load_from_path(cssProvider, get_path_to_style("stone_shop.css"), NULL);
+        builder = gtk_builder_new_from_file(get_path_to_glade("shop_stone_age.glade"));
     }
     else if (model_user_data->era == 1) {
         gtk_css_provider_load_from_path(cssProvider, get_path_to_style("egypt_shop.css"), NULL);
@@ -60,6 +59,8 @@ void set_shop_on_button(GtkWidget *button) {
     GtkWidget *shop_item5 = GTK_WIDGET(gtk_builder_get_object(builder, "shop_item5"));
     GtkWidget *shop_item6 = GTK_WIDGET(gtk_builder_get_object(builder, "shop_item6"));
 
+    printf("\n\n THERE \n\n");
+
     for (int i = 0; i < 6; i++) {
     printf("\n\n %s \n\n", model_store[i]->path); }
 
@@ -103,12 +104,12 @@ void set_shop_on_button(GtkWidget *button) {
 
     g_signal_connect(button, "clicked", G_CALLBACK(money_view), builder);
 
-    // g_signal_connect(shop_item1, "clicked", G_CALLBACK(buy_item), builder);
-    // g_signal_connect(shop_item2, "clicked", G_CALLBACK(buy_item), builder);
-    // g_signal_connect(shop_item3, "clicked", G_CALLBACK(buy_item), builder);
-    // g_signal_connect(shop_item4, "clicked", G_CALLBACK(buy_item), builder);
-    // g_signal_connect(shop_item5, "clicked", G_CALLBACK(buy_item), builder);
-    // g_signal_connect(shop_item6, "clicked", G_CALLBACK(buy_item), builder);
+    // g_signal_connect(shop_item1, "clicked", G_CALLBACK(buy_item), model_user_data);
+    // g_signal_connect(shop_item2, "clicked", G_CALLBACK(buy_item), model_user_data);
+    // g_signal_connect(shop_item3, "clicked", G_CALLBACK(buy_item), model_user_data);
+    // g_signal_connect(shop_item4, "clicked", G_CALLBACK(buy_item), model_user_data);
+    // g_signal_connect(shop_item5, "clicked", G_CALLBACK(buy_item), model_user_data);
+    // g_signal_connect(shop_item6, "clicked", G_CALLBACK(buy_item), model_user_data);
 
 }
 
@@ -117,8 +118,67 @@ void money_view(GtkWidget *widget, GtkWidget *builder) {
     gtk_label_set_text(money_label, mx_itoa(send_money_request_by_username(get_from_protocol_string(get_cookies(), "USERNAME"))));
 }
 
-// void buy_item(GtkWidget *widget, GtkWidget *builder) {
-    
+// void buy_item(GtkWidget *widget, t_model_user_data* model_user_data) {
+    // if (model_user_data->id == 1) {
+    //     // change era 
+    //     send_set_user_era_request(get_from_protocol_string(get_cookies(), "USERNAME"), get_from_protocol_string(get_cookies(), "TOKEN"), 2);
+    // }
 
+    // if (model_user_data->id == 2) {
+    //     // clear stone
+    // }
 
+    // if (model_user_data->id == 3) {
+    //     // change rock
+    // }
+
+    // if (model_user_data->id == 4) {
+    //     // change rock
+    // }
+
+    // if (model_user_data->id == 5) {
+    //     // change rock
+    // }
+
+    // if (model_user_data->id == 6) {
+    //     // change rock
+    // }
+
+    // if (model_user_data->id == 7) {
+    //     // change era 
+    //     send_set_user_era_request(get_from_protocol_string(get_cookies(), "USERNAME"), get_from_protocol_string(get_cookies(), "TOKEN"), 4);
+    // }
+
+    // //8-12 add words
+
+    // if (model_user_data->id == 19) {
+    //     // change era 
+    //     send_set_user_era_request(get_from_protocol_string(get_cookies(), "USERNAME"), get_from_protocol_string(get_cookies(), "TOKEN"), 5);
+    // }
+
+    // if (model_user_data->id == 20) {
+    //     // unlock sending files
+    // }
+
+    // if (model_user_data->id == 21) {
+    //     // educate
+    // }
+
+    // if (model_user_data->id == 22) {
+    //     // change background
+    //     // add new function
+    // }
+
+    // if (model_user_data->id == 23) {
+    //     // change background
+    // }
+
+    // if (model_user_data->id == 24) {
+    //     // change background
+    // }
+
+    // if (model_user_data->id == 25) {
+    //     // change era, gift
+    //     send_set_user_era_request(get_from_protocol_string(get_cookies(), "USERNAME"), get_from_protocol_string(get_cookies(), "TOKEN"), 0);
+    // }
 // }
