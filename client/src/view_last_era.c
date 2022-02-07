@@ -24,18 +24,9 @@ void view_last_era(t_current_window_info *current_layout_info) {
 
     GtkLayout *home_page_layout = GTK_LAYOUT(gtk_builder_get_object(current_layout_info->builder, "home_page_layout"));
 
-    GtkWidget *home_page_fixed = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "home_page_fixed"));
-
-    GtkWidget *home_chats_viewport = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "home_chats_viewport"));
-
-    GtkWidget *home_chats_grid = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "home_chats_grid"));
-
-    GtkWidget *choose_chat_grid = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "choose_chat_grid"));
-
-    ////
     GtkWidget *home_chats_scrolled_window = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "home_chats_scrolled_window")); 
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(home_chats_scrolled_window), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
-    ////
+
 
     GtkWidget *profile_info_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "profile_info_button"));
     GtkWidget *profile_info_icon_img = gtk_image_new_from_file("./client/resources/static/images/e_profile_info_icon.png");
@@ -44,7 +35,6 @@ void view_last_era(t_current_window_info *current_layout_info) {
     GtkWidget *quiz_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "quiz_button"));
     GtkWidget *quiz_icon_img = gtk_image_new_from_file("./client/resources/static/images/e_quiz_icon.png");
     gtk_button_set_image(GTK_BUTTON(quiz_button), quiz_icon_img);
-    // GtkWidget *menu_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "menu_button"));
 
     GtkWidget *shop_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "shop_button"));
     GtkWidget *shop_icon_img = gtk_image_new_from_file("./client/resources/static/images/e_shop_icon.png");
@@ -59,10 +49,13 @@ void view_last_era(t_current_window_info *current_layout_info) {
     GtkWidget *type_message_entry = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "type_message_entry"));
     
     g_signal_connect(type_message_entry, "activate", G_CALLBACK(send_message_button_clicked), current_layout_info);
-    // GtkWidget *menu_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "menu_button"));
 
-
-    // GtkWidget *draw_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "draw_button"));
+    GtkWidget *user_avatar = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "profile_photo"));
+    t_model_resource *avatar_resource = send_get_avatar_request(get_from_protocol_string(get_cookies(), "USERNAME" ));
+    GdkPixbuf *image_pixbuf = gdk_pixbuf_new_from_file_at_size(request_file_if_not_exist(avatar_resource->path), 80, 80, NULL);
+	gtk_image_set_from_pixbuf(GTK_IMAGE(user_avatar), image_pixbuf);
+    GtkWidget *user_name_lable = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "user_name"));
+    gtk_label_set_text(GTK_LABEL(user_name_lable), get_from_protocol_string(get_cookies(), "USERNAME" ));
     
     set_quiz_on_button(quiz_button);
     
@@ -79,9 +72,6 @@ void view_last_era(t_current_window_info *current_layout_info) {
     for(int i = 0; i < user_chats_count;i++){ 
         printf("USER CHATS: %s\n\n", user_chats[i]); 
     }
-
-    // TODO: add era checker;
-    // add_draw_area(current_layout_info);
  
     set_user_info_on_button(profile_info_button, current_layout_info);
     set_setting_on_button(settings_button, current_layout_info);
@@ -90,22 +80,9 @@ void view_last_era(t_current_window_info *current_layout_info) {
     gtk_container_add(GTK_CONTAINER(current_layout_info->main_window), GTK_WIDGET(home_page_layout));
     current_layout_info->layout_exists = true;
 
-
-
-
-    // FILE *f1 = fopen("functions.txt", "r");
-
-	// if (f1 == NULL ) {
-	// 	printf("File finctions.txt not found\n");
-	// 	// return EXIT_FAILURE;
-	// 	}
-
-
-
-    // g_signal_connect(draw_button, "clicked", G_CALLBACK(add_drawing_area_clicked), current_layout_info);
 	column = 0;
 
-        gtk_widget_show_all(GTK_WIDGET(home_page_layout));
+    gtk_widget_show_all(GTK_WIDGET(home_page_layout));
     thread_id = g_timeout_add_seconds(10, callback_update_messages, current_layout_info);
     // thread_id = g_timeout_add_seconds(10, callback_update_messages, current_layout_info);
 }

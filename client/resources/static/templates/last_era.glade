@@ -167,7 +167,7 @@
                   <object class="GtkImage" id="profile_photo">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="pixbuf">../images/profile_photo.png</property>
+                    <!-- <property name="pixbuf">../images/profile_photo.png</property> -->
                     <style>
                       <class name="profile_photo"/>
                     </style>
@@ -181,7 +181,7 @@
                   <object class="GtkLabel" id="user_name">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Mary</property>
+                    <!-- <property name="label" translatable="yes">Mary</property> -->
                     <style>
                       <class name="user_name"/>
                     </style>

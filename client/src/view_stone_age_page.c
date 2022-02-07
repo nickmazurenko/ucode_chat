@@ -26,13 +26,7 @@ void view_stone_age_page(t_current_window_info *current_layout_info)
     gtk_builder_add_from_file(current_layout_info->builder, get_path_to_glade("quiz.glade"), NULL);
     
     GtkLayout *home_page_layout = GTK_LAYOUT(gtk_builder_get_object(current_layout_info->builder, "home_page_layout"));
-///////// TODO: NADO ?
-    // GtkWidget *home_page_fixed = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "home_page_fixed"));
 
-    // GtkWidget *home_chats_viewport = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "home_chats_viewport"));
-
-    // GtkWidget *home_chats_grid = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "home_chats_grid"));
-/////////
     GtkWidget *chat_window_scrolled = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "chat_window_scrolled")); 
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(chat_window_scrolled), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
 
@@ -55,7 +49,12 @@ void view_stone_age_page(t_current_window_info *current_layout_info)
 
     GtkWidget *add_chat_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "add_chat_button"));
 
-
+    GtkWidget *user_avatar = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "profile_photo"));
+    t_model_resource *avatar_resource = send_get_avatar_request(get_from_protocol_string(get_cookies(), "USERNAME" ));
+    GdkPixbuf *image_pixbuf = gdk_pixbuf_new_from_file_at_size(request_file_if_not_exist(avatar_resource->path), 80, 80, NULL);
+	gtk_image_set_from_pixbuf(GTK_IMAGE(user_avatar), image_pixbuf);
+    GtkWidget *user_name_lable = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "user_name"));
+    gtk_label_set_text(GTK_LABEL(user_name_lable), get_from_protocol_string(get_cookies(), "USERNAME" ));
     
     set_quiz_on_button(quiz_button);
     

@@ -5,7 +5,7 @@
 static GtkGrid*   message_actions_grid = NULL;
 static long selected_message = -1;
 static GtkLabel* selected_message_label = NULL;
-
+static GtkPopover *popover_for_forward = NULL;
 
 
 
@@ -92,7 +92,8 @@ void forward_clicked(GtkWidget *widget, t_current_window_info *current_window_in
     } else if(msg->data_type == MESSAGE_TEXT) {
         response = controller_forward_message(msg->to_user, msg->data_type, msg->data, msg->forward_from);
     }
-    // view_message(response, current_window_info);
+    gtk_popover_popdown(popover_for_forward);
+        // view_message(response, current_window_info);
 }
 
 void callback_forward_message(GtkWidget *b, GdkEventButton *event,  char* text) {
@@ -112,16 +113,13 @@ void callback_forward_message(GtkWidget *b, GdkEventButton *event,  char* text) 
 
     add_chats_for_forward(user_chats, current_window_info, user_chats_count);
 
-    GtkPopover* edit_popover = gtk_popover_new(b);
+    popover_for_forward = gtk_popover_new(b);
 
-    gtk_popover_set_position(edit_popover, GTK_POS_RIGHT);
+    gtk_popover_set_position(popover_for_forward, GTK_POS_RIGHT);
 
-    gtk_container_add(GTK_CONTAINER(edit_popover), home_chats_window);
+    gtk_container_add(GTK_CONTAINER(popover_for_forward), home_chats_window);
 
-    gtk_widget_show_all(edit_popover);
-
-
-
+    gtk_widget_show_all(popover_for_forward);
 
     if (selected_message != -1)
         printf("forward message: %i\n", selected_message);
