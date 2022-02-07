@@ -41,6 +41,26 @@ size_t send_money_request(size_t user_data_id) {
    return money;
 }
 
+size_t send_money_request_by_username(char* username) {
+
+    cJSON* protocol = create_protocol();
+
+    add_to_protocol_string(protocol, "ACTION", "GET_USER_DATA");
+    add_to_protocol_string(protocol, "SUBACTION", "GET_USER_MONEY_BY_USERNAME");
+
+    add_to_protocol_string(protocol, "DATA", username);
+    
+    char* request = cJSON_Print(protocol);
+    
+    char* response = send_request(request, get_server_ip(), PORT);
+
+    cJSON* response_money = cJSON_Parse(response);
+
+    size_t money = get_from_protocol_number(response_money, "DATA");
+
+   return money;
+}
+
 void send_set_user_about_request(char* username, char *token, char* about) {
 
     cJSON* protocol = create_protocol();
@@ -92,7 +112,7 @@ void send_set_user_email_request(char* username, char *token, char* email) {
     free(response);
 }
 
-t_model_store** send_store_request(char* era) {
+t_model_store** send_store_request(int era) {
     t_model_store** model_store = (t_model_store**)malloc(sizeof(t_model_store*) * 6);
 
     cJSON* protocol = create_protocol();
@@ -100,7 +120,7 @@ t_model_store** send_store_request(char* era) {
     add_to_protocol_string(protocol, "ACTION", "STORE");
     add_to_protocol_string(protocol, "SUBACTION", "GET_STORE");
 
-    add_to_protocol_string(protocol, "DATA", era);
+    add_to_protocol_number(protocol, "DATA", era);
     
     char* request = cJSON_Print(protocol);
     char* response = send_request(request, get_server_ip(), PORT);
@@ -137,3 +157,22 @@ void send_buy_request(char* username, char *token, int store_item_id) {
 
     free(response);
 }
+
+void send_set_user_era_request(char* username, char *token, int era) {
+
+    cJSON* protocol = create_protocol();
+
+    add_to_protocol_string(protocol, "ACTION", "SET_USER_DATA");
+    add_to_protocol_string(protocol, "SUBACTION", "SET_USER_ERA");
+
+    add_to_protocol_string(protocol, "USERNAME", username);
+    add_to_protocol_string(protocol, "TOKEN", token);
+    add_to_protocol_number(protocol, "DATA", era);
+    
+    char* request = cJSON_Print(protocol);
+    
+    char* response = send_request(request, get_server_ip(), PORT);
+
+    free(response);
+}
+

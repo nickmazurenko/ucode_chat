@@ -61,7 +61,6 @@ int update_user_money(char *username, int add_money) {
     errno = 0;
     size_t user_data_id = get_user_data_id(username);
     size_t money = get_user_money_by_username(username); 
-    printf("\n\n\nMONEY: %i\nADD MONEY %i\n\n\n", money, add_money);
     if (add_money > 0 || (add_money < 0 && abs(add_money) <= money))
         money += add_money;
     else
@@ -363,3 +362,30 @@ int callback_get_user_data(void *data, int argc, char **argv, char **azColName) 
 
     return 0;
 }
+
+int update_user_era(char *username, int era) {
+
+    printf("/n/n in update /n/n");
+    errno = 0;
+    size_t user_data_id = get_user_data_id(username);
+    
+    int err_status = 0;
+    
+    char *update_request = "UPDATE UsersData SET Era = '%i' WHERE Id = '%zu';";
+    char *sql_query = NULL;
+    char *err_msg = NULL;
+
+    asprintf(&sql_query, update_request, era, user_data_id);
+
+    if((err_status = sqlite3_exec(get_database(), sql_query, callback_print_db, 0, &err_msg)) != SQLITE_OK) {
+        fprintf(stderr, "SQL_error: %s\n", err_msg);
+        sqlite3_free(err_msg);
+        sqlite3_close(get_database());
+        return 1;
+        // exit(1);
+    }
+
+    printf("/n/n end update /n/n");
+    return 0;
+}
+

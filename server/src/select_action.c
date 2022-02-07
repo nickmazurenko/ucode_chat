@@ -93,9 +93,10 @@ int select_action(char* request, char* response) {
 
         if (!subaction)
             get_user_data(request, response);
-        else if (strcmp(subaction, "GET_USER_MONEY") == 0) {
+        else if (strcmp(subaction, "GET_USER_MONEY") == 0) 
             get_user_data_money(request, response);
-        }
+        else if (strcmp(subaction, "GET_USER_MONEY_BY_USERNAME") == 0) 
+            get_user_data_money_by_username(request, response);
     } else if (strcmp(action, "SET_USER_DATA") == 0) {
         char *subaction = get_from_protocol_string(request_obj, "SUBACTION");
         
@@ -105,6 +106,8 @@ int select_action(char* request, char* response) {
             set_user_tnumber_subaction(request, response);
         else if (strcmp(subaction, "SET_USER_EMAIL") == 0) 
             set_user_email_subaction(request, response);
+        else if (strcmp(subaction, "SET_USER_ERA") == 0) 
+            set_user_era_subaction(request, response);
     } else if (strcmp(action, "STORE") == 0) {
         char *subaction = get_from_protocol_string(request_obj, "SUBACTION");
         
@@ -113,7 +116,6 @@ int select_action(char* request, char* response) {
         else if (strcmp(subaction, "BUY") == 0) 
             buy_subaction(request, response);
     }
-
 
     cJSON_Delete(request_obj);
 

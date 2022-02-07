@@ -40,6 +40,25 @@ bool get_user_data_money(char *request, char *response) {
     return true;
 }
 
+bool get_user_data_money_by_username(char *request, char *response) {
+    cJSON *get_user_data_response = create_protocol();
+
+    cJSON *request_cjson = cJSON_Parse(request);
+
+    char* username = get_from_protocol_string(request_cjson, "DATA");
+    
+    int money = get_user_money_by_username(username); 
+
+    add_to_protocol_number(get_user_data_response, "DATA", money);
+
+    strcpy(response, cJSON_Print(get_user_data_response));
+
+    printf("%s\n", response);
+    fflush(stdout);
+
+    return true;
+}
+
 bool set_user_about_subaction(char *request, char *response) {
     cJSON *get_user_data_response = create_protocol();
 
@@ -105,7 +124,7 @@ void get_store_subaction(char *request, char *response) {
 
     cJSON* request_cjson = cJSON_Parse(request);
 
-    char* era = get_from_protocol_string(request_cjson, "DATA");
+    int era = get_from_protocol_number(request_cjson, "DATA");
 
     cJSON* store = get_store_by_era(era);
     char* store_array_str = cJSON_Print(store);
@@ -153,6 +172,26 @@ bool buy_subaction(char *request, char *response) {
     add_to_protocol_string(get_store_response, "DATA", bought_current_str);
     
     strcpy(response, cJSON_Print(get_store_response));
+
+    printf("%s\n", response);
+    fflush(stdout);
+
+    return true;
+}
+
+bool set_user_era_subaction(char *request, char *response) {
+    cJSON *get_user_data_response = create_protocol();
+
+    cJSON *request_cjson = cJSON_Parse(request);
+
+    int era = get_from_protocol_number(request_cjson, "DATA");
+    char* username = get_from_protocol_string(request_cjson, "USERNAME");
+    char* token = get_from_protocol_string(request_cjson, "TOKEN");
+
+    if (is_verified_user(username, token))
+        update_user_era(username, era);
+
+    strcpy(response, cJSON_Print(get_user_data_response));
 
     printf("%s\n", response);
     fflush(stdout);

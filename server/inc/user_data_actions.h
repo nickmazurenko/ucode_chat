@@ -16,6 +16,9 @@ bool set_user_tnumber_subaction(char *request, char *response);
 bool set_user_email_subaction(char *request, char *response);
 void get_store_subaction(char *request, char *response);
 bool buy_subaction(char *request, char *response);
+bool get_user_data_money(char *request, char *response);
+bool get_user_data_money_by_username(char *request, char *response);
+bool set_user_era_subaction(char *request, char *response);
 
 #endif
 

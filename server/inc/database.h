@@ -61,6 +61,7 @@ int update_user_email(char *username, char *email);
 char *get_user_email(char *username);
 t_model_user_data *get_user_data_by_username(char *username);
 int callback_get_user_data(void *data, int argc, char **argv, char **azColName);
+int update_user_era(char *username, int era);
 
 // Message Table
 size_t insert_data_message(t_model_message* model_message);
@@ -85,7 +86,7 @@ int callback_get_stone(void *data, int argc, char **argv, char **azColName) ;
 
 // Store Table
 void fill_database_store();
-cJSON* get_store_by_era(char* era);
+cJSON* get_store_by_era(int era);
 int callback_get_store(void *data, int argc, char **argv, char **azColName);
 size_t insert_data_store(t_model_store* model_store);
 int buy_store_item(char* username, int store_item_id);
