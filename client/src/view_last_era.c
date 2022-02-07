@@ -69,13 +69,8 @@ void view_last_era(t_current_window_info *current_layout_info) {
     char **user_chats = get_all_user_chats(get_from_protocol_string(get_cookies(), "USERNAME"), &user_chats_count); 
 
     add_chats(user_chats, current_layout_info, user_chats_count);
-
-    for(int i = 0; i < user_chats_count;i++){ 
-        printf("USER CHATS: %s\n\n", user_chats[i]); 
-    }
- 
     set_user_info_on_button(profile_info_button, current_layout_info);
-    set_setting_on_button(settings_button, current_layout_info);
+    set_setting_on_button(settings_button, current_layout_info, home_page_layout);
     set_shop_on_button(shop_button);
 
     gtk_container_add(GTK_CONTAINER(current_layout_info->main_window), GTK_WIDGET(home_page_layout));
@@ -84,8 +79,6 @@ void view_last_era(t_current_window_info *current_layout_info) {
 	column = 0;
 
     gtk_widget_show_all(GTK_WIDGET(home_page_layout));
-    // thread_id = g_timeout_add_seconds(10, callback_update_messages, current_layout_info);
-    // thread_id = g_timeout_add_seconds(10, callback_update_messages, current_layout_info);
     pthread_t new_messages_thread;
     pthread_create(&new_messages_thread, NULL, check_new_messages, current_layout_info);
 

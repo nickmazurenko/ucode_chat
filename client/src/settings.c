@@ -1,4 +1,5 @@
 #include "settings.h"
+#include "log_out.h"
 
 // void view_edit_window_on_button(t_current_window_info *current_layout_info) {
 //     printf("2\n");
@@ -43,7 +44,7 @@ void edit_info_on_button(GtkWidget *button, const gchar *title) {
     gtk_popover_set_position(GTK_POPOVER(user_info_popover), GTK_POS_RIGHT);
 }
 
-void set_setting_on_button(GtkWidget *button, t_current_window_info *current_layout_info) {
+void set_setting_on_button(GtkWidget *button, t_current_window_info *current_layout_info, GtkWidget *layout_to_destroy) {
 
     GtkCssProvider *cssProvider = gtk_css_provider_new(); 
     gtk_css_provider_load_from_path(cssProvider, get_path_to_style("settings.css"), NULL); 
@@ -71,5 +72,6 @@ void set_setting_on_button(GtkWidget *button, t_current_window_info *current_lay
     edit_info_on_button(edit_personal_info, gtk_button_get_label(edit_personal_info));
     edit_info_on_button(edit_phone_number, gtk_button_get_label(edit_phone_number));
     edit_info_on_button(edit_email, gtk_button_get_label(edit_email));
-
+    current_layout_info->data = (void*)layout_to_destroy;
+    g_signal_connect(log_out, "clicked", log_out_func, current_layout_info);
 }

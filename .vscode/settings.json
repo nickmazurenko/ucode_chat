@@ -53,6 +53,8 @@
         "protocol.h": "c",
         "stdlib.h": "c",
         "model_defines.h": "c",
-        "encrypt.h": "c"
+        "encrypt.h": "c",
+        "log_out.h": "c",
+        "settings.h": "c"
     }
 }
