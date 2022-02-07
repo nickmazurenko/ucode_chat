@@ -56,7 +56,9 @@ void view_last_era(t_current_window_info *current_layout_info) {
 
     GtkWidget *add_chat_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "add_chat_button"));
 
-
+    GtkWidget *type_message_entry = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "type_message_entry"));
+    
+    g_signal_connect(type_message_entry, "activate", G_CALLBACK(send_message_button_clicked), current_layout_info);
     // GtkWidget *menu_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "menu_button"));
 
 

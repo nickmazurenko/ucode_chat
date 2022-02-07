@@ -7,6 +7,7 @@
 #include "view_stone_age_page.h"
 #include "view_second_era.h"
 #include "view_home_page.h"
+#include "view_last_era.h"
 
 int controller_sign_in(char* user_name, char* password);
 void controller_view_user_era(GtkWidget **sign_in_info, t_current_window_info *current_window_info);
