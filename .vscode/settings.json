@@ -54,7 +54,9 @@
         "stdlib.h": "c",
         "model_defines.h": "c",
         "encrypt.h": "c",
-        "log_out.h": "c",
-        "settings.h": "c"
+        "algorithm": "c",
+        "chrono": "c",
+        "map": "c",
+        "unordered_map": "c"
     }
 }
