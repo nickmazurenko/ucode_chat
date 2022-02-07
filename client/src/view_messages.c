@@ -91,8 +91,8 @@ void view_message(t_model_message *model_message, t_current_window_info *current
 
 char* get_file_name(char* full_name) {
 
-    int full_name_len = strlen(full_name);
-    int len = full_name;
+    int len = strlen(full_name) - 1;
+
 
     for (; len >= 0; len--) {
 
@@ -100,13 +100,13 @@ char* get_file_name(char* full_name) {
             len++;
             break;
         } 
-
     }
 
-    char*  name = NULL;
+    char*  name = full_name + len;
+    name = strdup(name);
 
-    full_name += len;
-    name = strdup(full_name);
+    fprintf(stdout ,"name: %s\n", name);
+
 
     return name;
 }
@@ -128,16 +128,17 @@ void view_file(t_model_message *model_message, t_current_window_info *current_la
     char * real_path = request_file_if_not_exist(msg_resource->path);
     GdkPixbuf *image_pixbuf = gdk_pixbuf_new_from_file_at_size(real_path, 100, 100, NULL);
 
-    gchar* message_about = NULL;
+    gchar* message_about = message_about;
 
     if (model_message->data_type == MESSAGE_FILE) {
         t_model_resource* resource = get_resource_by_id(model_message->data);
         char* name = get_file_name(resource->name);
-        message_about = g_strjoin(" ", "File:", name, " ");
+        message_about = g_strjoin(" ", "File:", name, " ", NULL);
         free(name);
         free_model_resource(&resource);
     }
 
+    GtkWidget* forward_label = NULL;
 
     if(!strcmp(model_message->from_user, get_from_protocol_string(get_cookies(), "USERNAME"))){
         image = GTK_WIDGET(gtk_builder_get_object(message_builder, "current_user_msg_image"));
@@ -151,15 +152,20 @@ void view_file(t_model_message *model_message, t_current_window_info *current_la
         gtk_container_add(GTK_CONTAINER(box), image);
 
         if(strlen(model_message->forward_from) > 0) {
-            GtkWidget *forward_label = GTK_WIDGET(gtk_builder_get_object(forward_builder, "current_forward_label")); 
+            forward_label = GTK_WIDGET(gtk_builder_get_object(forward_builder, "current_forward_label")); 
             // gtk_label_set_text(forward_label, mx_strjoin("From: ",model_message->forward_from));
             
             gchar* buff = message_about;
-            message_about = g_strjoin(" ", "From:", model_message->forward_from);
+            message_about = g_strjoin(" ", message_about, "From:", model_message->forward_from, NULL);
+            if (buff) free(buff);
 
             gtk_grid_attach(GTK_GRID(chat_window_grid), forward_label, 1, current_id, 1, 1); 
             current_id++;
-        }   
+        } else if (model_message->data_type == MESSAGE_FILE) {
+            forward_label = GTK_WIDGET(gtk_builder_get_object(forward_builder, "current_forward_label")); 
+            gtk_grid_attach(GTK_GRID(chat_window_grid), forward_label, 1, current_id, 1, 1); 
+            current_id++;
+        }  
         gtk_grid_attach(GTK_GRID(chat_window_grid), box, 1, current_id, 1, 1); 
         gtk_widget_show (box);
 
@@ -175,22 +181,28 @@ void view_file(t_model_message *model_message, t_current_window_info *current_la
 
         gtk_container_add(GTK_CONTAINER(box), image);     
         if(strlen(model_message->forward_from) > 0) {
-            GtkWidget *forward_label = GTK_WIDGET(gtk_builder_get_object(forward_builder, "other_forward_label")); 
+            forward_label = GTK_WIDGET(gtk_builder_get_object(forward_builder, "other_forward_label")); 
             // gtk_label_set_text(forward_label, mx_strjoin("From: ",model_message->forward_from));
             gchar* buff = message_about;
-            message_about = g_strjoin(" ", "From:", model_message->forward_from);
-            free(buff);
+            message_about = g_strjoin(" ", message_about, "From:", model_message->forward_from, NULL);
+            if (buff) free(buff);
 
-            gtk_grid_attach(GTK_GRID(chat_window_grid), forward_label, 0, current_id, 1, 1); 
+            gtk_grid_attach(GTK_GRID(chat_window_grid), forward_label, 0, current_id, 1, 1);
             current_id++;
-        } 
+        } else if (model_message->data_type == MESSAGE_FILE) {
+            forward_label = GTK_WIDGET(gtk_builder_get_object(forward_builder, "other_forward_label")); 
+            gtk_grid_attach(GTK_GRID(chat_window_grid), forward_label, 1, current_id, 1, 1); 
+            current_id++;
+        }
         gtk_grid_attach(GTK_GRID(chat_window_grid), box, 0, current_id, 1, 1); 
         gtk_widget_show (box);
     }
 
+    
+
     if (message_about) {
-        GtkWidget *forward_label = GTK_WIDGET(gtk_builder_get_object(forward_builder, "other_forward_label")); 
         gtk_label_set_text(forward_label, message_about);
+        gtk_widget_show(forward_label);
     }
     
 
