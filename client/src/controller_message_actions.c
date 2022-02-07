@@ -6,9 +6,12 @@ static GtkGrid*   message_actions_grid = NULL;
 static long selected_message = -1;
 static GtkLabel* selected_message_label = NULL;
 static GtkPopover *popover_for_forward = NULL;
+static t_current_window_info* static_current_window_info = NULL;
 
 
-
+void set_static_current_window_info(t_current_window_info* current_window_info) {
+    static_current_window_info = current_window_info;
+}
 
 void add_chats_for_forward(char **username, t_current_window_info *current_window_info, int count) {
 
@@ -93,7 +96,18 @@ void forward_clicked(GtkWidget *widget, t_current_window_info *current_window_in
         response = controller_forward_message(msg->to_user, msg->data_type, msg->data, msg->forward_from);
     }
     gtk_popover_popdown(popover_for_forward);
-        // view_message(response, current_window_info);
+
+    char* to_user = get_current_user_to_talk();
+    if (to_user != NULL && (strcmp(response->to_user, to_user) == 0) && static_current_window_info != NULL) 
+    {
+        printf("There\n\n");
+        if (response->data_type == MESSAGE_TEXT) {
+            view_message(msg, static_current_window_info);
+        } else if (response->data_type == MESSAGE_FILE) {
+            // add request file if not exist
+            view_file(msg, static_current_window_info);
+        }
+    }
 }
 
 void callback_forward_message(GtkWidget *b, GdkEventButton *event,  char* text) {

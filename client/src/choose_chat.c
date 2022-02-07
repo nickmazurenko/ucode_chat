@@ -3,8 +3,8 @@
 
 
 void choose_chat(GtkButton *b, t_current_window_info *current_window_info) {
-	printf("You selected: %s\n", gtk_button_get_label (b));
 
+	printf("You selected: %s\n", gtk_button_get_label (b));
 
     set_in_protocol_string(get_cookies(), "TO USER", gtk_button_get_label(b));
 
@@ -46,6 +46,8 @@ void choose_chat(GtkButton *b, t_current_window_info *current_window_info) {
 
         view_messages(model_message, current_window_info, count);
     // }
+    set_static_current_window_info(current_window_info);
+
 
 }
 
