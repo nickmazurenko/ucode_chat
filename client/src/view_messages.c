@@ -87,7 +87,29 @@ void view_message(t_model_message *model_message, t_current_window_info *current
     GtkAdjustment *adjustment = gtk_viewport_get_vadjustment(GTK_VIEWPORT(chat_viewport)); 
     gtk_adjustment_set_upper(adjustment, gtk_adjustment_get_upper(adjustment) + 500); 
     gtk_adjustment_set_value(adjustment, gtk_adjustment_get_upper(adjustment)); 
-} 
+}
+
+char* get_file_name(char* full_name) {
+
+    int full_name_len = strlen(full_name);
+    int len = full_name;
+
+    for (; len >= 0; len--) {
+
+        if (full_name[len] == '/') {
+            len++;
+            break;
+        } 
+
+    }
+
+    char*  name = NULL;
+
+    full_name += len;
+    name = strdup(full_name);
+
+    return name;
+}
 
 void view_file(t_model_message *model_message, t_current_window_info *current_layout_info){
     GtkWidget *image;
@@ -106,6 +128,17 @@ void view_file(t_model_message *model_message, t_current_window_info *current_la
     char * real_path = request_file_if_not_exist(msg_resource->path);
     GdkPixbuf *image_pixbuf = gdk_pixbuf_new_from_file_at_size(real_path, 100, 100, NULL);
 
+    gchar* message_about = NULL;
+
+    if (model_message->data_type == MESSAGE_FILE) {
+        t_model_resource* resource = get_resource_by_id(model_message->data);
+        char* name = get_file_name(resource->name);
+        message_about = g_strjoin(" ", "File:", name, " ");
+        free(name);
+        free_model_resource(&resource);
+    }
+
+
     if(!strcmp(model_message->from_user, get_from_protocol_string(get_cookies(), "USERNAME"))){
         image = GTK_WIDGET(gtk_builder_get_object(message_builder, "current_user_msg_image"));
 
@@ -115,10 +148,15 @@ void view_file(t_model_message *model_message, t_current_window_info *current_la
             image_pixbuf = gdk_pixbuf_new_from_file_at_size(get_path_to_image("click.png"), 100, 100, NULL);
             gtk_image_set_from_pixbuf(GTK_IMAGE(image), image_pixbuf);
         }
-        gtk_container_add(GTK_CONTAINER(box), image);   
+        gtk_container_add(GTK_CONTAINER(box), image);
+
         if(strlen(model_message->forward_from) > 0) {
             GtkWidget *forward_label = GTK_WIDGET(gtk_builder_get_object(forward_builder, "current_forward_label")); 
-            gtk_label_set_text(forward_label, mx_strjoin("From: ",model_message->forward_from));
+            // gtk_label_set_text(forward_label, mx_strjoin("From: ",model_message->forward_from));
+            
+            gchar* buff = message_about;
+            message_about = g_strjoin(" ", "From:", model_message->forward_from);
+
             gtk_grid_attach(GTK_GRID(chat_window_grid), forward_label, 1, current_id, 1, 1); 
             current_id++;
         }   
@@ -138,13 +176,23 @@ void view_file(t_model_message *model_message, t_current_window_info *current_la
         gtk_container_add(GTK_CONTAINER(box), image);     
         if(strlen(model_message->forward_from) > 0) {
             GtkWidget *forward_label = GTK_WIDGET(gtk_builder_get_object(forward_builder, "other_forward_label")); 
-            gtk_label_set_text(forward_label, mx_strjoin("From: ",model_message->forward_from));
+            // gtk_label_set_text(forward_label, mx_strjoin("From: ",model_message->forward_from));
+            gchar* buff = message_about;
+            message_about = g_strjoin(" ", "From:", model_message->forward_from);
+            free(buff);
+
             gtk_grid_attach(GTK_GRID(chat_window_grid), forward_label, 0, current_id, 1, 1); 
             current_id++;
         } 
         gtk_grid_attach(GTK_GRID(chat_window_grid), box, 0, current_id, 1, 1); 
         gtk_widget_show (box);
     }
+
+    if (message_about) {
+        GtkWidget *forward_label = GTK_WIDGET(gtk_builder_get_object(forward_builder, "other_forward_label")); 
+        gtk_label_set_text(forward_label, message_about);
+    }
+    
 
     g_signal_connect(box, "button_press_event", callback_click_message, model_message);
  
