@@ -17,6 +17,8 @@
 #include "controller_message_actions.h"
 
 
+void upload_chats(char *from_user, t_current_window_info *current_window_info);
+
 void	choose_chat(GtkButton *b, t_current_window_info *current_window_info);
 
 #endif
