@@ -188,3 +188,56 @@ size_t get_user_data_id(char *username) {
 
     return user_data_id;
 }
+
+int update_username(char *username, char *new_username) {
+    errno = 0;
+    size_t user_data_id = get_user_data_id(username);
+    
+    int err_status = 0;
+
+    if (username_is_unique(new_username)) {
+        char *update_request = "UPDATE Users SET Username = '%s' WHERE Id = '%zu';";
+        char *sql_query = NULL;
+        char *err_msg = NULL;
+
+        asprintf(&sql_query, update_request, new_username, user_data_id);
+
+        if((err_status = sqlite3_exec(get_database(), sql_query, callback_print_db, 0, &err_msg)) != SQLITE_OK) {
+            fprintf(stderr, "SQL_error: %s\n", err_msg);
+            sqlite3_free(err_msg);
+            sqlite3_close(get_database());
+            return 1;
+            // exit(1);
+        }
+
+        return 0;
+    }
+
+    return 1;
+}
+
+bool username_is_unique(char* username) {
+    errno = 0;
+    int err_status = 0;
+
+    char *select_request = "SELECT Id FROM Users WHERE Username = '%s';";
+    char *sql_query = NULL;
+    char *err_msg = NULL;
+
+    int id = -1;
+
+    asprintf(&sql_query, select_request, username);
+
+    if((err_status = sqlite3_exec(get_database(), sql_query, callback_get_user_str, &id, &err_msg)) != SQLITE_OK) {
+        fprintf(stderr, "SQL_error: %s\n", err_msg);
+        sqlite3_free(err_msg);
+        sqlite3_close(get_database());
+        return 1;
+        // exit(1);
+    }
+    
+    if (id == -1) 
+        return false;
+
+    return true;   
+}

@@ -12,7 +12,9 @@ t_model_user_data* new_model_user_data() {
     model_user_data->status   = ONLINE;
     model_user_data->money    = 0;
     model_user_data->avatar_id= 1;
-
+    model_user_data->bought_items = mx_strnew(BUFSIZ);
+    strcpy(model_user_data->bought_items, "[]");
+    
     return model_user_data;
 }
 
@@ -29,6 +31,7 @@ char*         to_string_model_user_data(t_model_user_data* model_user_data) {
     add_to_protocol_number(user_data, "status", model_user_data->status);
     add_to_protocol_number(user_data, "money", model_user_data->money);
     add_to_protocol_number(user_data, "avatar_id", model_user_data->money);
+    add_to_protocol_string(user_data, "bought_items", model_user_data->bought_items);
 
     char* user_data_str = cJSON_Print(user_data);
     cJSON_Delete(user_data);
@@ -43,12 +46,14 @@ t_model_user_data* from_string_model_user_data(char* json) {
     char* about    = get_from_protocol_string(user_data, "about");
     char* email    = get_from_protocol_string(user_data, "email");
     char* t_number = get_from_protocol_string(user_data, "t_number");
+    char* bought_items = get_from_protocol_string(user_data, "bought_items");
 
     t_model_user_data* model_user_data = new_model_user_data();
 
     strcpy(model_user_data->about, about);
     strcpy(model_user_data->email, email);
     strcpy(model_user_data->t_number, t_number);
+    strcpy(model_user_data->bought_items, bought_items);
 
     model_user_data->id = get_from_protocol_number(user_data, "id");
     model_user_data->era = (int)get_from_protocol_number(user_data, "era");

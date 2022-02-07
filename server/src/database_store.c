@@ -26,48 +26,73 @@ size_t insert_data_store(t_model_store* model_store) {
 
 
 int callback_get_store(void *data, int argc, char **argv, char **azColName) {
-    t_model_store *store = (t_model_store*)data;
+    cJSON* store = (cJSON*)data;
+    cJSON* store_item  = cJSON_CreateObject();
 
-    if(argc != 0) {
-        for(int column_index = 0; column_index < argc; column_index++) {
-            if(!mx_strcmp(azColName[column_index], "Id"))
-                store->id = atoi(argv[column_index]);
-            if(!mx_strcmp(azColName[column_index], "Path"))
-                mx_strcpy(store->path, argv[column_index]);
-            if(!mx_strcmp(azColName[column_index], "Name"))
-                mx_strcpy(store->name, argv[column_index]);
-            if(!mx_strcmp(azColName[column_index], "Price"))
-                store->price = atoi(argv[column_index]);
-            if(!mx_strcmp(azColName[column_index], "Era"))
-                store->era = atoi(argv[column_index]);
-        }
-    }
+    add_to_protocol_number(store_item, "id", atol(argv[0]));
+    add_to_protocol_string(store_item, "name", argv[1]);
+    add_to_protocol_string(store_item, "path", argv[2]);
+    add_to_protocol_number(store_item, "price", atol(argv[3]));
+    add_to_protocol_number(store_item, "era", atol(argv[4]));
 
+    char* store_item_str = cJSON_Print(store_item);
+    cJSON* store_item_str_json = cJSON_CreateString(store_item_str);
+
+    free(store_item_str);
+
+    cJSON_AddItemToArray(store, store_item_str_json);
     return 0;
+    
+    // t_model_store *store = (t_model_store*)data;
+
+    // if(argc != 0) {
+    //     for(int column_index = 0; column_index < argc; column_index++) {
+    //         if(!mx_strcmp(azColName[column_index], "Id"))
+    //             store->id = atoi(argv[column_index]);
+    //         if(!mx_strcmp(azColName[column_index], "Path"))
+    //             mx_strcpy(store->path, argv[column_index]);
+    //         if(!mx_strcmp(azColName[column_index], "Name"))
+    //             mx_strcpy(store->name, argv[column_index]);
+    //         if(!mx_strcmp(azColName[column_index], "Price"))
+    //             store->price = atoi(argv[column_index]);
+    //         if(!mx_strcmp(azColName[column_index], "Era"))
+    //             store->era = atoi(argv[column_index]);
+    //     }
+    // }
+
+    // return 0;
 }
 
 
-t_model_store *get_store_by_era(int era) {
-
+cJSON* get_store_by_era(char* era) {
     int err_status = 0;
+    int id = 0;
+    if (strcmp(era, "EGYPT") == 0)
+        id = 1;
+    if (strcmp(era, "MIDDLE_AGES") == 0)
+        id = 2;
+    if (strcmp(era, "ENLIGHTMENT") == 0)
+        id = 3;
+    if (strcmp(era, "MODERN_TIMES") == 0)
+        id = 4;
 
-    char *select_request = "SELECT * FROM Store WHERE Era=('%i');";
+    char *select_request = "SELECT * FROM Store WHERE Era = '%i';";
     char *sql_query = NULL;
-    char *err_msg = NULL;
+    char *err = NULL;
 
-    asprintf(&sql_query, select_request, era);
+    asprintf(&sql_query, select_request, id);
 
-    t_model_store *model_store = new_model_store();
-    // model_resource->id = id;
-    if((err_status = sqlite3_exec(get_database(), sql_query, callback_get_store, model_store, &err_msg)) != SQLITE_OK) {
-        fprintf(stderr, "SQL_error: %s\n", err_msg);
-        sqlite3_free(err_msg);
+    cJSON* store = cJSON_CreateArray();
+
+    if((err_status = sqlite3_exec(get_database(), sql_query, callback_get_store, store, &err)) != SQLITE_OK) {
+        fprintf(stderr, "SQL_error: %s\n", err);
+        sqlite3_free(err);
         sqlite3_close(get_database());
-        return 0;
+        // return 0;
         // exit(1);
     }
 
-    return model_store;
+    return store;
 
 }
 
@@ -254,5 +279,81 @@ void fill_database_store() {
     prize->price = 238;
     prize->era = 4;
     size_t prize_int = insert_data_store(prize);
+}
 
+int buy_store_item(char* username, int store_item_id) {
+    printf("\n\n\nSTORE ITEM ID %i\n\n\n", store_item_id);
+    int price = get_store_item_price(store_item_id);
+    
+    int update = update_user_money(username, -price);
+    printf("\n\n\nPRICE %i\n\n\n", -price);
+    if (update == 1)
+        return 1;
+    
+    return 0;
+}
+
+ int get_store_item_price(int store_item_id) {
+    size_t price = 0;
+    int err_status = 0;
+
+    char *select_request = "SELECT Price FROM Store WHERE Id='%zu';";
+    char *sql_query = NULL;
+    char *err_msg = NULL;
+
+    asprintf(&sql_query, select_request, store_item_id);
+
+    if((err_status = sqlite3_exec(get_database(), sql_query, callback_get_user_size_t, &price, &err_msg)) != SQLITE_OK) {
+        fprintf(stderr, "SQL_error: %s\n", err_msg);
+        sqlite3_free(err_msg);
+        sqlite3_close(get_database());
+        return 0;
+        // exit(1);
+    }
+
+    return price;
+}
+
+char* get_bought_items(char* username) {
+    char* bought = mx_strnew(BUFSIZ);
+    int err_status = 0;
+    size_t user_data_id = get_user_data_id(username);
+
+    char *select_request = "SELECT Bought FROM UsersData WHERE Id='%zu';";
+    char *sql_query = NULL;
+    char *err_msg = NULL;
+
+    asprintf(&sql_query, select_request, user_data_id);
+
+    if((err_status = sqlite3_exec(get_database(), sql_query, callback_get_user_str, bought, &err_msg)) != SQLITE_OK) {
+        fprintf(stderr, "SQL_error: %s\n", err_msg);
+        sqlite3_free(err_msg);
+        sqlite3_close(get_database());
+        return 0;
+        // exit(1);
+    }
+    if (!bought)
+        strcpy(bought, "[]");
+
+    return bought;
+}
+
+int update_bought_items(char* username, char* bought) {
+    int err_status = 0;
+    size_t user_data_id = get_user_data_id(username);
+
+    char *update_request = "UPDATE UsersData SET Bought = '%s' WHERE Id = '%zu';";
+    char *sql_query = NULL;
+    char *err_msg = NULL;
+    asprintf(&sql_query, update_request, bought, user_data_id);
+
+    if((err_status = sqlite3_exec(get_database(), sql_query, callback_print_db, NULL, &err_msg)) != SQLITE_OK) {
+        fprintf(stderr, "SQL_error: %s\n", err_msg);
+        sqlite3_free(err_msg);
+        sqlite3_close(get_database());
+        return 1;
+        // exit(1);
+    }
+
+    return 0;
 }

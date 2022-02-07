@@ -12,11 +12,11 @@ size_t insert_data_user_data(t_model_user_data* model_user_data) {
         exit(1);
     }
 
-    char *insert_request = "INSERT INTO UsersData(About, Status, TNumber, Email, Era, Money, AvatarId) VALUES('%s', %i, '%s', '%s', %i, %zu, %zu);";
+    char *insert_request = "INSERT INTO UsersData(About, Status, TNumber, Email, Era, Money, AvatarId, Bought) VALUES('%s', %i, '%s', '%s', '%i', '%zu', '%zu', '%s');";
     char *sql_query = NULL;
     char *err_msg = NULL;
 
-    asprintf(&sql_query, insert_request, model_user_data->about, model_user_data->status, model_user_data->t_number, model_user_data->email, model_user_data->era, model_user_data->money, model_user_data->avatar_id);
+    asprintf(&sql_query, insert_request, model_user_data->about, model_user_data->status, model_user_data->t_number, model_user_data->email, model_user_data->era, model_user_data->money, model_user_data->avatar_id, model_user_data->bought_items);
 
     if((err_status = sqlite3_exec(db, sql_query, callback_print_db, 0, &err_msg)) != SQLITE_OK) {
         fprintf(stderr, "SQL_error: %s\n", err_msg);
@@ -60,12 +60,12 @@ int update_user_avatar(char* username, int avatar_id) {
 int update_user_money(char *username, int add_money) {
     errno = 0;
     size_t user_data_id = get_user_data_id(username);
-    size_t money = get_user_money_by_username(username);
-    if (add_money < 0 && abs(add_money) > money) 
-        money = 0;
-    else
+    size_t money = get_user_money_by_username(username); 
+    printf("\n\n\nMONEY: %i\nADD MONEY %i\n\n\n", money, add_money);
+    if (add_money > 0 || (add_money < 0 && abs(add_money) <= money))
         money += add_money;
-
+    else
+        return 1;
     
     int err_status = 0;
 
@@ -195,14 +195,17 @@ char *get_user_about(char *username) {
 }
 
 int callback_get_user_str(void *data, int argc, char **argv, char **azColName) {
-
+    char* new_data = (char*)data;
     if (argc == 0) {
         printf("error: callback_get_user_about: no user data with given id\n");
         fflush(stdout);
         return 1;
     }
     else {
-        *((char**)data) = argv[0];
+        // *((char**)data) = argv[0];
+        strcpy(new_data, argv[0]);
+        printf("\n\nargv[0] %s\n\n", argv[0]);
+        printf("\n\argc %i\n\n", argc);
     }
 
     return 0;
@@ -353,6 +356,8 @@ int callback_get_user_data(void *data, int argc, char **argv, char **azColName) 
                 model_user_data->era = atoi(argv[column_index]);
             if (!strcmp(azColName[column_index], "Money"))
                 model_user_data->money = atoi(argv[column_index]);
+            if (!strcmp(azColName[column_index], "Bought"))
+                strcpy(model_user_data->bought_items, argv[column_index]);
         }
     }
 

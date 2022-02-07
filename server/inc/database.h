@@ -44,6 +44,8 @@ t_model_user* get_user_by_name(char* username);
 size_t get_user_data_id(char *username);
 size_t get_user_money_by_username(char *username);
 size_t get_user_money_by_user_data_id(size_t user_data_id);
+int update_username(char *username, char *new_username);
+bool username_is_unique(char* username);
 
 // User Data Table
 size_t insert_data_user_data(t_model_user_data* model_user_data);
@@ -81,6 +83,12 @@ size_t insert_data_stone(t_model_stone* model_stone);
 
 // Store Table
 void fill_database_store();
-
+cJSON* get_store_by_era(char* era);
+int callback_get_store(void *data, int argc, char **argv, char **azColName);
+size_t insert_data_store(t_model_store* model_store);
+int buy_store_item(char* username, int store_item_id);
+int get_store_item_price(int store_item_id);
+char* get_bought_items(char* username);
+int update_bought_items(char* username, char* bought);
 
 #endif

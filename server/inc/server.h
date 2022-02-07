@@ -24,7 +24,7 @@
 
 
 #define BUFFER_SIZE 4096
-#define S_PORT 11000
+#define S_PORT 10001
 #define MAX_CONNECTIONS 10
 
 void run_server();

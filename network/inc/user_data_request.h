@@ -7,7 +7,13 @@
 #include "send_request.h"
 #include "protocol.h"
 #include "model_user_data.h"
+#include "model_store.h"
 
 t_model_user_data* send_user_data_request(char *username);
+void send_set_user_about_request(char* username, char *token, char* about);
+void send_set_user_tnumber_request(char* username, char *token, char* t_number);
+void send_set_user_email_request(char* username, char *token, char* email);
+t_model_store** send_store_request(char* era);
+void send_buy_request(char* username, char *token, int store_item_id);
 
 #endif
