@@ -36,7 +36,7 @@ void view_chat_window(t_current_window_info *current_layout_info)
     
     GtkWidget *file_chooser_button = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "gtkfile_chooser_button"));  
  
-    g_signal_connect(file_chooser_button, "file-set", G_CALLBACK(send_file_as_message), current_layout_info);
+    // g_signal_connect(file_chooser_button, "file-set", G_CALLBACK(send_file_as_message), current_layout_info);
     
     GtkLayout *chat_window_layout = GTK_LAYOUT(gtk_builder_get_object(current_layout_info->builder, "chat_window_layout")); /// rename --> done
 

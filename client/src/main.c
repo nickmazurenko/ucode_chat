@@ -2,7 +2,7 @@
 #include "view.h"
 #include "resources.h"
 #include "user_data.h"
-
+#include "log_out.h"
 
 
 int main(int argc, char*argv[]) {
@@ -14,7 +14,7 @@ int main(int argc, char*argv[]) {
     
 
     GtkWidget *new_window = GTK_WIDGET(gtk_builder_get_object(main_window_builder, "main_window"));
-    g_signal_connect(new_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+    g_signal_connect(new_window, "destroy", G_CALLBACK(log_out_func), NULL);
     GtkCssProvider *cssProvider = gtk_css_provider_new();
     gtk_css_provider_load_from_path(cssProvider, get_path_to_style("sign.css"), NULL);
 

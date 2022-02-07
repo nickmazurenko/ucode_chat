@@ -52,6 +52,11 @@
         "model_resource.h": "c",
         "protocol.h": "c",
         "stdlib.h": "c",
-        "model_defines.h": "c"
+        "model_defines.h": "c",
+        "encrypt.h": "c",
+        "algorithm": "c",
+        "chrono": "c",
+        "map": "c",
+        "unordered_map": "c"
     }
 }

@@ -14,8 +14,11 @@
 #include "controller_get_messages.h"
 #include "get_resources_request.h"
 #include "user_data_request.h"
+#include "controller_message_actions.h"
 
 
+void upload_chats_on_add(char *from_user, t_current_window_info *current_window_info);
+void upload_on_add(char *from_user, t_current_window_info *current_window_info);
 void	choose_chat(GtkButton *b, t_current_window_info *current_window_info);
 
 #endif

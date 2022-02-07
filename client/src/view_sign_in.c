@@ -1,8 +1,5 @@
 #include "view_sign_in.h"
 
-//TODO: delete drawing from here
-#include "drawing_area.h"
-
 void view_sign_in(t_current_window_info *current_layout_info)
 {
 
@@ -46,7 +43,7 @@ G_MODULE_EXPORT void sign_in_clicked(GtkButton *button, t_current_window_info *c
     if (!is_valid_user_data(sign_in_info)){
         place_sign_entry_error(sign_in_info);
     }else{
-        int status = controller_sign_in((char *)gtk_entry_get_text(sign_in_info[0]), (char *)gtk_entry_get_text(sign_in_info[1]));
+        int status = controller_sign_in((char *)gtk_entry_get_text(sign_in_info[0]), encrypt_pswd((char *)gtk_entry_get_text(sign_in_info[1])));
         if (status){
             place_sign_entry_error(sign_in_info);
         } else {

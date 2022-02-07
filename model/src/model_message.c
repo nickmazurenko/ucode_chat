@@ -44,6 +44,13 @@ t_model_message* from_string_model_message(char* json) {
     model_message->id = get_from_protocol_number(message, "id");
 
     char* from_user = get_from_protocol_string(message, "from_user");
+
+    if (from_user == NULL) {
+        free_model_message(&model_message);
+        cJSON_Delete(message);
+        return NULL;
+    }
+
     char* to_user   = get_from_protocol_string(message, "to_user");
 
     strcpy(model_message->from_user, from_user);

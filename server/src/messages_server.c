@@ -17,11 +17,19 @@ char* add_message(cJSON* request) {
 
         if(model_message->data_type == MESSAGE_TEXT){
 
-            int msg_id = insert_data_message(model_message);
+            if (model_message->status == MESSAGE_EDITED) {
 
-            model_message->id = msg_id;
+                update_message_data(model_message);
 
-            add_to_protocol_string(response, "DATA", to_string_model_message(model_message));
+            } else {
+                int msg_id = insert_data_message(model_message);
+
+                model_message->id = msg_id;
+
+                add_to_protocol_string(response, "DATA", to_string_model_message(model_message));
+            }
+
+            
 
             // free_model_message(&model_message);
         } else if (model_message->data_type == MESSAGE_FILE){
@@ -69,13 +77,13 @@ char* add_message(cJSON* request) {
         }
 
         int socket_new_messages = get_new_message_socket_of(model_message->to_user);
-        printf("socket: %i\n", socket_new_messages);
-        printf("username: %s\n", username);
-        printf("from username: %s\n", model_message->from_user);
+        // printf("socket: %i\n", socket_new_messages);
+        // printf("username: %s\n", username);
+        // printf("from username: %s\n", model_message->from_user);
 
         if (strcmp(username, model_message->to_user) != 0) {
             int socket_new_messages = get_new_message_socket_of(model_message->to_user);
-            printf("socket: %i\n", socket_new_messages);
+            // printf("socket: %i\n", socket_new_messages);
             char* message_json = to_string_model_message(model_message);
             send(socket_new_messages, message_json, strlen(message_json), 0);
             sleep(1);

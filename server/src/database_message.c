@@ -137,8 +137,8 @@ cJSON* json_get_new_messages_of(char* username) {
     int err_status = 0;
 
     char *sql_query = NULL;
-    char *select_request = "SELECT * FROM Messages WHERE (ToUser=('%s') AND FromUser!=('%s') AND (STATUS=%i));";
-    asprintf(&sql_query, select_request, username, username, MESSAGE_SENT);
+    char *select_request = "SELECT * FROM Messages WHERE (ToUser=('%s') AND FromUser!=('%s') AND ((STATUS=%i) OR (STATUS=%i)));";
+    asprintf(&sql_query, select_request, username, username, MESSAGE_SENT, MESSAGE_EDITED);
     char *err_msg = NULL;
 
     if((err_status = sqlite3_exec(get_database(), sql_query, callback_get_messages_json, messages, &err_msg)) != SQLITE_OK) {
@@ -257,4 +257,32 @@ cJSON* get_all_messages_of(char* username) {
     // sqlite3_close(db);
 
     return str_array;
+}
+
+int update_message_data(t_model_message* model_message) {
+
+    errno = 0;
+
+
+    int err_status = 0;
+
+    char *update_request = "UPDATE Messages SET Data='%s' WHERE Id=%zu;";
+    char *sql_query = NULL;
+    char *err_msg = NULL;
+
+    asprintf(&sql_query, update_request, model_message->id, model_message->data);
+
+    if((err_status = sqlite3_exec(get_database(), sql_query, callback_print_db, 0, &err_msg)) != SQLITE_OK) {
+        fprintf(stderr, "SQL_error: %s\n", err_msg);
+        sqlite3_free(err_msg);
+        sqlite3_close(get_database());
+        return 1;
+        // exit(1);
+    }
+
+    update_message_status(model_message->id, MESSAGE_EDITED);
+
+
+    return 0;
+
 }

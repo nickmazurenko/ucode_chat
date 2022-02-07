@@ -10,18 +10,20 @@ void set_shop_on_button(GtkWidget *button) {
     t_model_store** model_store = send_store_request(model_user_data->era);
 
     GtkBuilder *builder;
-    // if (model_user_data->era == 0) {
-    //     gtk_css_provider_load_from_path(cssProvider, get_path_to_style("shop.css"), NULL);
-    //     builder = gtk_builder_new_from_file(get_path_to_glade("shop.glade"));
-    // }
-    if (model_user_data->era == 1) {
+    if (model_user_data->era == 0) {
+        model_user_data->era = 3;
+        gtk_css_provider_load_from_path(cssProvider, get_path_to_style("enlightment_shop.css"), NULL);
+        builder = gtk_builder_new_from_file(get_path_to_glade("shop_enlightment.glade"));
+    }
+    else if (model_user_data->era == 1) {
         gtk_css_provider_load_from_path(cssProvider, get_path_to_style("egypt_shop.css"), NULL);
         builder = gtk_builder_new_from_file(get_path_to_glade("shop_egypt.glade"));
     }
-    // else if (model_user_data->era == 2) {
-    //     gtk_css_provider_load_from_path(cssProvider, get_path_to_style("shop.css"), NULL);
-    //     builder = gtk_builder_new_from_file(get_path_to_glade("shop.glade"));
-    // }
+    else if (model_user_data->era == 2) {
+        model_user_data->era = 3;
+        gtk_css_provider_load_from_path(cssProvider, get_path_to_style("enlightment_shop.css"), NULL);
+        builder = gtk_builder_new_from_file(get_path_to_glade("shop_enlightment.glade"));
+    }
     else if (model_user_data->era == 3) {
         gtk_css_provider_load_from_path(cssProvider, get_path_to_style("enlightment_shop.css"), NULL);
         builder = gtk_builder_new_from_file(get_path_to_glade("shop_enlightment.glade"));
