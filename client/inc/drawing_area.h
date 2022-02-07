@@ -4,6 +4,8 @@
 #include "libmx.h"
 #include "view_tools.h"
 #include "resources.h"
+#include "controller_message_actions.h"
+#include "view_messages.h"
 
 typedef struct  s_point
 {
@@ -24,7 +26,7 @@ gboolean on_draw_draw(GtkWidget *widget, cairo_t *cr, gpointer data);
 
 gboolean on_draw_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, t_current_window_info* current_window_info);
 
-void add_draw_area(t_current_window_info *current_window_info);
+void add_draw_area(t_current_window_info *current_window_info, t_model_message *model_message);
 
 void set_rock_on_button(GtkWidget *button, t_current_window_info *current_window_info) ;
 

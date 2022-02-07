@@ -71,6 +71,8 @@
 #define SEND_SIZE   5120
 
 char* send_request(char*  request, char* ip, int port);
+struct sockaddr_in* get_serv_addr();
+pthread_t* get_current_thread();
 
 
 #endif

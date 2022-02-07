@@ -14,6 +14,8 @@
 #include "controller_get_messages.h"
 #include "get_resources_request.h"
 #include "view_home_page.h"
+#include "choose_chat.h"
+
 
 
 

@@ -9,9 +9,10 @@
 #include "messages_requests.h"
 #include "get_resources_request.h"
 #include "database_client.h"
+#include "view_messages.h"
 
 
 t_model_message *controller_send_message(char* to, e_message_data_types data_type, char* data);
-
+ t_model_message *controller_forward_message(char* to, e_message_data_types data_type, char* data, char *forward_from);
 
 #endif

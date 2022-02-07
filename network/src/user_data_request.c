@@ -133,6 +133,7 @@ void send_buy_request(char* username, char *token, int store_item_id) {
     
     char* response = send_request(request, get_server_ip(), PORT);
     cJSON *bought_array = cJSON_Parse(get_from_protocol_string(cJSON_Parse(response), "DATA"));
+    printf("\n\n\n THERE %s\n\n\n ", cJSON_Print(bought_array));
 
     free(response);
 }

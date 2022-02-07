@@ -16,5 +16,8 @@ bool start_chat(char *request, char *response);
 
 bool get_avatar(char *request, char *response);
 bool get_resource(char *request, char *response);
+bool get_user_data_money(char *request, char *response);
+bool get_stone(char *request, char *response);
+
 
 #endif

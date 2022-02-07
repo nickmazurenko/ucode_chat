@@ -1,20 +1,40 @@
 .message_label{
     font-size: 14pt;
-    background-color: rgba(37, 196, 196, 0.2);
-    border-radius: 300px; 
-    border: solid #57b9b4 0.8px;
+    color: #F5F5F5;
+    background-color: #4A402A;
+    border-radius: 10px; 
     padding: 10px;
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+}   
+
+.forward_label{
+    font-size: 8pt;
+    background-color: rgba(18, 117, 117, 0.2);
+    border-radius: 300px; 
+    border: solid #000000 0.8px;
+    padding-right: 10px;
+    padding-left: 10px;
+    font-weight: bolder;
+
 }   
 
 
 .user_button{
     background: rgba(0, 0, 0, 0.0);
     border:rgba(0, 0, 0, 0.0);
-    /* margin-top: 10px; */
+    /* height: 100px; */
+    margin-top: 10px;
     margin-bottom: 2px;
     margin-left: 10px;
     margin-right: 10px;
 }
 
+.chat_window_viewport {
+    padding-bottom: 60px;
+    border-radius: 10px;
+}
+.send_message_button {
+    /* opacity: 1.0; */
+    background: url("../images/send_button.png");
+}

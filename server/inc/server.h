@@ -28,5 +28,6 @@
 #define MAX_CONNECTIONS 10
 
 void run_server();
+int get_new_message_socket_of(char* username);
 
 #endif

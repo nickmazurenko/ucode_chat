@@ -12,11 +12,11 @@ size_t insert_data_message(t_model_message* model_message) {
     //     exit(1);
     // }
 
-    char *insert_request = "INSERT INTO Messages(FromUser, ToUser, Type, Data, Date, Status) VALUES('%s', '%s', %i, '%s', '%s', %i);";
+    char *insert_request = "INSERT INTO Messages(FromUser, ToUser, Type, Data, Date, Status, ForwardFrom) VALUES('%s', '%s', %i, '%s', '%s', %i, '%s');";
     char *sql_query = NULL;
     char *err_msg = NULL;
 
-    asprintf(&sql_query, insert_request, model_message->from_user, model_message->to_user, model_message->data_type, model_message->data, model_message->date, model_message->status);
+    asprintf(&sql_query, insert_request, model_message->from_user, model_message->to_user, model_message->data_type, model_message->data, model_message->date, model_message->status, model_message->forward_from);
 
     if((err_status = sqlite3_exec(get_database(), sql_query, callback_print_db, 0, &err_msg)) != SQLITE_OK) {
         fprintf(stderr, "SQL_error: %s\n", err_msg);
@@ -66,6 +66,8 @@ int callback_get_messages(void *data, int argc, char **argv, char **azColName) {
             strcpy(array[db_array_data->size]->date, argv[column_index]);
         } else if (strcmp(azColName[column_index], "Status") == 0) {
             array[db_array_data->size]->status = atoi(argv[column_index]);
+        } else if (strcmp(azColName[column_index], "ForwardFrom") == 0) {
+            strcpy(array[db_array_data->size]->forward_from, argv[column_index]);
         } else {
             perror("there we go but dont want\n");
         }
@@ -95,6 +97,8 @@ int callback_get_messages_json(void *data, int argc, char** argv, char** azColNa
     add_to_protocol_string(message, "data", argv[4]);
     add_to_protocol_string(message, "date", argv[5]);
     add_to_protocol_string(message, "status", argv[6]);
+    add_to_protocol_string(message, "forward_from", argv[7]);
+
 
     char* message_str = cJSON_Print(message);
     cJSON* message_str_json = cJSON_CreateString(message_str);
