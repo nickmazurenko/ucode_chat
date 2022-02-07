@@ -80,54 +80,57 @@ void* handle_request(void* data) {
     // 
     while (1) {
         // read_request(conn_fd, request, &read_number);
-        if (!socket_in_new_message_sockets(conn_fd)) {
-            int read_number = recv(conn_fd, request, 14336, 0);
-            if (read_number) {
-                // select_action(request, response_buffer);
+        // if (!socket_in_new_message_sockets(conn_fd)) {
+        int read_number = recv(conn_fd, request, 14336, 0);
+        if (read_number) {
+            // select_action(request, response_buffer);
+            if (read_number < 500) {
                 printf(request);
-
-                cJSON* request_obj = cJSON_Parse(request);
-                char* action = get_from_protocol_string(request_obj, "ACTION");
-                char* username = get_from_protocol_string(request_obj, "FROM");
-                if (action != NULL && username != NULL && strcmp(action, "ADD NEW MESSAGES SOCKET") == 0) {
-
-                    add_new_message_socket(username, conn_fd);
-                    strcpy(response_buffer, "200 OK\r\n\r\n");
-                    send(conn_fd, response_buffer, 10, 0);
-                    pthread_exit(NULL);
-                    break;
-                }
-
-                select_action(request, response_buffer);
-                // printf("response_buffer:\n %s\n", response_buffer);
-
-                if (strlen(response_buffer) == 0)
-                    strcpy(response_buffer, "200 OK\r\n\r\n");
-
-                response_buffer_length = strlen(response_buffer);
-                // write(conn_fd, response_buffer, response_buffer_length);
-                send(conn_fd, response_buffer, response_buffer_length, 0);
-                
-
-                cJSON_Delete(request_obj);
-                
-                
-                // sendto(conn_fd, response_buffer, strlen(response_buffer), 0, (struct sockaddr *)&client, sizeof(client_addres));
-
-                // close(conn_fd);
-                memset(response_buffer, '\0', response_buffer_length);
-                memset(request, '\0', read_number);
+            } else {
+                printf("request is too long\n");
             }
-            // usleep(100);
-        } else {
-            // printf("there we go\n");
-            fflush(stdout);
-            // break;
+
+            cJSON* request_obj = cJSON_Parse(request);
+            char* action = get_from_protocol_string(request_obj, "ACTION");
+            char* username = get_from_protocol_string(request_obj, "FROM");
+            if (action != NULL && username != NULL && strcmp(action, "ADD NEW MESSAGES SOCKET") == 0) {
+
+                add_new_message_socket(username, conn_fd);
+                strcpy(response_buffer, "200 OK\r\n\r\n");
+                send(conn_fd, response_buffer, 10, 0);
+                break;
+            }
+
+            cJSON_Delete(request_obj);            
+
+            select_action(request, response_buffer);
+            // printf("response_buffer:\n %s\n", response_buffer);
+
+            if (strlen(response_buffer) == 0)
+                strcpy(response_buffer, "200 OK\r\n\r\n");
+
+            response_buffer_length = strlen(response_buffer);
+            // write(conn_fd, response_buffer, response_buffer_length);
+            send(conn_fd, response_buffer, response_buffer_length, 0);
+            
+
+            
+            // sendto(conn_fd, response_buffer, strlen(response_buffer), 0, (struct sockaddr *)&client, sizeof(client_addres));
+
+            // close(conn_fd);
+            memset(response_buffer, '\0', response_buffer_length);
+            memset(request, '\0', read_number);
         }
+            // usleep(100);
+        // } else {
+            // printf("there we go\n");
+            // fflush(stdout);
+            // break;
+        // }
         sleep(1);
         
     }
-
+    pthread_exit(NULL);
 }
 
 void create_user_thread(int conn_fd) {

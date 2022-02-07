@@ -40,7 +40,9 @@ char* save_file(char* request, char* response) {
     path_to_file = mx_strjoin(path_to_file, path_to_file_obj->valuestring);
     FILE* file = fopen(path_to_file, "a");
 
-    if (file == NULL) {
+    printf("path_to_file: %s\n", path_to_file);
+
+    if (file == NULL) {        
         char* create_file_command = "touch ";
         create_file_command = mx_strjoin(create_file_command, path_to_file);
         system(create_file_command);

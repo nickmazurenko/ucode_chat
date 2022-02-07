@@ -112,7 +112,7 @@ void view_file(t_model_message *model_message, t_current_window_info *current_la
         if (image_pixbuf) {
             gtk_image_set_from_pixbuf(GTK_IMAGE(image), image_pixbuf);
         } else {
-            image_pixbuf = gdk_pixbuf_new_from_file_at_size(get_path_to_image("click.jpeg"), 100, 100, NULL);
+            image_pixbuf = gdk_pixbuf_new_from_file_at_size(get_path_to_image("click.png"), 100, 100, NULL);
             gtk_image_set_from_pixbuf(GTK_IMAGE(image), image_pixbuf);
         }
         gtk_container_add(GTK_CONTAINER(box), image);   
@@ -131,7 +131,7 @@ void view_file(t_model_message *model_message, t_current_window_info *current_la
         if (image_pixbuf) {
             gtk_image_set_from_pixbuf(GTK_IMAGE(image), image_pixbuf);
         } else {
-            image_pixbuf = gdk_pixbuf_new_from_file_at_size(get_path_to_image("click.jpeg"), 100, 100, NULL);
+            image_pixbuf = gdk_pixbuf_new_from_file_at_size(get_path_to_image("click.png"), 100, 100, NULL);
             gtk_image_set_from_pixbuf(GTK_IMAGE(image), image_pixbuf);
         }
 
@@ -272,7 +272,7 @@ void*
             printf("message: %s\n",  new_message_str);
             insert_data_message(model_message);
             char* to_user = get_from_protocol_string(cookies, "TO USER");
-            if (to_user != NULL && strcmp(model_message->from_user, to_user) == 0) {
+            if (to_user != NULL && model_message != NULL && strcmp(model_message->from_user, to_user) == 0) {
                 if (model_message->data_type == MESSAGE_TEXT)
                     view_message(model_message, window_info);
                 else if (model_message->data_type == MESSAGE_FILE) {
