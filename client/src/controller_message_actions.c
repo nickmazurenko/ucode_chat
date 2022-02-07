@@ -102,10 +102,10 @@ void forward_clicked(GtkWidget *widget, t_current_window_info *current_window_in
     {
         printf("There\n\n");
         if (response->data_type == MESSAGE_TEXT) {
-            view_message(msg, static_current_window_info);
+            view_message(response, static_current_window_info);
         } else if (response->data_type == MESSAGE_FILE) {
             // add request file if not exist
-            view_file(msg, static_current_window_info);
+            view_file(response, static_current_window_info);
         }
     }
 }
