@@ -285,3 +285,32 @@ t_model_message* get_message_by_id(size_t msg_id) {
     return msg;
 }
 
+void update_message(t_model_message* new_data) {
+
+    sqlite3 *db;
+    
+    int err_status = 0;
+
+    if((err_status = sqlite3_open(DB, &db)) != SQLITE_OK) {
+        fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        exit(1);
+    }
+
+    char *sql_query = NULL;
+    char *update_request = "UPDATE Messages SET Data='%s', Status=%i WHERE Id=%i";
+
+    asprintf(&sql_query, update_request, new_data->data, new_data->status, new_data->id); 
+    
+    char* err_msg = NULL;
+    if((err_status = sqlite3_exec(db, sql_query, NULL, NULL, &err_msg)) != SQLITE_OK) {
+        fprintf(stderr, "SQL_error: %s\n", err_msg);
+        sqlite3_free(err_msg);
+        sqlite3_close(db);
+        exit(1);
+    }
+
+    sqlite3_close(db);
+
+}
+

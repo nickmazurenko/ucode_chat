@@ -20,7 +20,8 @@ typedef enum  message_status {
 
     MESSAGE_SENT,
     MESSAGE_RECEIVED,
-    MESSAGE_READ
+    MESSAGE_READ,
+    MESSAGE_EDITED
 
 }             e_message_status;
 

@@ -68,6 +68,7 @@ cJSON* get_all_new_messages_of(char* username);
 cJSON* get_all_messages_of(char* username);
 cJSON* json_get_all_messages_of(char* username);
 cJSON* json_get_new_messages_of(char* username);
+int update_message_data(t_model_message* model_message);
 
 t_model_resource *get_resource_by_id(size_t id);
 int callback_get_resource(void *data, int argc, char **argv, char **azColName);

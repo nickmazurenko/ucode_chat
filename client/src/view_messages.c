@@ -347,24 +347,36 @@ void*
              */
             printf("message: %s\n",  new_message_str);
             upload_chats(model_message->from_user, window_info);
-            insert_data_message(model_message);
-            char* to_user = get_from_protocol_string(cookies, "TO USER");
-            if (to_user != NULL && model_message != NULL && strcmp(model_message->from_user, to_user) == 0) {
-                if (model_message->data_type == MESSAGE_TEXT)
-                    view_message(model_message, window_info);
-                else if (model_message->data_type == MESSAGE_FILE) {
-                    t_model_resource* resource = send_get_resource_request(model_message->data);
-                    // pthread_t* current_thread = get_current_thread();
-                    // pthread_join(*current_thread, NULL);
-                    insert_data_resource(resource);
-                    printf("before request\n");
-                    request_file_if_not_exist(resource->path);
-                    // current_thread = get_current_thread();
-                    // pthread_join(*current_thread, NULL);
-                    printf("after request\n");
-                    view_file(model_message, window_info);
+            if (model_message->status == MESSAGE_EDITED) {
+                update_message(model_message);
+                char* to_user = get_from_protocol_string(cookies, "TO USER");
+                if (to_user != NULL && model_message != NULL && strcmp(model_message->from_user, to_user) == 0) {
+                    GtkWidget* button = gtk_button_new_with_label(to_user);
+                    choose_chat(button, window_info);
+                    gtk_widget_destroy(button);
+                }
+                
+            } else {
+                insert_data_message(model_message);
+                char* to_user = get_from_protocol_string(cookies, "TO USER");
+                if (to_user != NULL && model_message != NULL && strcmp(model_message->from_user, to_user) == 0) {
+                    if (model_message->data_type == MESSAGE_TEXT)
+                        view_message(model_message, window_info);
+                    else if (model_message->data_type == MESSAGE_FILE) {
+                        t_model_resource* resource = send_get_resource_request(model_message->data);
+                        // pthread_t* current_thread = get_current_thread();
+                        // pthread_join(*current_thread, NULL);
+                        insert_data_resource(resource);
+                        printf("before request\n");
+                        request_file_if_not_exist(resource->path);
+                        // current_thread = get_current_thread();
+                        // pthread_join(*current_thread, NULL);
+                        printf("after request\n");
+                        view_file(model_message, window_info);
+                    }
                 }
             }
+            
 
             memset(new_message_str, '\0', read_number);
             sleep(1);

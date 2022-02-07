@@ -46,6 +46,30 @@ void add_chats_for_forward(char **username, t_current_window_info *current_windo
     }
 }
 
+void send_edited_clicked(GtkWidget *widget, GtkWidget* entry) {
+
+    if (selected_message != -1) {
+
+        t_model_message* selected_message = get_message_by_id(selected_message);
+        selected_message->status = MESSAGE_EDITED;
+        memset(selected_message->data, '\0', strlen(selected_message->data));
+        strcpy(selected_message->data, gtk_entry_get_text(entry));
+
+        cJSON* protocol = create_protocol();
+        add_to_protocol_string(protocol, "FROM", get_from_protocol_string(get_cookies(), "USERNAME"));
+        add_to_protocol_string(protocol, "TOKEN", get_from_protocol_string(get_cookies(), "TOKEN"));
+
+        send_message(selected_message, protocol);
+
+        // update on user that edit
+
+
+        free_model_message(&selected_message);
+
+    }
+
+}
+
 void callback_edit_message(GtkWidget *b, GdkEventButton *event,  char* text) {
     if (selected_message != -1)
         printf("edit message: %i\n", selected_message);
@@ -58,6 +82,7 @@ void callback_edit_message(GtkWidget *b, GdkEventButton *event,  char* text) {
     gtk_entry_set_text(entry, gtk_label_get_text(selected_message_label));
 
     GtkButton* send_edited = gtk_button_new_with_label("Send");
+    g_signal_connect(send_edited, "clicked", send_edited_clicked, entry);
 
     gtk_grid_attach(edit_grid, entry, 0, 0, 1, 1);
     gtk_grid_attach(edit_grid, send_edited, 0, 1, 1, 1);
@@ -143,13 +168,26 @@ void callback_forward_message(GtkWidget *b, GdkEventButton *event,  char* text) 
 void create_message_actions_grid() {
 
     message_actions_grid = gtk_grid_new();
-    
 
-    GtkButton* edit = gtk_button_new_with_label("Edit");
+    GtkButton* edit = NULL;
+
+    if (selected_message != -1) {
+        t_model_message* message = get_message_by_id(selected_message);
+
+        if (message->data_type == MESSAGE_TEXT) {
+
+            edit = gtk_button_new_with_label("Edit");
+            g_signal_connect(edit, "clicked", callback_edit_message, NULL);
+
+        } 
+
+        free_model_message(&message);
+
+    }
+    
     GtkButton* reply = gtk_button_new_with_label("Reply");
     GtkButton* forward = gtk_button_new_with_label("Forward");
 
-    g_signal_connect(edit, "clicked", callback_edit_message, NULL);
     g_signal_connect(reply, "clicked", callback_reply_message, NULL);
     g_signal_connect(forward, "clicked", callback_forward_message, NULL);
 
@@ -158,7 +196,8 @@ void create_message_actions_grid() {
     gtk_grid_insert_row(message_actions_grid, 1);
     gtk_grid_insert_row(message_actions_grid, 2);
 
-    gtk_grid_attach(message_actions_grid, edit, 0, 0, 1, 1);
+    if (edit != NULL)
+        gtk_grid_attach(message_actions_grid, edit, 0, 0, 1, 1);
     gtk_grid_attach(message_actions_grid, reply, 0, 1, 1, 1);
     gtk_grid_attach(message_actions_grid, forward, 0, 2, 1, 1);
 
@@ -207,8 +246,8 @@ void callback_click_message(GtkWidget *b, GdkEventButton *event,  t_model_messag
         GList* childs = gtk_container_get_children(GTK_CONTAINER(b));
         GtkLabel* label = GTK_LABEL(childs->data);
         
-        show_message_actions_popover(label);
         selected_message = (long)model_message->id;
+        show_message_actions_popover(label);
 
         g_list_free(childs);
     } else if(GTK_IS_IMAGE(gtk_container_get_children(GTK_CONTAINER(b))->data) && (event->type == GDK_BUTTON_PRESS  &&  event->button == 1)){

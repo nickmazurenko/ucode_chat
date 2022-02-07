@@ -6,7 +6,7 @@ void log_out_func(GtkWidget *widget, t_current_window_info *current_window_info)
 
     system("rm ./client/resources/tmp/*");
 
-    system("mkdir ./client/resources/to_delete.txt");
+    system("touch ./client/resources/tmp/to_delete.txt");
 
     if(!current_window_info) {
         gtk_main_quit();

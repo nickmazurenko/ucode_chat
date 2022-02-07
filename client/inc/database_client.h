@@ -51,6 +51,7 @@ t_model_message** get_all_messages_from_chat(char *from_user, int *size);
 
 int callback_get_user_chats(void *data, int argc, char **argv, char **azColName);
 char** get_all_user_chats(char *current_user, int *count);
+void update_message(t_model_message* new_data);
 
 
 // Resource Table
