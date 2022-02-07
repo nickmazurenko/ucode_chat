@@ -11,3 +11,18 @@ void upload_chats(char *from_user, t_current_window_info *current_window_info) {
     }
     add_chat(from_user, current_window_info);
 }
+
+void upload_chats_on_add(char *from_user, t_current_window_info *current_window_info) {
+    GList *children, *iter;
+    GtkWidget *home_chats_grid = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "home_chats_grid"));
+
+
+    children = gtk_container_get_children(GTK_CONTAINER(home_chats_grid));
+    
+    for(iter = children; iter != NULL; iter = g_list_next(iter)) {
+        if(!strcmp(gtk_button_get_label(iter->data), from_user)) {
+            return;
+        }
+    }
+    add_chat(from_user, current_window_info);
+}
