@@ -1,7 +1,5 @@
 #include "controller_send_message.h"
 
-
-
 t_model_message *controller_send_message(char* to, e_message_data_types data_type, char* data) {
 
     if (to != NULL) {

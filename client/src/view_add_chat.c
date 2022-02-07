@@ -15,7 +15,7 @@ void add_chat_clicked(GtkWidget *widget, t_current_window_info *current_window_i
 
     if(user_to_find && strlen(user_to_find) > 0) {
         if(send_start_chat_request(user_to_find)) {
-            add_chat(user_to_find, current_window_info);
+            upload_chats(user_to_find, current_window_info);
             gtk_widget_show_all(current_window_info->main_window);
         } else {
             NULL;

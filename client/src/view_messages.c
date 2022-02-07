@@ -346,6 +346,7 @@ void*
              * 
              */
             printf("message: %s\n",  new_message_str);
+            upload_chats(model_message->from_user, window_info);
             insert_data_message(model_message);
             char* to_user = get_from_protocol_string(cookies, "TO USER");
             if (to_user != NULL && model_message != NULL && strcmp(model_message->from_user, to_user) == 0) {
