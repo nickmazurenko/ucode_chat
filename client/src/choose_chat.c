@@ -28,13 +28,13 @@ void choose_chat(GtkButton *b, t_current_window_info *current_window_info) {
 
     set_current_user_to_talk((char*)gtk_button_get_label (b)); //TODO:
 
+    // TODO: uncomment this for stones
+    // if(other_user_data->era == STONE_AGE || current_user_date == STONE_AGE){ 
+    //     t_model_message *model_message = get_stone_message_from_chat((char*)gtk_button_get_label (b), &count);
+    //     add_draw_area(current_window_info, model_message);
+    //     printf("\n\n THERE STONE ERA\n\n");
 
-    if(other_user_data->era == STONE_AGE || current_user_date == STONE_AGE){ 
-        t_model_message *model_message = get_stone_message_from_chat((char*)gtk_button_get_label (b), &count);
-        add_draw_area(current_window_info, model_message);
-        printf("\n\n THERE STONE ERA\n\n");
-
-    } else {
+    // } else {
         t_model_message **model_message = get_all_messages_from_chat((char*)gtk_button_get_label (b), &count);
         for (int i = 0; i < 20; i++)
         {
@@ -45,7 +45,7 @@ void choose_chat(GtkButton *b, t_current_window_info *current_window_info) {
         current_window_info->message_position_y = count + 20;
 
         view_messages(model_message, current_window_info, count);
-    }
+    // }
 
 }
 

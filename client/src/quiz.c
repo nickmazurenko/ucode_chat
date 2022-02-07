@@ -138,7 +138,7 @@ void set_quiz_on_button(GtkWidget *button) {
         load_quiz_question_label();
     }
 
-    gtk_button_set_image (GTK_BUTTON (button), gtk_image_new_from_icon_name ("open-menu-symbolic", GTK_ICON_SIZE_BUTTON));
+    // gtk_button_set_image (GTK_BUTTON (button), gtk_image_new_from_icon_name ("open-menu-symbolic", GTK_ICON_SIZE_BUTTON));
 
     GtkWidget *quiz_popover;
 	GtkWidget *quiz_layout = GTK_WIDGET(gtk_builder_get_object(quiz_builder, "quiz_layout"));

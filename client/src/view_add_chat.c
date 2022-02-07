@@ -31,8 +31,12 @@ void set_add_chat_on_button(GtkWidget *button, t_current_window_info *current_wi
 
     // printf("%s\n", cJSON_Print(quiz_questions));
 
-    gtk_button_set_image (GTK_BUTTON (button), gtk_image_new_from_icon_name ("open-menu-symbolic", GTK_ICON_SIZE_BUTTON));
-
+    // gtk_button_set_image (GTK_BUTTON (button), gtk_image_new_from_icon_name ("open-menu-symbolic", GTK_ICON_SIZE_BUTTON));
+    GtkCssProvider *cssProvider = gtk_css_provider_new(); 
+    gtk_css_provider_load_from_path(cssProvider, get_path_to_style("add_chat.css"), NULL); 
+    gtk_style_context_add_provider_for_screen(gdk_screen_get_default(), 
+                                            GTK_STYLE_PROVIDER(cssProvider), 
+                                            GTK_STYLE_PROVIDER_PRIORITY_USER);
     GtkWidget *add_chat_popover;
 
     gtk_builder_add_from_file(current_window_info->builder, get_path_to_glade("add_chat.glade"), NULL);

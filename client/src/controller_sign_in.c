@@ -35,6 +35,7 @@ void controller_view_user_era(GtkWidget **sign_in_info, t_current_window_info *c
 
     // TODO: ALARM!!!! CHANGE ERA !!!!!!!
     // user_data->era = MODERN_TIMES; //TODO: ALARM!!!! CHANGE ERA !!!!!!!
+    user_data->era = ENLIGHTMENT; //TODO: ALARM!!!! CHANGE ERA !!!!!!!
     // TODO: ALARM!!!! CHANGE ERA !!!!!!!
     if(user_data->era == STONE_AGE){
 
@@ -50,13 +51,18 @@ void controller_view_user_era(GtkWidget **sign_in_info, t_current_window_info *c
 
     } else if (user_data->era == ENLIGHTMENT){
 
-        // TODO: add view EENLIGHTMENTGYPT era
+        view_last_era(current_window_info);
 
     }else if (user_data->era == MODERN_TIMES){
 
         view_home_page(current_window_info);
         
     }
+    // change window to text chat era
+    // view_home_page(current_window_info);
+
+    
+    // view_stone_age_page(current_window_info );
 
 }
 
