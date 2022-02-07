@@ -1,4 +1,5 @@
 #include "view_last_era.h"
+#include "pthread.h"
 
 static guint thread_id = 0;
 
@@ -83,6 +84,9 @@ void view_last_era(t_current_window_info *current_layout_info) {
 	column = 0;
 
     gtk_widget_show_all(GTK_WIDGET(home_page_layout));
-    thread_id = g_timeout_add_seconds(10, callback_update_messages, current_layout_info);
     // thread_id = g_timeout_add_seconds(10, callback_update_messages, current_layout_info);
+    // thread_id = g_timeout_add_seconds(10, callback_update_messages, current_layout_info);
+    pthread_t new_messages_thread;
+    pthread_create(&new_messages_thread, NULL, check_new_messages, current_layout_info);
+
 }

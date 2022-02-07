@@ -262,6 +262,14 @@ void*
             // add message to db
             // view message
             t_model_message* model_message = from_string_model_message(new_message_str);
+            /**
+             * @
+             *char **all_chats  = get_all_chats(...) 
+             * for(int i = 0; i < count_of_chats; i++)
+             * if (!strcmp(model_message->from_user, all_chats[i])
+             * 
+             */
+            printf("message: %s\n",  new_message_str);
             insert_data_message(model_message);
             char* to_user = get_from_protocol_string(cookies, "TO USER");
             if (to_user != NULL && strcmp(model_message->from_user, to_user) == 0) {
@@ -269,13 +277,13 @@ void*
                     view_message(model_message, window_info);
                 else if (model_message->data_type == MESSAGE_FILE) {
                     t_model_resource* resource = send_get_resource_request(model_message->data);
-                    pthread_t* current_thread = get_current_thread();
-                    pthread_join(*current_thread, NULL);
+                    // pthread_t* current_thread = get_current_thread();
+                    // pthread_join(*current_thread, NULL);
                     insert_data_resource(resource);
                     printf("before request\n");
                     request_file_if_not_exist(resource->path);
-                    current_thread = get_current_thread();
-                    pthread_join(*current_thread, NULL);
+                    // current_thread = get_current_thread();
+                    // pthread_join(*current_thread, NULL);
                     printf("after request\n");
                     view_file(model_message, window_info);
                 }

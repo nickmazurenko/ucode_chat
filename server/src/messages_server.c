@@ -64,7 +64,7 @@ char* add_message(cJSON* request) {
 
             add_to_protocol_string(response, "DATA", to_string_model_message(model_message));
 
-            free_model_message(&model_message);
+            // free_model_message(&model_message);
             free_model_stone(&model_stone);
         }
 
