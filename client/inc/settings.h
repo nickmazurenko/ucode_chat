@@ -8,6 +8,7 @@
 
 void edit_info_on_button(GtkWidget *button, const char *title);
 // void view_edit_window_on_button(t_current_window_info *current_layout_info);
-void set_settings_on_button(GtkWidget *button);
+void set_setting_on_button(GtkWidget *button, t_current_window_info *current_layout_info, GtkWidget *layout_to_destroy);
+
 
 #endif
