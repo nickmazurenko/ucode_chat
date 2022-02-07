@@ -8,6 +8,7 @@
 #include "view_home_page.h"
 #include "view_tools.h"
 #include "resources.h"
+#include "encrypt.h"
 
 // void view_sign_in(GtkWidget* window);
 
