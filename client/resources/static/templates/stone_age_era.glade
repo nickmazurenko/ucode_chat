@@ -22,8 +22,8 @@
             <property name="can_focus">False</property>
             <child>
               <object class="GtkMenuButton" id="add_chat_button">
-                <property name="width_request">89</property>
-                <property name="height_request">116</property>
+                <property name="width_request">75</property>
+                <property name="height_request">75</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="focus_on_click">False</property>
@@ -37,8 +37,8 @@
                 </style>
               </object>
               <packing>
-                <property name="x">1266</property>
-                <property name="y">640</property>
+                <property name="x">1275</property>
+                <property name="y">660</property>
               </packing>
             </child>
             <child>
@@ -172,7 +172,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="shop_button">
+                  <object class="GtkMenuButton" id="shop_button">
                     <property name="width_request">116</property>
                     <property name="height_request">70</property>
                     <property name="visible">True</property>

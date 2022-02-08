@@ -2,7 +2,7 @@
 
 
 void set_shop_on_button(GtkWidget *button) {
-    send_set_user_era_request("a", "a", 0);
+    // send_set_user_era_request("a", "a", 3);
 
     GtkCssProvider *cssProvider = gtk_css_provider_new(); 
 
