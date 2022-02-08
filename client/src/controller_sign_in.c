@@ -27,17 +27,10 @@ int controller_sign_in(char* user_name, char* password) {
 
 void controller_view_user_era(GtkWidget **sign_in_info, t_current_window_info *current_window_info) {
 
-    // generate_cookies((char *)gtk_entry_get_text(sign_in_info[0]), (char *)gtk_entry_get_text(sign_in_info[1]));
-
     controller_get_messages();
 
     t_model_user_data * user_data = send_user_data_request((char *)gtk_entry_get_text(sign_in_info[0]));
 
-
-    // TODO: ALARM!!!! CHANGE ERA !!!!!!!
-    // user_data->era = MODERN_TIMES; //TODO: ALARM!!!! CHANGE ERA !!!!!!!
-    // user_data->era = ENLIGHTMENT; //TODO: ALARM!!!! CHANGE ERA !!!!!!!
-    // TODO: ALARM!!!! CHANGE ERA !!!!!!!
     if(user_data->era == STONE_AGE){
 
         view_stone_age_page(current_window_info );
@@ -51,20 +44,13 @@ void controller_view_user_era(GtkWidget **sign_in_info, t_current_window_info *c
         // TODO: add view MIDDLE_AGES era
 
     } else if (user_data->era == ENLIGHTMENT){
-
-        view_modern_era(current_window_info);
-        // view_enlightenment_era(current_window_info);
+        view_enlightenment_era(current_window_info);
 
     }else if (user_data->era == MODERN_TIMES){
 
         view_modern_era(current_window_info);
         
     }
-    // change window to text chat era
-    // view_home_page(current_window_info);
-
-    
-    // view_stone_age_page(current_window_info );
 
 }
 

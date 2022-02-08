@@ -1,5 +1,4 @@
 #include "messages_server.h"
-#include "server.h"
 
 char* add_message(cJSON* request) {
 
@@ -15,7 +14,7 @@ char* add_message(cJSON* request) {
         e_message_status message_status = model_message->status;
         model_message->status = MESSAGE_SENT;
 
-
+        t_model_user_data *user_data = get_user_data_by_username(username);
         if(model_message->data_type == MESSAGE_TEXT){
 
             if (message_status == MESSAGE_EDITED) {
@@ -25,6 +24,9 @@ char* add_message(cJSON* request) {
                 printf("model_message->id: %i\n", model_message->id);
 
             } else {
+                if(user_data->era == ENLIGHTMENT){
+                    wrong_message(&(model_message->data));
+                }
                 int msg_id = insert_data_message(model_message);
 
                 model_message->id = msg_id;
