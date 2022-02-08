@@ -1,10 +1,41 @@
 #include "choose_chat.h"
 
+void set_chat_is_chosen(GtkWidget *user_chat_button, t_current_window_info *current_window_info) {
+    GList *children, *iter;
+    GtkWidget *home_chats_grid = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "home_chats_grid"));
 
+    children = gtk_container_get_children(GTK_CONTAINER(home_chats_grid));
+    
+    for(iter = children; iter != NULL; iter = g_list_next(iter)) {
+        GtkStyleContext *user_button_context = gtk_widget_get_style_context(GTK_WIDGET(iter->data));
+        gtk_style_context_remove_class(user_button_context, "user_button_chosen");
+        gtk_style_context_remove_class(user_button_context, "user_button_new_message");
 
+        gtk_style_context_add_class(user_button_context, "user_button");
+    }
+
+    GtkStyleContext *user_button_context = gtk_widget_get_style_context(GTK_WIDGET(user_chat_button));
+    gtk_style_context_remove_class(user_button_context, "user_button");
+    gtk_style_context_add_class(user_button_context, "user_button_chosen");
+}
+
+void set_chat_new_message(char* from_user, t_current_window_info *current_window_info) {
+    GList *children, *iter;
+    GtkWidget *home_chats_grid = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "home_chats_grid"));
+
+    children = gtk_container_get_children(GTK_CONTAINER(home_chats_grid));
+    
+    for(iter = children; iter != NULL; iter = g_list_next(iter)) {
+        if(!strcmp(from_user, gtk_button_get_label(iter->data))) {
+            GtkStyleContext *user_button_context = gtk_widget_get_style_context(GTK_WIDGET(iter->data));
+            gtk_style_context_remove_class(user_button_context, "user_button");
+            gtk_style_context_add_class(user_button_context, "user_button_new_message");
+        }
+    }
+}
 void choose_chat(GtkButton *b, t_current_window_info *current_window_info) {
-
-	printf("You selected: %s\n", gtk_button_get_label (b));
+    set_chat_is_chosen(b, current_window_info);
+    printf("You selected: %s\n", gtk_button_get_label (b));
 
     set_in_protocol_string(get_cookies(), "TO USER", gtk_button_get_label(b));
 
