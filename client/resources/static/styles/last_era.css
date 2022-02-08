@@ -69,3 +69,14 @@
     margin-right: 12px;
     margin-right: 12px;
 }
+
+.user_button_chosen{
+    background: rgba(5, 45, 48, 0.712);
+    border:rgba(5, 45, 48, 0.712);
+    /* height: 100px; */
+    margin-top: 10px;
+    margin-bottom: 2px;
+    margin-left: 10px;
+    margin-right: 10px;
+    color:#F5F5F5
+}

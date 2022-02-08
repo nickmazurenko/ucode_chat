@@ -5,9 +5,10 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include "libmx.h"
 
-long int encryption_key();
-long int cd(long int, int f);
 char *encrypt_pswd(char *msg);
+char *decrypt_pswd(char *msg);
 
 #endif
+

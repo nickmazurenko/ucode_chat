@@ -93,7 +93,13 @@ void add_chat(char *username, t_current_window_info *current_window_info) {
 
 		// gtk_button_set_alignment (GTK_BUTTON(button), 0.5, 0.0); // hor left, ver center
         gtk_widget_set_size_request(button, 100, 100);
-		gtk_grid_attach (GTK_GRID(home_chats_grid), button, get_current_chat_count(), 1, 1, 1);
+		// gtk_grid_attach (GTK_GRID(home_chats_grid), button, get_current_chat_count(), 1, 1, 1);
+        GList* children = gtk_container_get_children(GTK_CONTAINER(home_chats_grid));
+        if(children)
+            gtk_grid_attach_next_to(GTK_GRID(home_chats_grid), button, children->data, GTK_POS_LEFT, 100, 100);
+        else
+    		gtk_grid_attach (GTK_GRID(home_chats_grid), button, get_current_chat_count(), 1, 1, 1);
+
         
 		g_signal_connect(button, "clicked", G_CALLBACK(choose_chat), current_window_info);
 

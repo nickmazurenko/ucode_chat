@@ -346,7 +346,8 @@ void*
              * 
              */
             printf("message: %s\n",  new_message_str);
-            upload_chats(model_message->from_user, window_info);
+            upload_chats_on_add(model_message->from_user, window_info);
+            set_chat_new_message(model_message->from_user, window_info);
             if (model_message->status == MESSAGE_EDITED) {
                 update_message(model_message);
                 char* to_user = get_from_protocol_string(cookies, "TO USER");

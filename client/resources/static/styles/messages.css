@@ -30,6 +30,28 @@
     margin-right: 10px;
 }
 
+.user_button_new_message {
+    background: rgba(212, 209, 209, 0.774);
+    border:rgba(0, 0, 0, 0.0);
+    /* height: 100px; */
+    margin-top: 10px;
+    margin-bottom: 2px;
+    margin-left: 10px;
+    margin-right: 10px;
+    animation-duration: 3s;
+    animation-name: new_message;
+  }
+  
+  @keyframes new_message {
+    from {
+        margin-bottom: 20px;
+      }
+    
+      to {
+        margin-top: 0px;
+      }
+  }
+
 .chat_window_viewport {
     padding-bottom: 60px;
     border-radius: 10px;

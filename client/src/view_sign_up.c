@@ -45,7 +45,12 @@ G_MODULE_EXPORT void sign_up_insert_clicked(GtkButton *button, t_current_window_
     if (!is_valid_user_data(sign_up_info)){
         place_sign_entry_error(sign_up_info);
     }else{
-        int status = controller_sign_up((char *)gtk_entry_get_text(sign_up_info[0]), encrypt_pswd((char *)gtk_entry_get_text(sign_up_info[1])));
+        char* encrypted = encrypt_pswd((char *)gtk_entry_get_text(sign_up_info[1]));
+        int status = controller_sign_up((char *)gtk_entry_get_text(sign_up_info[0]), encrypted);
+        printf("\n\n\n\n");
+        printf("THERE SIGN UP CLIENT");
+        printf("%s", encrypted);
+        printf("\n\n\n\n");
         if(status){
             place_sign_entry_error(sign_up_info);
         }else {
