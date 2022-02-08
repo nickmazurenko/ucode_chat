@@ -11,7 +11,7 @@ size_t insert_data_user_data(t_model_user_data* model_user_data) {
         sqlite3_close(db);
         exit(1);
     }
-
+    
     char *insert_request = "INSERT INTO UsersData(About, Status, TNumber, Email, Era, Money, AvatarId, Bought) VALUES('%s', %i, '%s', '%s', '%i', '%zu', '%zu', '%s');";
     char *sql_query = NULL;
     char *err_msg = NULL;

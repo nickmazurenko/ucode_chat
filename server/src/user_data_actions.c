@@ -164,7 +164,9 @@ bool buy_subaction(char *request, char *response) {
             add_to_protocol_string(get_store_response, "STATUS", "SUCCESS");
             cJSON* last_bought_id = cJSON_Parse(mx_itoa(store_item_id));  
             cJSON_AddItemToArray(bought_current_json_array, last_bought_id);
-            
+            free(bought_current_str);
+            bought_current_str = cJSON_Print(bought_current_json_array);
+
             update_bought_items(username, bought_current_str);
         }    
     }

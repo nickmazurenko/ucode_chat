@@ -9,6 +9,12 @@
     background-image: url("../images/enlifgtenment_background.png");
     border:rgba(0, 0, 0, 0.0);
 }
+
+.chat_window_scrolled_background1 {
+    background-image: url("../images/enlightenment_bckg1.png");
+    border:rgba(0, 0, 0, 0.0);
+}
+
 .home_chats_grid {
     margin-right: 20px;
     margin-left: 20px;

@@ -61,6 +61,8 @@ void view_stone_age_page(t_current_window_info *current_layout_info)
     set_add_chat_on_button(GTK_WIDGET(add_chat_button), current_layout_info);
 
     set_user_info_on_button(profile_info_button, current_layout_info);
+    set_setting_on_button(settings_button, current_layout_info, home_page_layout);
+    set_shop_on_button(shop_button, current_layout_info);
 
 
     // view_chat_window(current_layout_info);

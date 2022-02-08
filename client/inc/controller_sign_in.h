@@ -5,7 +5,7 @@
 #include "sign_requests.h"
 #include "view_tools.h"
 #include "view_stone_age_page.h"
-#include "view_second_era.h"
+#include "view_egypt.h"
 #include "view_home_page.h"
 #include "view_last_era.h"
 

@@ -1,13 +1,26 @@
 #include "shop.h"
+#include "user_data_request.h"
+#include "encrypt.h"
 
+static t_current_window_info* static_current_window_info = NULL;
 
-void set_shop_on_button(GtkWidget *button) {
-    // send_set_user_era_request("a", "a", 3);
+bool is_in_bought(cJSON* bought, size_t id);
+void buy_item(GtkWidget *widget, t_model_store* model_store);
+void money_view(GtkWidget *widget, GtkBuilder* builder);
+void change_background();
+
+void set_shop_on_button(GtkWidget *button, t_current_window_info* current_window_info) {
+    // send_set_user_era_request("n", (get_from_protocol_string(get_cookies(), "TOKEN")), 3);
+
+    static_current_window_info = current_window_info;
 
     GtkCssProvider *cssProvider = gtk_css_provider_new(); 
 
     t_model_user_data* model_user_data = send_user_data_request(get_from_protocol_string(get_cookies(), "USERNAME"));
     t_model_store** model_store = send_store_request(model_user_data->era);
+
+    cJSON* bought = cJSON_Parse(model_user_data->bought_items);
+    
 
     GtkBuilder *builder;
     if (model_user_data->era == 0) {
@@ -59,7 +72,6 @@ void set_shop_on_button(GtkWidget *button) {
     GtkWidget *shop_item5 = GTK_WIDGET(gtk_builder_get_object(builder, "shop_item5"));
     GtkWidget *shop_item6 = GTK_WIDGET(gtk_builder_get_object(builder, "shop_item6"));
 
-    printf("\n\n THERE \n\n");
 
     for (int i = 0; i < 6; i++) {
     printf("\n\n %s \n\n", model_store[i]->path); }
@@ -104,81 +116,143 @@ void set_shop_on_button(GtkWidget *button) {
 
     g_signal_connect(button, "clicked", G_CALLBACK(money_view), builder);
 
-    // g_signal_connect(shop_item1, "clicked", G_CALLBACK(buy_item), model_user_data);
-    // g_signal_connect(shop_item2, "clicked", G_CALLBACK(buy_item), model_user_data);
-    // g_signal_connect(shop_item3, "clicked", G_CALLBACK(buy_item), model_user_data);
-    // g_signal_connect(shop_item4, "clicked", G_CALLBACK(buy_item), model_user_data);
-    // g_signal_connect(shop_item5, "clicked", G_CALLBACK(buy_item), model_user_data);
-    // g_signal_connect(shop_item6, "clicked", G_CALLBACK(buy_item), model_user_data);
+    if (!is_in_bought(bought, model_store[0]->id))
+        g_signal_connect(shop_item1, "clicked", G_CALLBACK(buy_item), model_store[0]);
+    // else 
+    //     // grey
+    if (!is_in_bought(bought, model_store[1]->id))
+        g_signal_connect(shop_item2, "clicked", G_CALLBACK(buy_item), model_store[1]);
+    if (!is_in_bought(bought, model_store[2]->id))
+        g_signal_connect(shop_item3, "clicked", G_CALLBACK(buy_item), model_store[2]);
+    if (!is_in_bought(bought, model_store[3]->id))
+        g_signal_connect(shop_item4, "clicked", G_CALLBACK(buy_item), model_store[3]);
+    if (!is_in_bought(bought, model_store[4]->id))
+        g_signal_connect(shop_item5, "clicked", G_CALLBACK(buy_item), model_store[4]);
+    if (!is_in_bought(bought, model_store[5]->id))
+        g_signal_connect(shop_item6, "clicked", G_CALLBACK(buy_item), model_store[5]);
 
 }
 
-void money_view(GtkWidget *widget, GtkWidget *builder) {
+void money_view(GtkWidget *widget, GtkBuilder* builder) {
     GtkLabel *money_label = GTK_LABEL(gtk_builder_get_object(builder, "money_label"));
     gtk_label_set_text(money_label, mx_itoa(send_money_request_by_username(get_from_protocol_string(get_cookies(), "USERNAME"))));
 }
 
-// void buy_item(GtkWidget *widget, t_model_user_data* model_user_data) {
-    // if (model_user_data->id == 1) {
-    //     // change era 
-    //     send_set_user_era_request(get_from_protocol_string(get_cookies(), "USERNAME"), get_from_protocol_string(get_cookies(), "TOKEN"), 2);
-    // }
+void buy_item(GtkWidget *widget, t_model_store* model_store) {
 
-    // if (model_user_data->id == 2) {
+    send_buy_request(get_from_protocol_string(get_cookies(), "USERNAME"), get_from_protocol_string(get_cookies(), "TOKEN"), model_store->id);
+
+    if (model_store->id == 1) {
+        // change era 
+        send_set_user_era_request(get_from_protocol_string(get_cookies(), "USERNAME"), get_from_protocol_string(get_cookies(), "TOKEN"), 1);
+
+        GtkLayout *first_era_layout = GTK_LAYOUT(gtk_builder_get_object(static_current_window_info->builder, "home_page_layout"));
+        if (static_current_window_info->layout_exists)
+            gtk_widget_destroy(GTK_WIDGET(first_era_layout));
+    
+        view_egypt(static_current_window_info);
+    }
+
+    // if (model_store->id == 2) {
     //     // clear stone
     // }
 
-    // if (model_user_data->id == 3) {
+    // if (model_store->id == 3) {
     //     // change rock
     // }
 
-    // if (model_user_data->id == 4) {
+    // if (model_store->id == 4) {
     //     // change rock
     // }
 
-    // if (model_user_data->id == 5) {
+    // if (model_store->id == 5) {
     //     // change rock
     // }
 
-    // if (model_user_data->id == 6) {
+    // if (model_store->id == 6) {
     //     // change rock
     // }
 
-    // if (model_user_data->id == 7) {
-    //     // change era 
-    //     send_set_user_era_request(get_from_protocol_string(get_cookies(), "USERNAME"), get_from_protocol_string(get_cookies(), "TOKEN"), 4);
-    // }
+    if (model_store->id == 7) {
+        // change era 
+        send_set_user_era_request(get_from_protocol_string(get_cookies(), "USERNAME"), get_from_protocol_string(get_cookies(), "TOKEN"), 3);
+
+        GtkLayout *egypt_layout = GTK_LAYOUT(gtk_builder_get_object(static_current_window_info->builder, "home_page_layout"));
+        if (static_current_window_info->layout_exists)
+            gtk_widget_destroy(GTK_WIDGET(egypt_layout));
+        
+        view_last_era(static_current_window_info);
+    }
 
     // //8-12 add words
 
-    // if (model_user_data->id == 19) {
+    // if (model_store->id == 19) {
     //     // change era 
-    //     send_set_user_era_request(get_from_protocol_string(get_cookies(), "USERNAME"), get_from_protocol_string(get_cookies(), "TOKEN"), 5);
+    //     send_set_user_era_request(get_from_protocol_string(get_cookies(), "USERNAME"), get_from_protocol_string(get_cookies(), "TOKEN"), 4);
+
+    //     GtkLayout *first_era_layout = GTK_LAYOUT(gtk_builder_get_object(static_current_window_info->builder, "home_page_layout"));
+    //     if (static_current_window_info->layout_exists)
+    //         gtk_widget_destroy(GTK_WIDGET(first_era_layout));
+        
+    //     view_stone_age_page(static_current_window_info);
     // }
 
-    // if (model_user_data->id == 20) {
+    // if (model_store->id == 20) {
     //     // unlock sending files
     // }
 
-    // if (model_user_data->id == 21) {
+    // if (model_store->id == 21) {
     //     // educate
     // }
 
-    // if (model_user_data->id == 22) {
-    //     // change background
-    //     // add new function
-    // }
 
-    // if (model_user_data->id == 23) {
-    //     // change background
-    // }
+    if (model_store->id == 22) {
+        change_background();
+        // change background
+    //     GtkWidget *background1 = GTK_WIDGET(gtk_builder_get_object(static_current_window_info->builder, "chat_window_scrolled"));
 
-    // if (model_user_data->id == 24) {
-    //     // change background
-    // }
+    //     GdkPixbuf *image_pixbuf = gdk_pixbuf_new_from_file_at_size("./client/resources/static/images/enlightenment_bckg1.jpeg", -1, -1, NULL);
+    //     GtkWidget *image_shop_item3 = gtk_image_new();
+    //     gtk_image_set_from_pixbuf(GTK_IMAGE(image_shop_item3), image_pixbuf);
+    //  (background1, image_shop_item3);
+    }
 
-    // if (model_user_data->id == 25) {
+    if (model_store->id == 23) {
+        // change background
+
+    }
+
+    if (model_store->id == 24) {
+        // change background
+    }
+
+    // if (model_store->id == 25) {
     //     // change era, gift
     //     send_set_user_era_request(get_from_protocol_string(get_cookies(), "USERNAME"), get_from_protocol_string(get_cookies(), "TOKEN"), 0);
+
+    //     GtkLayout *first_era_layout = GTK_LAYOUT(gtk_builder_get_object(static_current_window_info->builder, "home_page_layout"));
+    //     if (static_current_window_info->layout_exists)
+    //         gtk_widget_destroy(GTK_WIDGET(first_era_layout));
+        
+    //     view_stone_age_page(static_current_window_info);
     // }
-// }
+}
+
+bool is_in_bought(cJSON* bought, size_t id) {
+    int arr_size = cJSON_GetArraySize(bought);
+
+    for (int i = 0; i < arr_size; i++) {
+        if (cJSON_GetArrayItem(bought, i)->valueint == id)
+            return true;
+    }
+
+    return false;
+}
+
+void change_background () {
+    GtkStyleContext *background_old = gtk_widget_get_style_context(GTK_WIDGET(gtk_builder_get_object(static_current_window_info->builder, "chat_window_scrolled")));
+    // GtkStyleContext *background_new = gtk_widget_get_style_context(GTK_WIDGET(gtk_builder_get_object(static_current_window_info->builder, "chat_window_scrolled_background1")));
+    gtk_style_context_remove_class(background_old, "chat_window_scrolled");
+    gtk_style_context_add_class(background_old, "chat_window_scrolled_background1");
+}
+

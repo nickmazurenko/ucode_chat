@@ -10,7 +10,6 @@
 #include "model_user_data.h"
 #include "model_store.h"
 
-void set_shop_on_button(GtkWidget *button);
-void money_view(GtkWidget *widget, GtkWidget *builder);
+void set_shop_on_button(GtkWidget *button, t_current_window_info* current_window_info);
 
 #endif

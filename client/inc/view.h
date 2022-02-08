@@ -7,7 +7,7 @@
 #include "view_messages.h"
 #include "view_chat_window.h"
 #include "view_home_page.h"
-#include "view_second_era.h"
+#include "view_egypt.h"
 #include "controller_start_chat.h"
 #include <gtk/gtk.h>
 

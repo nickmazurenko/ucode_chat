@@ -36,6 +36,7 @@ void controller_view_user_era(GtkWidget **sign_in_info, t_current_window_info *c
     // TODO: ALARM!!!! CHANGE ERA !!!!!!!
     // user_data->era = MODERN_TIMES; //TODO: ALARM!!!! CHANGE ERA !!!!!!!
     user_data->era = ENLIGHTMENT; //TODO: ALARM!!!! CHANGE ERA !!!!!!!
+    // user_data->era = EGYPT; //TODO: ALARM!!!! CHANGE ERA !!!!!!!
     // TODO: ALARM!!!! CHANGE ERA !!!!!!!
     if(user_data->era == STONE_AGE){
 
@@ -43,7 +44,7 @@ void controller_view_user_era(GtkWidget **sign_in_info, t_current_window_info *c
 
     } else if (user_data->era == EGYPT){
 
-        view_second_era(current_window_info);
+        view_egypt(current_window_info);
 
     } else if (user_data->era == MIDDLE_AGES){
 

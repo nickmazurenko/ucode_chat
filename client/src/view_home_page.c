@@ -89,7 +89,7 @@ void view_home_page(t_current_window_info *current_layout_info)
     FILE *f1 = fopen("functions.txt", "r");
 
 	if (f1 == NULL ) {
-		printf("File finctions.txt not found\n");
+		printf("File functions.txt not found\n");
 		// return EXIT_FAILURE;
 		}
     // g_signal_connect(draw_button, "clicked", G_CALLBACK(add_drawing_area_clicked), current_layout_info);

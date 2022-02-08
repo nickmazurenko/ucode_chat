@@ -75,6 +75,6 @@
 }
 
 .chat_window_viewport {
-    background-image: url("../images/stone.png");
+    /* background-image: url("../images/stone.png"); */
     border-radius: 10px;
 }

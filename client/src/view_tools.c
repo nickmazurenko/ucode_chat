@@ -49,7 +49,6 @@ void delete_answer_error(GtkWidget *button) {
 
 
 
-
 void place_sign_entry_error(GtkEntry **entries) {
     GtkStyleContext *entry_context_username = gtk_widget_get_style_context(GTK_WIDGET(entries[0]));
     GtkStyleContext *entry_context_password = gtk_widget_get_style_context(GTK_WIDGET(entries[1]));

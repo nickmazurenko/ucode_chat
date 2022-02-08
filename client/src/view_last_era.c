@@ -71,7 +71,7 @@ void view_last_era(t_current_window_info *current_layout_info) {
     add_chats(user_chats, current_layout_info, user_chats_count);
     set_user_info_on_button(profile_info_button, current_layout_info);
     set_setting_on_button(settings_button, current_layout_info, home_page_layout);
-    set_shop_on_button(shop_button);
+    set_shop_on_button(shop_button, current_layout_info);
 
     gtk_container_add(GTK_CONTAINER(current_layout_info->main_window), GTK_WIDGET(home_page_layout));
     current_layout_info->layout_exists = true;
