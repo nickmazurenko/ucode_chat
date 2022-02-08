@@ -10,7 +10,13 @@ bool sign_up(char* request, char *response) {
     char* user_str = user_json->valuestring;
 
     t_model_user* user = from_string_model_user(user_str);
-
+    char* encrypted_password = encrypt_pswd(user->password);
+    free(user->password);
+    // user->password = encrypt_pswd(user->password);
+    user->password = encrypted_password;
+    printf("\n\n\n\n\n");
+    printf("%s", user->password);
+    printf("\n\n\n\n\n");
     cJSON *sign_up_status = create_protocol();
 
     // add to db
@@ -54,6 +60,7 @@ bool sign_in(char* request, char *response) {
     char* user_str = user_json->valuestring;
 
     t_model_user* user = from_string_model_user(user_str);
+    user->password = encrypt_pswd(user->password);
     // TODO: use hash
     char* token = user->password;
 
