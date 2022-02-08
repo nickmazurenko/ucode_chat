@@ -289,6 +289,8 @@ void*
             printf("\n Error : Could not create socket \n");
             return NULL;
         }
+        
+        set_new_messages_socket(new_messages_socket);
 
         serv_addr->sin_family = AF_INET;
         serv_addr->sin_port   = htons(PORT);
