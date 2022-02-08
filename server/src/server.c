@@ -84,11 +84,7 @@ void* handle_request(void* data) {
         int read_number = recv(conn_fd, request, 14336, 0);
         if (read_number) {
             // select_action(request, response_buffer);
-            if (read_number < 500) {
-                printf(request);
-            } else {
-                printf("request is too long\n");
-            }
+            
 
             cJSON* request_obj = cJSON_Parse(request);
             char* action = get_from_protocol_string(request_obj, "ACTION");
@@ -103,6 +99,11 @@ void* handle_request(void* data) {
 
             cJSON_Delete(request_obj);            
             char* buffer = decrypt_pswd(request);
+            if (read_number < 500) {
+                printf(buffer);
+            } else {
+                printf("request is too long\n");
+            }
             select_action(buffer, response_buffer);
             // printf("response_buffer:\n %s\n", response_buffer);
 

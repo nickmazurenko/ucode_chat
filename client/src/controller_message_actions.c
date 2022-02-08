@@ -50,21 +50,24 @@ void send_edited_clicked(GtkWidget *widget, GtkWidget* entry) {
 
     if (selected_message != -1) {
 
-        t_model_message* selected_message = get_message_by_id(selected_message);
-        selected_message->status = MESSAGE_EDITED;
-        memset(selected_message->data, '\0', strlen(selected_message->data));
-        strcpy(selected_message->data, gtk_entry_get_text(entry));
+        t_model_message* selected_message_model = get_message_by_id(selected_message);
+        selected_message_model->status = MESSAGE_EDITED;
+        memset(selected_message_model->data, '\0', strlen(selected_message_model->data));
+        strcpy(selected_message_model->data, gtk_entry_get_text(entry));
 
         cJSON* protocol = create_protocol();
         add_to_protocol_string(protocol, "FROM", get_from_protocol_string(get_cookies(), "USERNAME"));
         add_to_protocol_string(protocol, "TOKEN", get_from_protocol_string(get_cookies(), "TOKEN"));
+        selected_message_model->id = selected_message;
 
-        send_message(selected_message, protocol);
+        send_message(selected_message_model, protocol);
 
         // update on user that edit
+        gtk_label_set_text(selected_message_label, gtk_entry_get_text(entry));
+        gtk_widget_show(selected_message_label);
 
 
-        free_model_message(&selected_message);
+        free_model_message(&selected_message_model);
 
     }
 
