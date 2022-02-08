@@ -7,7 +7,9 @@
 #include "view_tools.h"
 #include "quiz.h"
 #include "resources.h"
+#include "pthread.h"
+#include "shop.h"
 
-void view_last_era(t_current_window_info *current_layout_info);
+void view_enlightenment_era(t_current_window_info *current_layout_info);
 
 #endif

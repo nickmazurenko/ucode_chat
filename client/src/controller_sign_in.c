@@ -52,11 +52,12 @@ void controller_view_user_era(GtkWidget **sign_in_info, t_current_window_info *c
 
     } else if (user_data->era == ENLIGHTMENT){
 
-        view_last_era(current_window_info);
+        view_modern_era(current_window_info);
+        // view_enlightenment_era(current_window_info);
 
     }else if (user_data->era == MODERN_TIMES){
 
-        view_home_page(current_window_info);
+        view_modern_era(current_window_info);
         
     }
     // change window to text chat era

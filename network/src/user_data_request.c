@@ -130,7 +130,10 @@ t_model_store** send_store_request(int era) {
     cJSON* array_of_data = cJSON_Parse(store_str);
 
 
-    for (int i = 0; i < 6; i++) {
+    int size = 6;
+    if (era == 4) size = 1;
+
+    for (int i = 0; i < size; i++) {
         cJSON* item = cJSON_GetArrayItem(array_of_data, i);
         model_store[i] = from_string_model_store(item->valuestring);
     }

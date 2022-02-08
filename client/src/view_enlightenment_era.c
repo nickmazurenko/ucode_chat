@@ -1,9 +1,8 @@
-#include "view_last_era.h"
-#include "pthread.h"
+#include "view_enlightenment_era.h"
 
 static guint thread_id = 0;
 
-void view_last_era(t_current_window_info *current_layout_info) {
+void view_enlightenment_era(t_current_window_info *current_layout_info) {
 
     GtkCssProvider *cssProvider = gtk_css_provider_new(); 
     gtk_css_provider_load_from_path(cssProvider, get_path_to_style("last_era.css"), NULL); 

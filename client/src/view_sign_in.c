@@ -44,12 +44,12 @@ G_MODULE_EXPORT void sign_in_clicked(GtkButton *button, t_current_window_info *c
         place_sign_entry_error(sign_in_info);
     }else{
         char* encrypted_password = encrypt_pswd((char *)gtk_entry_get_text(sign_in_info[1]));
-        printf("Encrypted password: %s\n", encrypted_password);
+        // printf("Encrypted password: %s\n", encrypted_password);
         int status = controller_sign_in((char *)gtk_entry_get_text(sign_in_info[0]), encrypted_password);
-        printf("\n\n\n\n");
-        printf("THERE SIGN IN CLIENT");
-        printf("%s", encrypted_password);
-        printf("\n\n\n\n");
+        // printf("\n\n\n\n");
+        // printf("THERE SIGN IN CLIENT");
+        // printf("%s", encrypted_password);
+        // printf("\n\n\n\n");
         if (status){
             place_sign_entry_error(sign_in_info);
         } else {

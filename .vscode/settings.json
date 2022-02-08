@@ -58,6 +58,9 @@
         "chrono": "c",
         "map": "c",
         "unordered_map": "c",
-        "sign.h": "c"
+        "sign.h": "c",
+        "view_enlightenment_era.h": "c",
+        "pthread.h": "c",
+        "view_modern_era.h": "c"
     }
 }
