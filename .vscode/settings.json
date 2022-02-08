@@ -57,6 +57,7 @@
         "algorithm": "c",
         "chrono": "c",
         "map": "c",
-        "unordered_map": "c"
+        "unordered_map": "c",
+        "sign.h": "c"
     }
 }

@@ -346,7 +346,8 @@ void*
              * 
              */
             printf("message: %s\n",  new_message_str);
-            upload_chats(model_message->from_user, window_info);
+            upload_chats_on_add(model_message->from_user, window_info);
+            set_chat_new_message(model_message->from_user, window_info);
             if (model_message->status == MESSAGE_EDITED) {
                 update_message(model_message);
                 char* to_user = get_from_protocol_string(cookies, "TO USER");
@@ -373,6 +374,12 @@ void*
                         // pthread_join(*current_thread, NULL);
                         printf("after request\n");
                         view_file(model_message, window_info);
+                    }
+                    else if(model_message->data_type == MESSAGE_STONE) {
+                        t_model_stone* stone = send_get_stone_request(model_message->data);
+                        insert_data_stone(stone);
+                        request_file_if_not_exist(stone->path);
+                        view_stone(model_message, window_info);
                     }
                 }
             }

@@ -30,4 +30,9 @@ void add_draw_area(t_current_window_info *current_window_info, t_model_message *
 
 void set_rock_on_button(GtkWidget *button, t_current_window_info *current_window_info) ;
 
+t_point* read_saved_from_file(char* path_to_file);
+
+void save_saved_to_file(t_point* saved, char* path_to_file) ;
+void add_to_saved(t_point* point);
+
 #endif

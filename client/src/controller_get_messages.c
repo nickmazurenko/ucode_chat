@@ -6,7 +6,18 @@ void controller_get_messages(){
     int count = cJSON_GetArraySize(current_user_messages);
     printf("\n\nCOUNT %i\n\n", count);
     for(int message_id = 0; message_id < count; message_id++) {
-        insert_data_message(from_string_model_message(cJSON_GetArrayItem(current_user_messages, message_id)->valuestring));
+        t_model_message* message = from_string_model_message(cJSON_GetArrayItem(current_user_messages, message_id)->valuestring);
+        insert_data_message(message);
+        if(message->data_type == MESSAGE_FILE){
+            t_model_resource *resource = send_get_resource_request(message->data);
+            insert_data_resource(resource);
+            free_model_resource(&resource);
+        }else if (message->data_type == MESSAGE_STONE){
+            t_model_stone *stone = send_get_stone_request(message->data);
+            insert_data_stone(stone);
+            free_model_stone(&stone);
+        }  
+        free_model_message(&message);
     }
 }
 
