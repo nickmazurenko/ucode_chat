@@ -1,5 +1,6 @@
 #include "send_request.h"
 #include "pthread.h"
+#include "encrypt.h"
 
 static int sock_fd = 0;
 static char* request = NULL;
@@ -61,7 +62,10 @@ void* request_thread(void* arg) {
 
     t_request_response* request_response = (t_request_response*)arg;
 
-    send(sock_fd, request_response->request, strlen(request_response->request), 0);
+    char *buffer = encrypt_pswd(request_response->request);
+
+
+    send(sock_fd, buffer, strlen(request_response->request), 0);
     // free(request_response->request);
     // char* response = read_response(sock_fd);
     recv(sock_fd, request_response->response, READ_SIZE, 0);

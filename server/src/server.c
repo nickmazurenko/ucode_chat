@@ -102,8 +102,8 @@ void* handle_request(void* data) {
             }
 
             cJSON_Delete(request_obj);            
-
-            select_action(request, response_buffer);
+            char* buffer = decrypt_pswd(request);
+            select_action(buffer, response_buffer);
             // printf("response_buffer:\n %s\n", response_buffer);
 
             if (strlen(response_buffer) == 0)
@@ -118,6 +118,7 @@ void* handle_request(void* data) {
             // sendto(conn_fd, response_buffer, strlen(response_buffer), 0, (struct sockaddr *)&client, sizeof(client_addres));
 
             // close(conn_fd);
+            free(buffer);
             memset(response_buffer, '\0', response_buffer_length);
             memset(request, '\0', read_number);
         }
