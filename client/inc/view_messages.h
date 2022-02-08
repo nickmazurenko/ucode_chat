@@ -18,6 +18,8 @@ void view_message(t_model_message *model_message, t_current_window_info *current
 
 void view_file(t_model_message *model_message, t_current_window_info *current_layout_info);
 
+void view_stone(t_model_message *model_message, t_current_window_info *current_layout_info);
+
 void send_message_button_clicked(GtkWidget *widget, t_current_window_info *current_window_info);
 
 void send_file_as_message(GtkWidget *widget, t_current_window_info * current_window_info);

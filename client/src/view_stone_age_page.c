@@ -74,19 +74,14 @@ void view_stone_age_page(t_current_window_info *current_layout_info)
         printf("USER CHATS: %s\n\n", user_chats[i]); 
     }
 
-    // TODO: maybe replace ?
-    // add_draw_area(current_layout_info, NULL);
- 
-
 
     gtk_container_add(GTK_CONTAINER(current_layout_info->main_window), GTK_WIDGET(home_page_layout));
     current_layout_info->layout_exists = true;
 
-
-    // g_signal_connect(draw_button, "clicked", G_CALLBACK(add_drawing_area_clicked), current_layout_info);
 	column = 0;
     gtk_widget_show_all(GTK_WIDGET(home_page_layout));
-    thread_id = g_timeout_add_seconds(10, callback_update_messages, current_layout_info);
+    pthread_t new_messages_thread;
+    pthread_create(&new_messages_thread, NULL, check_new_messages, current_layout_info);
 
 
 }

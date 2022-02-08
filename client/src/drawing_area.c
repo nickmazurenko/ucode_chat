@@ -6,10 +6,11 @@ t_point* saved = NULL;
 
 char *file_to_save_draw = NULL;
 
-void add_to_saved(t_point* point) {
-	// printf("to add x: %dy: %d\n", point->x, point->y);
-// printf("\n\n THERE add_to_saved start\n\n");
+cairo_t *global_cr = NULL;
 
+void draw_transparent(cairo_t *cr);
+
+void add_to_saved(t_point* point) {
     if (saved == NULL) {
         saved = (t_point*)malloc(sizeof(t_point));
         saved->x = point->x;
@@ -27,12 +28,9 @@ void add_to_saved(t_point* point) {
         last->next->y = point->y;
         last->next->next = NULL;
     }
-// printf("\n\n THERE add_to_saved end\n\n");
-
 }
 
 void save_saved_to_file(t_point* saved, char* path_to_file) {
-// printf("\n\n THERE save_saved_to_file start\n\n");
 
     t_point* current = saved;
 	int size_of_saved = 0;
@@ -40,7 +38,6 @@ void save_saved_to_file(t_point* saved, char* path_to_file) {
 		size_of_saved++;
 		current = current->next;
 	}
-	// printf("size of saved: %d\n", size_of_saved);
 	fflush(stdout);
 	t_point saved_points[size_of_saved];
 
@@ -48,19 +45,12 @@ void save_saved_to_file(t_point* saved, char* path_to_file) {
 
     FILE* file = fopen(path_to_file, "w");
 
-    // while (current != NULL) {
-	// 	printf("saved x: %d y: %d\n", current->x, current->y);
-    //     fwrite(saved, sizeof(t_point), 1, file);
-    //     current = current->next;
-    // }    
 
 	for(int i = 0; i < size_of_saved - 1; i++) {
-		// if((i % 2 ) == 0){
-			saved_points[i].x = current->x;
-			saved_points[i].y = current->y;
-			saved_points[i].next = current->next;
-			current = current->next;
-		// }
+		saved_points[i].x = current->x;
+		saved_points[i].y = current->y;
+		saved_points[i].next = current->next;
+		current = current->next;
 	}
 
 	current->next = NULL;
@@ -68,7 +58,6 @@ void save_saved_to_file(t_point* saved, char* path_to_file) {
 	fwrite(saved_points, sizeof(t_point), (size_of_saved - 1) , file);
 
     fclose(file);
-// printf("\n\n THERE save_saved_to_file end\n\n");
 	
 }
 
@@ -93,19 +82,12 @@ t_point* read_saved_from_file(char* path_to_file) {
     }
     fseek(file, 0, SEEK_SET);
 
-	// printf("size of array: %d\n", size_of_array);
 	fflush(stdout);
     
 	fread(points, sizeof( t_point), size_of_array, file);
 
 
     t_point* current = read;
-
-    // while (current->next != NULL) {
-    //     current->next = (t_point*)malloc(sizeof( t_point));
-    //     fread(current->next, sizeof( t_point), 1, file);
-    //     current = current->next;
-    // }
 
 	for(int i = 0; i < size_of_array; i++) {
 		current->x = points[i].x;
@@ -116,15 +98,7 @@ t_point* read_saved_from_file(char* path_to_file) {
 			current = current->next;
 		}
 	}
-
-	// free(current->next);
-	// current->next = NULL;
-	
-
     fclose(file);
-
-	
-
     return read;
 }
 
@@ -134,8 +108,6 @@ t_point* read_saved_from_file(char* path_to_file) {
 
 void draw_brush(GtkWidget *widget, gdouble x, gdouble y, GtkWidget *draw_area)
 {
-// printf("\n\n THERE draw_brush start\n\n");
-
 	point = malloc(sizeof(struct s_point));
 	if (point == NULL)
 	{
@@ -149,11 +121,6 @@ void draw_brush(GtkWidget *widget, gdouble x, gdouble y, GtkWidget *draw_area)
 	s_point_start = point;
 
 	add_to_saved(point);
-// printf("\n\n THERE draw_brush end\n\n");
-
-
-	//check for better effectivness
-	// gtk_widget_queue_draw(draw_area);
 
 	gtk_widget_queue_draw_area(draw_area, 0, 0, 1214, 668);
 	
@@ -161,28 +128,16 @@ void draw_brush(GtkWidget *widget, gdouble x, gdouble y, GtkWidget *draw_area)
 
 gboolean on_draw_button_press_event(GtkWidget *widget, GdkEventButton *event,  t_current_window_info* current_window_info)
 {
-// printf("\n\n THERE on_draw_button_press_event start\n\n");
-
 	GtkWidget *draw_area = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "draw"));
     draw_brush(widget, event->x, event->y, draw_area);
-// printf("\n\n THERE on_draw_button_press_event end\n\n");
-
 	return TRUE;
 }
 
 gboolean on_draw_button_release_event(GtkWidget *widget, GdkEventButton *event,  t_current_window_info* current_window_info)
 {
-// printf("\n\n THERE on_draw_button_release_event start\n\n");
-
 	save_saved_to_file(saved, file_to_save_draw);
 	char *to_user = get_current_user_to_talk();
 	t_model_message *message = controller_send_message(to_user, MESSAGE_STONE, file_to_save_draw);
-	// if(strcmp (file_to_save_draw, "./client/resources/tmp/temp_draw") == 0){
-	// 	system(mx_strjoin("rm ", file_to_save_draw));
-	// 	printf("\n\n THERE DELETED\n\n");
-	// }
-// printf("\n\n THERE on_draw_button_release_event end\n\n");
-
     return TRUE;
 }
 
@@ -199,22 +154,18 @@ void draw_saved(cairo_t *cr){
 		cairo_move_to(cr, (double)temp->x, (double)temp->y);
 		if(ABS((temp->next->x - temp->x)) < cairo_get_line_width(cr) * 5 && ABS((temp->next->y - temp->y)) < cairo_get_line_width(cr) * 5) {
 			cairo_line_to(cr, (double)temp->next->x, (double)temp->next->y);
-
-
 			// weird line version
 	        // cairo_curve_to(cr, point->x, point->y, point->x + 3, point->y + 3, point->x + 5, point->y + 5);
         }
-
-
         cairo_stroke(cr);
-
         temp = temp->next;
 	}
 
 }
 
 gboolean on_draw_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
-{
+{	
+	global_cr = cr;
 	if(saved){
 		draw_saved(cr);
 	}
@@ -279,15 +230,38 @@ gboolean on_draw_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, t
 
 
 
+void draw_transparent(cairo_t *cr){
+
+    cairo_surface_t *cairo_image_surface = cairo_image_surface_create_from_png(get_path_to_image("stone.png"));
+	cairo_set_line_width(cr, 4.0);
+
+	t_point *temp = saved;
+	while (temp->next != NULL) {
+		// cairo_set_source_rgb(cr, 1, 0, 0);
+        cairo_set_source_surface(cr, cairo_image_surface, 0, 0);
+        
+		cairo_move_to(cr, (double)temp->x, (double)temp->y);
+		if(ABS((temp->next->x - temp->x)) < cairo_get_line_width(cr) * 5 && ABS((temp->next->y - temp->y)) < cairo_get_line_width(cr) * 5) {
+			cairo_line_to(cr, (double)temp->next->x, (double)temp->next->y);
+			// weird line version
+	        // cairo_curve_to(cr, point->x, point->y, point->x + 3, point->y + 3, point->x + 5, point->y + 5);
+        }
+        cairo_stroke(cr);
+        temp = temp->next;
+	}
+
+}
+
 
 
 void add_draw_area(t_current_window_info *current_window_info, t_model_message *model_message) {
 	// TODO: CLEAR DRAW AREA for users
 	system(mx_strjoin("rm ", "./client/resources/tmp/temp_draw"));
-	
+	if(global_cr){
+		printf("\n\nTRANSPARENT\n\n");
+		draw_transparent (global_cr);
+	}
 	saved = NULL;
-
-	
 	if(model_message){
 		t_model_stone *stone_msg = get_stone_by_id(model_message->data);
 		request_file_if_not_exist(stone_msg->path);
@@ -329,6 +303,19 @@ void add_draw_area(t_current_window_info *current_window_info, t_model_message *
     g_signal_connect(draw_area, "motion-notify-event", G_CALLBACK(on_draw_motion_notify_event), current_window_info);
 	gtk_widget_add_events(draw_area, GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
 
+
+}
+
+void view_stone(t_model_message *model_message, t_current_window_info *current_layout_info){
+	// if( !strcmp (get_current_user_to_talk(), model_message->from_user)){
+	// 	printf("\n\n THERE %s", model_message->data);
+		t_model_stone *stone_to_draw = get_stone_by_id(model_message->data);
+		request_file_if_not_exist(stone_to_draw->path);
+		saved = read_saved_from_file(stone_to_draw->path);
+		add_to_saved(saved);
+	// } else {
+
+	// }
 
 }
 

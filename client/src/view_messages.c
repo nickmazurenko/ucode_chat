@@ -374,6 +374,12 @@ void*
                         printf("after request\n");
                         view_file(model_message, window_info);
                     }
+                    else if(model_message->data_type == MESSAGE_STONE) {
+                        t_model_stone* stone = send_get_stone_request(model_message->data);
+                        insert_data_stone(stone);
+                        request_file_if_not_exist(stone->path);
+                        view_stone(model_message, window_info);
+                    }
                 }
             }
             

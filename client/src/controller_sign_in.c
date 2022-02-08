@@ -33,9 +33,10 @@ void controller_view_user_era(GtkWidget **sign_in_info, t_current_window_info *c
 
     t_model_user_data * user_data = send_user_data_request((char *)gtk_entry_get_text(sign_in_info[0]));
 
+
     // TODO: ALARM!!!! CHANGE ERA !!!!!!!
     // user_data->era = MODERN_TIMES; //TODO: ALARM!!!! CHANGE ERA !!!!!!!
-    user_data->era = ENLIGHTMENT; //TODO: ALARM!!!! CHANGE ERA !!!!!!!
+    // user_data->era = ENLIGHTMENT; //TODO: ALARM!!!! CHANGE ERA !!!!!!!
     // TODO: ALARM!!!! CHANGE ERA !!!!!!!
     if(user_data->era == STONE_AGE){
 
