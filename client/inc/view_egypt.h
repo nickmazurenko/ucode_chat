@@ -25,5 +25,6 @@ void refresh_words(GtkWidget *widget, t_egypt_elements *egypt_elements);
 void add_word_to_message(GtkWidget *widget, t_egypt_elements *second_era_ellements);
 void count_words(t_egypt_elements *egypt_elements);
 
+t_egypt_elements *get_egypt_element();
 
 #endif

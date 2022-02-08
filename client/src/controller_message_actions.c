@@ -6,6 +6,7 @@ static GtkGrid*   message_actions_grid = NULL;
 static long selected_message = -1;
 static GtkLabel* selected_message_label = NULL;
 static GtkPopover *popover_for_forward = NULL;
+static GtkPopover *popover_for_edit    = NULL;
 static t_current_window_info* static_current_window_info = NULL;
 
 
@@ -50,21 +51,28 @@ void send_edited_clicked(GtkWidget *widget, GtkWidget* entry) {
 
     if (selected_message != -1) {
 
-        t_model_message* selected_message = get_message_by_id(selected_message);
-        selected_message->status = MESSAGE_EDITED;
-        memset(selected_message->data, '\0', strlen(selected_message->data));
-        strcpy(selected_message->data, gtk_entry_get_text(entry));
+        t_model_message* selected_message_model = get_message_by_id(selected_message);
 
-        cJSON* protocol = create_protocol();
-        add_to_protocol_string(protocol, "FROM", get_from_protocol_string(get_cookies(), "USERNAME"));
-        add_to_protocol_string(protocol, "TOKEN", get_from_protocol_string(get_cookies(), "TOKEN"));
+        if ( strcmp(selected_message_model->from_user, get_from_protocol_string(get_cookies(), "USERNAME")) == 0 ) {
+            selected_message_model->status = MESSAGE_EDITED;    
+            memset(selected_message_model->data, '\0', strlen(selected_message_model->data));
+            strcpy(selected_message_model->data, gtk_entry_get_text(entry));
 
-        send_message(selected_message, protocol);
+            cJSON* protocol = create_protocol();
+            add_to_protocol_string(protocol, "FROM", get_from_protocol_string(get_cookies(), "USERNAME"));
+            add_to_protocol_string(protocol, "TOKEN", get_from_protocol_string(get_cookies(), "TOKEN"));
+            selected_message_model->id = selected_message;
 
-        // update on user that edit
+            send_message(selected_message_model, protocol);
 
+            // update on user that edit
+            gtk_label_set_text(selected_message_label, gtk_entry_get_text(entry));
+            gtk_widget_show(selected_message_label);
+        }
 
-        free_model_message(&selected_message);
+        gtk_popover_popdown(popover_for_edit);
+
+        free_model_message(&selected_message_model);
 
     }
 
@@ -88,6 +96,7 @@ void callback_edit_message(GtkWidget *b, GdkEventButton *event,  char* text) {
     gtk_grid_attach(edit_grid, send_edited, 0, 1, 1, 1);
 
     GtkPopover* edit_popover = gtk_popover_new(b);
+    popover_for_edit = edit_popover;
     gtk_popover_set_position(edit_popover, GTK_POS_RIGHT);
 
     gtk_container_add(GTK_CONTAINER(edit_popover), edit_grid);

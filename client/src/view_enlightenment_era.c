@@ -80,5 +80,5 @@ void view_enlightenment_era(t_current_window_info *current_layout_info) {
     gtk_widget_show_all(GTK_WIDGET(home_page_layout));
     pthread_t new_messages_thread;
     pthread_create(&new_messages_thread, NULL, check_new_messages, current_layout_info);
-
+    set_new_messages_thread(&new_messages_thread);
 }

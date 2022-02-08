@@ -75,5 +75,9 @@ char* send_request(char*  request, char* ip, int port);
 struct sockaddr_in* get_serv_addr();
 pthread_t* get_current_thread();
 
+void set_new_messages_socket(int socket);
+void set_new_messages_thread(pthread_t* thread);
+void close_connection();
+
 
 #endif

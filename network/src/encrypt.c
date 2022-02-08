@@ -8,10 +8,6 @@ char *encrypt_pswd(char *msg)
     char *str = mx_strdup(msg);
     int key = 2;
 
-    printf("\n\n\n\n\n");
-    printf("THERETHERE");
-    printf("\n\n\n\n\n");
-
     for(i = 0; (i < 100 && str[i] != '\0'); i++) {
         if (str[i] % 2 == 0) {
             str[i] += key;
@@ -19,7 +15,6 @@ char *encrypt_pswd(char *msg)
             str[i] -= key;
         }
     }
-    printf("ENCRYPT_PSWD encrypted: %s\n", str);
 
     return str;
 }

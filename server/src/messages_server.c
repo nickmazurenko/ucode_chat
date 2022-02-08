@@ -12,14 +12,17 @@ char* add_message(cJSON* request) {
         char* message_json = get_from_protocol_string(request, "DATA");
         t_model_message* model_message = from_string_model_message(message_json);
         strcpy(model_message->date, get_from_protocol_string(request, "DATE"));
+        e_message_status message_status = model_message->status;
         model_message->status = MESSAGE_SENT;
 
 
         if(model_message->data_type == MESSAGE_TEXT){
 
-            if (model_message->status == MESSAGE_EDITED) {
+            if (message_status == MESSAGE_EDITED) {
 
+                model_message->status = MESSAGE_EDITED;
                 update_message_data(model_message);
+                printf("model_message->id: %i\n", model_message->id);
 
             } else {
                 int msg_id = insert_data_message(model_message);

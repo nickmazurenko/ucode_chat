@@ -63,8 +63,8 @@
     margin-right: 12px;
 }
 .button_refresh_words {
-    border:rgba(0, 0, 0, 0.0);
-    background: rgba(0, 0, 0, 0.0);
+    border:rgba(0, 0, 0, 0);
+    background: rgba(0, 0, 0, 0);
     background-image: url("../images/reload_words.png");
 }
 .choose_word_2era_grid {

@@ -262,7 +262,7 @@ cJSON* get_all_messages_of(char* username) {
 int update_message_data(t_model_message* model_message) {
 
     errno = 0;
-
+    perror("there we go\n");
 
     int err_status = 0;
 
@@ -270,9 +270,9 @@ int update_message_data(t_model_message* model_message) {
     char *sql_query = NULL;
     char *err_msg = NULL;
 
-    asprintf(&sql_query, update_request, model_message->id, model_message->data);
+    asprintf(&sql_query, update_request, model_message->data, model_message->id);
 
-    if((err_status = sqlite3_exec(get_database(), sql_query, callback_print_db, 0, &err_msg)) != SQLITE_OK) {
+    if((err_status = sqlite3_exec(get_database(), sql_query, callback_print_db, NULL, &err_msg)) != SQLITE_OK) {
         fprintf(stderr, "SQL_error: %s\n", err_msg);
         sqlite3_free(err_msg);
         sqlite3_close(get_database());
