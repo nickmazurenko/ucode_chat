@@ -1,7 +1,7 @@
 NAME = ../uchat
 # CFLAGS = -std=c11 $(addprefix -W, extr error pedantic) `pkg-config --cflags --libs glib-2.0` -g
 
-CFLAGS = -std=c11 `pkg-config --cflags --libs gtk+-3.0 glib-2.0`
+CFLAGS = -std=c11 `pkg-config --cflags --libs gtk+-3.0 glib-2.0` -w
 COMP = clang
 
 SRCDIR = src
