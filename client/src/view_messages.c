@@ -289,6 +289,7 @@ void*
 
     if (new_messages_socket == 0) {
 
+        
         // connect to server
         // ACTION: create user new messages socket
         // FROM: username
@@ -332,11 +333,12 @@ void*
 
         char* request = cJSON_Print(protocol);
         send(new_messages_socket, request, strlen(request), 0);
-        fflush(stdout);
+        
         char* response = mx_strnew(256);
         
         recv(new_messages_socket, response, 256, 0);
-
+        printf("response: there we go: %s\n", response);
+        fflush(stdout); 
         free(request);
         free(response);
     }

@@ -65,7 +65,12 @@ void add_new_message_socket(char* username, int socket) {
     if (new_message_sockets == NULL)
         new_message_sockets = cJSON_CreateObject();
 
+
+    if (cJSON_GetObjectItem(new_message_sockets, username)) {
+        cJSON_DeleteItemFromObject(new_message_sockets, username);
+    }
     add_to_protocol_number(new_message_sockets, username, socket);
+    
     new_message_sockets_int[new_message_sockets_int_count++] = socket;
 
 }
@@ -85,29 +90,34 @@ void* handle_request(void* data) {
         int read_number = recv(conn_fd, request, 14336, 0);
         if (read_number) {
             // select_action(request, response_buffer);
-            
+            // char* buffer = decrypt_pswd(request);
+
+            // printf("buffer: %s\n", request); fflush(stdout);
 
             cJSON* request_obj = cJSON_Parse(request);
             char* action = get_from_protocol_string(request_obj, "ACTION");
             char* username = get_from_protocol_string(request_obj, "FROM");
             if (action != NULL && username != NULL && strcmp(action, "ADD NEW MESSAGES SOCKET") == 0) {
-
+                
+                printf("there we go\n");
+                fflush(stdout);
                 add_new_message_socket(username, conn_fd);
                 strcpy(response_buffer, "200 OK\r\n\r\n");
                 send(conn_fd, response_buffer, 10, 0);
                 break;
             }
 
-            char* buffer = decrypt_pswd(request);
             if (read_number < 500) {
-                printf(buffer);
+                printf(request);
             } else {
                 printf("request is too long\n");
             }
-            select_action(buffer, response_buffer);
+            select_action(request, response_buffer);
             // printf("response_buffer:\n %s\n", response_buffer);
 
             if (username && action && strcmp(action, "SIGN IN") == 0) {
+                printf("there we go add to user tables\n");
+                fflush(stdout);
                 cJSON* response = cJSON_Parse(response_buffer); 
                 char* status = get_from_protocol_string(response, "STATUS");
 
@@ -120,8 +130,9 @@ void* handle_request(void* data) {
                     free(conn_fd_str);
             }
 
-            if (read_number == -1 || (action && strcmp(action, "CLOSE CONNECTION" == 0))) {
+            if (action && (strcmp(action, "CLOSE CONNECTION") == 0)) {
                 
+                printf("there we go but dont want\n");
                 printf("socket is closed\n");
                 char* conn_fd_str = mx_itoa(conn_fd);
 
@@ -149,7 +160,7 @@ void* handle_request(void* data) {
             // sendto(conn_fd, response_buffer, strlen(response_buffer), 0, (struct sockaddr *)&client, sizeof(client_addres));
 
             // close(conn_fd);
-            free(buffer);
+            // free(buffer);
             memset(response_buffer, '\0', response_buffer_length);
             memset(request, '\0', read_number);
         }
@@ -162,7 +173,7 @@ void* handle_request(void* data) {
         sleep(1);
         
     }
-    close(conn_fd);
+    // close(conn_fd);
     pthread_exit(NULL);
 }
 

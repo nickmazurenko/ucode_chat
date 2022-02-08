@@ -93,10 +93,10 @@ void* request_thread(void* arg) {
 
     t_request_response* request_response = (t_request_response*)arg;
 
-    char *buffer = encrypt_pswd(request_response->request);
+    // char *buffer = encrypt_pswd(request_response->request);
 
 
-    send(sock_fd, buffer, strlen(request_response->request), 0);
+    send(sock_fd, request_response->request, strlen(request_response->request), 0);
     // free(request_response->request);
     // char* response = read_response(sock_fd);
     recv(sock_fd, request_response->response, READ_SIZE, 0);
