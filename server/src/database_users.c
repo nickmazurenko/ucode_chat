@@ -139,8 +139,9 @@ bool is_user(char *username, char *password) {
 
 size_t insert_data_user(char *username, char *password) {
     
-
+    //TODO: ERA !
     t_model_user_data* user_data = new_model_user_data();
+    user_data->era = 1;
     size_t user_data_id = insert_data_user_data(user_data);
     free_model_user_data(&user_data);
 

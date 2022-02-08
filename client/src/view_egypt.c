@@ -132,6 +132,10 @@ void view_egypt(t_current_window_info *current_layout_info)
     gtk_container_add(GTK_CONTAINER(current_layout_info->main_window), GTK_WIDGET(home_page_layout));
 
     gtk_widget_show_all(home_page_layout);
+
+    pthread_t new_messages_thread;
+    pthread_create(&new_messages_thread, NULL, check_new_messages, current_layout_info);
+    set_new_messages_thread(&new_messages_thread);
 }
 
 void set_words_on_buttons(t_egypt_elements *egypt_elements) {

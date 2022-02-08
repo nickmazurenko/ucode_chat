@@ -14,11 +14,7 @@ bool sign_up(char* request, char *response) {
     free(user->password);
     // user->password = encrypt_pswd(user->password);
     user->password = encrypted_password;
-    printf("\n\n\n\n\n");
-    printf("%s", user->password);
-    printf("\n\n\n\n\n");
     cJSON *sign_up_status = create_protocol();
-
     // add to db
     if (is_new_user(user->name)) {
         insert_data_user(user->name, user->password);
