@@ -8,6 +8,9 @@
 #include "protocol.h"
 #include "database.h"
 #include "file_for_write.h"
+#include "server.h"
+#include "wrong_messages.h"
+
 
 
 char* add_message(cJSON* request);

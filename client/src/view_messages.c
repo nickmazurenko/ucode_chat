@@ -223,6 +223,11 @@ void send_message_button_clicked(GtkWidget *widget, t_current_window_info *curre
 {
     GtkWidget *type_message_entry = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "type_message_entry"));
     char *message_str = mx_strdup((char*)gtk_entry_get_text(GTK_ENTRY(type_message_entry)));
+    for(int i = 0; i < strlen(message_str); i++){
+        if(message_str[i] == '\''){
+            message_str[i] = '`';
+        }
+    }
     if(message_str && strlen(message_str) > 0){
         t_model_message *message = NULL;
         char *to_user = get_current_user_to_talk();
