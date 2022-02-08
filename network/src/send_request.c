@@ -3,9 +3,40 @@
 #include "encrypt.h"
 
 static int sock_fd = 0;
+static int new_messages_socket = 0;
+pthread_t* new_messages_thread = NULL;
 static char* request = NULL;
 static struct sockaddr_in* serv_addr;
 // static char* response = NULL;
+
+void set_new_messages_socket(int socket) {
+    new_messages_socket = socket;
+}
+
+void set_new_messages_thread(pthread_t* thread) {
+    new_messages_thread = thread;
+}
+
+void close_connection() {
+
+    cJSON* protocol = create_protocol();
+
+    
+    add_to_protocol_string(protocol, "ACTION", "CLOSE CONNECTION");
+    char* request = cJSON_Print(protocol);
+
+    char* response = send_request(request, get_server_ip(), PORT);
+    free(response);
+
+    close(sock_fd);
+    if (new_messages_thread) {
+        pthread_cancel(*new_messages_thread);
+    }
+    close(new_messages_socket);
+    sock_fd = 0;
+    new_messages_socket = 0;
+    new_messages_thread = NULL;
+}
 
 struct sockaddr_in* get_serv_addr() {
     return serv_addr;

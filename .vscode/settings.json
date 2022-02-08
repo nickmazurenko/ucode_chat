@@ -58,6 +58,8 @@
         "chrono": "c",
         "map": "c",
         "unordered_map": "c",
-        "sign.h": "c"
+        "sign.h": "c",
+        "send_request.h": "c",
+        "locale": "c"
     }
 }

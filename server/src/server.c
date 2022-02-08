@@ -39,6 +39,7 @@ char* read_request(int conn_fd, char* request, int* read_number) {
 }
 
 static cJSON* new_message_sockets = NULL;
+static cJSON* user_sockets        = NULL;
 static int new_message_sockets_int[100];
 static int new_message_sockets_int_count = 0;
 
@@ -84,11 +85,7 @@ void* handle_request(void* data) {
         int read_number = recv(conn_fd, request, 14336, 0);
         if (read_number) {
             // select_action(request, response_buffer);
-            if (read_number < 500) {
-                printf(request);
-            } else {
-                printf("request is too long\n");
-            }
+            
 
             cJSON* request_obj = cJSON_Parse(request);
             char* action = get_from_protocol_string(request_obj, "ACTION");
@@ -101,16 +98,50 @@ void* handle_request(void* data) {
                 break;
             }
 
-            cJSON_Delete(request_obj);            
             char* buffer = decrypt_pswd(request);
+            if (read_number < 500) {
+                printf(buffer);
+            } else {
+                printf("request is too long\n");
+            }
             select_action(buffer, response_buffer);
             // printf("response_buffer:\n %s\n", response_buffer);
+
+            if (username && action && strcmp(action, "SIGN IN") == 0) {
+                cJSON* response = cJSON_Parse(response_buffer); 
+                char* status = get_from_protocol_string(response, "STATUS");
+
+                char* conn_fd_str = NULL;
+                if (strcmp(status, "SUCCESS")) {
+                    conn_fd_str = mx_itoa(conn_fd);
+                    add_to_protocol_string(user_sockets, conn_fd_str, username);
+                }
+                if (conn_fd_str)
+                    free(conn_fd_str);
+            }
+
+            if (read_number == -1 || (action && strcmp(action, "CLOSE CONNECTION" == 0))) {
+                
+                printf("socket is closed\n");
+                char* conn_fd_str = mx_itoa(conn_fd);
+
+                char* username = get_from_protocol_string(user_sockets, conn_fd_str);
+                // check on null
+                int new_message_user_socket = get_from_protocol_number(new_message_sockets, username);
+                cJSON_DeleteItemFromObject(new_message_sockets, username);
+                close(new_message_user_socket);
+                cJSON_DeleteItemFromObject(user_sockets, conn_fd_str);
+
+                free(conn_fd_str);
+                break;
+            }
 
             if (strlen(response_buffer) == 0)
                 strcpy(response_buffer, "200 OK\r\n\r\n");
 
             response_buffer_length = strlen(response_buffer);
             // write(conn_fd, response_buffer, response_buffer_length);
+            cJSON_Delete(request_obj);
             send(conn_fd, response_buffer, response_buffer_length, 0);
             
 
@@ -131,6 +162,7 @@ void* handle_request(void* data) {
         sleep(1);
         
     }
+    close(conn_fd);
     pthread_exit(NULL);
 }
 
@@ -151,6 +183,9 @@ void run_server() {
 
     int listen_fd = 0, conn_fd = 0;
     struct sockaddr_in serv_addr;
+
+    user_sockets = cJSON_CreateObject();
+
     // char* response_buffer = mx_strnew(READ_SIZE);
 
     memset(&serv_addr, '0', sizeof(serv_addr));

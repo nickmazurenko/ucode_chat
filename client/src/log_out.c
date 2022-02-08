@@ -1,4 +1,5 @@
 #include "log_out.h"
+#include "send_request.h"
 
 void log_out_func(GtkWidget *widget, t_current_window_info *current_window_info) {
 
@@ -18,4 +19,6 @@ void log_out_func(GtkWidget *widget, t_current_window_info *current_window_info)
         window_info->builder = gtk_builder_new();
         view_sign_in(window_info);
     }
+
+    close_connection();
 }
