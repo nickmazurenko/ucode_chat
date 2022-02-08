@@ -11,6 +11,7 @@
 #include "quiz.h"
 #include "resources.h"
 #include "controller_message_actions.h"
+#include "view_egypt.h"
 
 void view_messages(t_model_message **model_message, t_current_window_info *current_layout_info, int size);
  

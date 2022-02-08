@@ -235,16 +235,25 @@ void send_message_button_clicked(GtkWidget *widget, t_current_window_info *curre
         }
     }
 
+    t_egypt_elements *to_clear = get_egypt_element();
+    if(to_clear){
+        if(to_clear->message){
+            mx_strdel(&(to_clear->message));
+        }
+    }
+    
     GtkWidget *file_chooser = GTK_WIDGET(gtk_builder_get_object(current_window_info->builder, "gtkfile_chooser_button")); 
-    char *selected_file = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(file_chooser)); 
-    if(selected_file) {
-        t_model_message *message = NULL;
-        char *to_user = get_current_user_to_talk();
-        if(to_user) 
-            message = controller_send_message(to_user, MESSAGE_FILE, selected_file);
-        if (message != NULL) {
-            gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(file_chooser));
-            view_file(message, current_window_info);
+    if(file_chooser){
+        char *selected_file = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(file_chooser)); 
+        if(selected_file) {
+            t_model_message *message = NULL;
+            char *to_user = get_current_user_to_talk();
+            if(to_user) 
+                message = controller_send_message(to_user, MESSAGE_FILE, selected_file);
+            if (message != NULL) {
+                gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(file_chooser));
+                view_file(message, current_window_info);
+            }
         }
     }
 }

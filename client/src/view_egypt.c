@@ -2,6 +2,12 @@
 
 static guint thread_id = 0;
 
+static t_egypt_elements* egypt_element = NULL;
+
+t_egypt_elements *get_egypt_element(){
+    return egypt_element;
+}
+
 void view_egypt(t_current_window_info *current_layout_info)
 {
     GtkCssProvider *cssProvider = gtk_css_provider_new(); 
@@ -65,6 +71,13 @@ void view_egypt(t_current_window_info *current_layout_info)
     egypt_elements->buttons[8] = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "button2_4"));
     egypt_elements->buttons[9] = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "button2_5"));
 
+    GtkWidget *user_avatar = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "profile_photo"));
+    t_model_resource *avatar_resource = send_get_avatar_request(get_from_protocol_string(get_cookies(), "USERNAME" ));
+    GdkPixbuf *image_pixbuf = gdk_pixbuf_new_from_file_at_size(request_file_if_not_exist(avatar_resource->path), 80, 80, NULL);
+	gtk_image_set_from_pixbuf(GTK_IMAGE(user_avatar), image_pixbuf);
+    GtkWidget *user_name_lable = GTK_WIDGET(gtk_builder_get_object(current_layout_info->builder, "user_name"));
+    gtk_label_set_text(GTK_LABEL(user_name_lable), get_from_protocol_string(get_cookies(), "USERNAME" ));
+
     set_quiz_on_button(quiz_button);
 
     set_add_chat_on_button(GTK_WIDGET(add_chat_button), current_layout_info);
@@ -86,7 +99,6 @@ void view_egypt(t_current_window_info *current_layout_info)
 
    
 
-    gtk_container_add(GTK_CONTAINER(current_layout_info->main_window), GTK_WIDGET(home_page_layout));
     current_layout_info->layout_exists = true;
     
     FILE* words_file = fopen("./client/resources/second_era_words", "r");
@@ -97,10 +109,10 @@ void view_egypt(t_current_window_info *current_layout_info)
 
     int buf_size = fread(buffer, sizeof(char), 1024, words_file);
 
-    egypt_elements->words = mx_strsplit(buffer, "\n");
+    egypt_elements->words = mx_strsplit(buffer, '\n');
 
-    // if(!egypt_elements->words)
-    //     egypt_elements->words = get_words_from_file("./client/resources/second_era_words");
+    if(!egypt_elements->words)
+        egypt_elements->words = get_words_from_file("./client/resources/second_era_words");
        
     count_words(egypt_elements);
     set_words_on_buttons(egypt_elements);
@@ -117,9 +129,8 @@ void view_egypt(t_current_window_info *current_layout_info)
     g_signal_connect(egypt_elements->buttons[7], "clicked", G_CALLBACK(add_word_to_message), egypt_elements);
     g_signal_connect(egypt_elements->buttons[8], "clicked", G_CALLBACK(add_word_to_message), egypt_elements);
     g_signal_connect(egypt_elements->buttons[9], "clicked", G_CALLBACK(add_word_to_message), egypt_elements);
-   
-    thread_id = g_timeout_add_seconds(10, callback_update_messages, current_layout_info);
-   
+    gtk_container_add(GTK_CONTAINER(current_layout_info->main_window), GTK_WIDGET(home_page_layout));
+
     gtk_widget_show_all(home_page_layout);
 }
 
@@ -127,6 +138,7 @@ void set_words_on_buttons(t_egypt_elements *egypt_elements) {
     for (int i = egypt_elements->page * 10 - 10, ind = 0; ind < 10; i++, ind++) {
         if (!egypt_elements->words[i])
             i = 0;
+        printf("THERE %s\n\n", egypt_elements->words[i]);
         gtk_button_set_label(GTK_BUTTON(egypt_elements->buttons[ind]), egypt_elements->words[i]);
     }
 }
@@ -178,7 +190,6 @@ void add_word_to_message(GtkWidget *widget, t_egypt_elements *egypt_elements) {
          
             if (buff) 
                 free(buff);
-            
                 gtk_entry_set_text(GTK_ENTRY(egypt_elements->entry), egypt_elements->message);
         }
     } else {
@@ -191,6 +202,7 @@ void add_word_to_message(GtkWidget *widget, t_egypt_elements *egypt_elements) {
             
         gtk_entry_set_text(GTK_ENTRY(egypt_elements->entry), egypt_elements->message);
     }
+    egypt_element = egypt_elements;
     printf("%s\n", egypt_elements->message);
 }
 

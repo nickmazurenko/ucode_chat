@@ -10,7 +10,7 @@ int controller_sign_up(char* user_name, char* password) {
     }else {
         exit_status = 1;
     }
-    send_set_user_era_request(user_name, encrypt_pswd(password), ENLIGHTMENT); //TODO: CHAGE/REMOVE IT  !!!!
+    send_set_user_era_request(user_name, encrypt_pswd(password), EGYPT); //TODO: CHAGE/REMOVE IT  !!!!
     free_model_user(&user);
 
     return exit_status;

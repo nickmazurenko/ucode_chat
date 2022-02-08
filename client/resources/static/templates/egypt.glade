@@ -128,7 +128,7 @@
                   <object class="GtkImage" id="profile_photo">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="pixbuf">../images/profile_photo.png</property>
+                    <!-- <property name="pixbuf">../images/profile_photo.png</property> -->
                     <style>
                       <class name="profile_photo"/>
                     </style>
@@ -142,7 +142,7 @@
                   <object class="GtkLabel" id="user_name">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Mary</property>
+                    <!-- <property name="label" translatable="yes">Mary</property> -->
                     <style>
                       <class name="user_name"/>
                     </style>
@@ -332,10 +332,10 @@
                     </child>
                     <child>
                       <object class="GtkEntry" id="type_message_entry">
-                        <property name="width_request">1079</property>
+                        <property name="width_request">1179</property>
                         <property name="height_request">40</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can_focus">False</property>
                         <style>
                           <class name="type_message_entry"/>
                         </style>
@@ -345,9 +345,9 @@
                         <property name="top_attach">0</property>
                       </packing>
                     </child>
-                    <child>
+                    <!-- <child>
                       <object class="GtkFileChooserButton" id="gtkfile_chooser_button">
-                        <property name="visible">True</property>
+                        <property name="visible">False</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">12</property>
                         <property name="title" translatable="yes"/>
@@ -359,7 +359,7 @@
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
                       </packing>
-                    </child>
+                    </child> -->
                     <style>
                       <class name="choose_chat_grid"/>
                     </style>
